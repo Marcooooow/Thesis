@@ -1,0 +1,43 @@
+services:
+
+  db:
+    image: postgres:17
+    container_name: intellibreak-db
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      POSTGRES_DB: intellibreak
+      POSTGRES_USER: intellibreak_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - intellibreak_restored:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U intellibreak_user -d intellibreak"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+    container_name: intellibreak-backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      - DATABASE_URL=postgresql+psycopg://intellibreak_user:${POSTGRES_PASSWORD}@db:5432/intellibreak
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "python -m uvicorn app.main:app --host 0.0.0.0 --port 8000"
+
+volumes:
+  intellibreak_postgres_data:
+  intellibreak_restored:
+    external: true
