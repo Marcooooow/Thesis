@@ -295,7 +295,7 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
             }
           },
           selectedColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
-          backgroundColor: isDark ? const Color(0xFF1B1D24) : Colors.grey.shade100,
+          backgroundColor: isDark ? const Color(0xFF151A21) : Colors.grey.shade100,
           labelStyle: TextStyle(
             color: isSelected
                 ? Theme.of(context).colorScheme.primary
@@ -377,7 +377,7 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1B1D24) : Colors.white,
+        color: isDark ? const Color(0xFF151A21) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.1) : Colors.grey.withValues(alpha: 0.2)),
       ),
@@ -404,7 +404,7 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1B1D24) : Colors.white,
+        color: isDark ? const Color(0xFF151A21) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.1) : Colors.grey.withValues(alpha: 0.2)),
       ),
@@ -461,7 +461,7 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1B1D24) : Colors.white,
+        color: isDark ? const Color(0xFF151A21) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.1) : Colors.grey.withValues(alpha: 0.2)),
       ),
@@ -575,7 +575,7 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1B1D24) : Colors.white,
+        color: isDark ? const Color(0xFF151A21) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.1) : Colors.grey.withValues(alpha: 0.2)),
       ),

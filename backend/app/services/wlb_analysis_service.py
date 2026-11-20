@@ -904,11 +904,24 @@ class WLBAnalysisService:
                 "survey_submitted": survey is not None,
             })
 
+        # Trend from surveyed weeks only: latest score vs. mean of the earlier
+        # surveyed weeks. A change of +/-5 points (0-100 scale) is treated as
+        # meaningful; anything smaller is "stable". Needs at least 2 surveys.
+        scored = [w["survey_score"] for w in weekly_data if w["survey_score"] is not None]
+        trend_label = "stable"
+        if len(scored) >= 2:
+            baseline = sum(scored[:-1]) / len(scored[:-1])
+            delta = scored[-1] - baseline
+            if delta >= 5:
+                trend_label = "improving"
+            elif delta <= -5:
+                trend_label = "declining"
+
         return {
             "profile_id": str(profile_id),
             "weeks": weeks,
             "weeks_analyzed": weeks,
-            "trend": "stable",
+            "trend": trend_label,
             "current_week": current_monday.isoformat(),
             "weekly_data": weekly_data,
         }

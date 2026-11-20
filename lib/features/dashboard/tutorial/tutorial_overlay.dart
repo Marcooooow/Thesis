@@ -121,7 +121,7 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
               border: Border.all(
                 color: isDark
                     ? Colors.white.withValues(alpha: 0.15)
-                    : const Color(0xFFE0E0E0),
+                    : const Color(0xFFE2E6EB),
               ),
             ),
             child: Column(
@@ -132,7 +132,7 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    color: isDark ? const Color(0xFFF5F5F7) : const Color(0xFF171923),
+                    color: isDark ? const Color(0xFFF5F5F7) : const Color(0xFF111827),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -200,7 +200,7 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
               border: Border.all(
                 color: isDark
                     ? Colors.white.withValues(alpha: 0.15)
-                    : const Color(0xFFE0E0E0),
+                    : const Color(0xFFE2E6EB),
               ),
             ),
             child: Column(
@@ -248,7 +248,7 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: isDark ? const Color(0xFFF5F5F7) : const Color(0xFF171923),
+                    color: isDark ? const Color(0xFFF5F5F7) : const Color(0xFF111827),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -269,7 +269,7 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
                     fontSize: 14,
                     color: isDark
                         ? const Color(0xFFA8A8B3).withValues(alpha: 0.8)
-                        : const Color(0xFF6B7280),
+                        : const Color(0xFF5B6472),
                   ),
                 ),
                 const SizedBox(height: 24),

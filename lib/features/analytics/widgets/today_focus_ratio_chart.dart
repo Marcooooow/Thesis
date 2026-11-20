@@ -135,7 +135,7 @@ class _TodayFocusRatioChartState extends State<TodayFocusRatioChart> {
               centerSpaceRadius: 20,
               sections: [
                 PieChartSectionData(
-                  color: const Color(0xFF6C63FF), // Purple/blue primary accent
+                  color: const Color(0xFF0F766E), // Purple/blue primary accent
                   value: _focusRatioData['activeFocus'] ?? 0.0,
                   title:
                       '${(_focusRatioData['activeFocus'] ?? 0.0).toStringAsFixed(0)}%',
@@ -184,7 +184,7 @@ class _TodayFocusRatioChartState extends State<TodayFocusRatioChart> {
             children: [
               _buildLegendItem(
                 'Active Focus',
-                const Color(0xFF6C63FF),
+                const Color(0xFF0F766E),
                 _focusRatioData['activeFocus'] ?? 0.0,
                 isDark,
               ),
@@ -230,7 +230,7 @@ class _TodayFocusRatioChartState extends State<TodayFocusRatioChart> {
           '$label: ${value.toStringAsFixed(0)}%',
           style: TextStyle(
             fontSize: 12,
-            color: isDark ? Colors.white : const Color(0xFF171923),
+            color: isDark ? Colors.white : const Color(0xFF111827),
           ),
         ),
       ],

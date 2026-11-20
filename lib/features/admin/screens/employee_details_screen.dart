@@ -226,7 +226,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
                 color: isDark
                     ? (isHighContrast
                           ? Colors.white.withValues(alpha: 0.7)
-                          : Color(0xFFA5A7AE))
+                          : Color(0xFF9AA3AF))
                     : Colors.grey.shade600,
                 fontSize: 16,
               ),
@@ -280,10 +280,10 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
             padding: const EdgeInsets.all(20),
             margin: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF1B1D24) : Colors.white,
+              color: isDark ? const Color(0xFF151A21) : Colors.white,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: isDark ? const Color(0xFF30323A) : Colors.grey.shade200,
+                color: isDark ? const Color(0xFF262D37) : Colors.grey.shade200,
               ),
               boxShadow: [
                 BoxShadow(
@@ -330,7 +330,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
                         email,
                         style: TextStyle(
                           fontSize: 14,
-                          color: isDark ? const Color(0xFFA5A7AE) : Colors.grey.shade600,
+                          color: isDark ? const Color(0xFF9AA3AF) : Colors.grey.shade600,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -357,7 +357,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
                             'Role: $role',
                             style: TextStyle(
                               fontSize: 12,
-                              color: isDark ? const Color(0xFFA5A7AE) : Colors.grey.shade600,
+                              color: isDark ? const Color(0xFF9AA3AF) : Colors.grey.shade600,
                             ),
                           ),
                         ],
@@ -370,11 +370,11 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
           ),
           // Tab Bar
           Container(
-            color: isDark ? const Color(0xFF1B1D24) : Colors.grey.shade100,
+            color: isDark ? const Color(0xFF151A21) : Colors.grey.shade100,
             child: TabBar(
               isScrollable: true,
               labelColor: isDark ? Colors.white : Colors.blue.shade800,
-              unselectedLabelColor: isDark ? const Color(0xFFA5A7AE) : Colors.grey.shade600,
+              unselectedLabelColor: isDark ? const Color(0xFF9AA3AF) : Colors.grey.shade600,
               indicatorColor: Colors.blue,
               tabs: const [
                 Tab(text: 'Overview'),
@@ -525,10 +525,10 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1B1D24) : Colors.white,
+        color: isDark ? const Color(0xFF151A21) : Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: isDark ? const Color(0xFF30323A) : Colors.grey.shade200,
+          color: isDark ? const Color(0xFF262D37) : Colors.grey.shade200,
         ),
         boxShadow: [
           BoxShadow(
@@ -681,7 +681,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
               color: isDark
                   ? (isHighContrast
                         ? Colors.white.withValues(alpha: 0.5)
-                        : Color(0xFFA5A7AE))
+                        : Color(0xFF9AA3AF))
                   : Colors.grey.shade400,
             ),
             const SizedBox(height: 16),
@@ -698,7 +698,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
               'This employee has no completed work sessions.',
               style: TextStyle(
                 fontSize: 14,
-                color: isDark ? Color(0xFFA5A7AE) : Colors.grey.shade600,
+                color: isDark ? Color(0xFF9AA3AF) : Colors.grey.shade600,
               ),
               textAlign: TextAlign.center,
             ),
@@ -728,7 +728,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
             style: TextStyle(
               fontSize: 14,
               color: isDark
-                  ? (isHighContrast ? Colors.white : Color(0xFFA5A7AE))
+                  ? (isHighContrast ? Colors.white : Color(0xFF9AA3AF))
                   : Colors.grey.shade600,
             ),
           ),
@@ -781,7 +781,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
               _recError!,
               style: TextStyle(
                 fontSize: 14,
-                color: isDark ? Color(0xFFA5A7AE) : Colors.grey.shade600,
+                color: isDark ? Color(0xFF9AA3AF) : Colors.grey.shade600,
               ),
               textAlign: TextAlign.center,
             ),
@@ -815,7 +815,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
               color: isDark
                   ? (isHighContrast
                         ? Colors.white.withValues(alpha: 0.5)
-                        : Color(0xFFA5A7AE))
+                        : Color(0xFF9AA3AF))
                   : Colors.grey.shade400,
             ),
             const SizedBox(height: 16),
@@ -832,7 +832,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
               'This employee has not received any recommendations yet.',
               style: TextStyle(
                 fontSize: 14,
-                color: isDark ? Color(0xFFA5A7AE) : Colors.grey.shade600,
+                color: isDark ? Color(0xFF9AA3AF) : Colors.grey.shade600,
               ),
               textAlign: TextAlign.center,
             ),
@@ -898,7 +898,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
                         style: TextStyle(
                           fontSize: 14,
                           color: isDark
-                              ? (isHighContrast ? Colors.white : Color(0xFFA5A7AE))
+                              ? (isHighContrast ? Colors.white : Color(0xFF9AA3AF))
                               : Colors.grey.shade600,
                         ),
                       ),
@@ -909,7 +909,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
                         style: TextStyle(
                           fontSize: 14,
                           color: isDark
-                              ? (isHighContrast ? Colors.white : Color(0xFFA5A7AE))
+                              ? (isHighContrast ? Colors.white : Color(0xFF9AA3AF))
                               : Colors.grey.shade600,
                         ),
                       ),
@@ -924,7 +924,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
                     style: TextStyle(
                       fontSize: 14,
                       color: isDark
-                          ? (isHighContrast ? Colors.white : Color(0xFFA5A7AE))
+                          ? (isHighContrast ? Colors.white : Color(0xFF9AA3AF))
                           : Colors.grey.shade600,
                     ),
                   ),
@@ -935,7 +935,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
                   style: TextStyle(
                     fontSize: 12,
                     color: isDark
-                        ? (isHighContrast ? Colors.white : Color(0xFFA5A7AE))
+                        ? (isHighContrast ? Colors.white : Color(0xFF9AA3AF))
                         : Colors.grey.shade500,
                   ),
                 ),
@@ -983,7 +983,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
               _wbError!,
               style: TextStyle(
                 fontSize: 14,
-                color: isDark ? Color(0xFFA5A7AE) : Colors.grey.shade600,
+                color: isDark ? Color(0xFF9AA3AF) : Colors.grey.shade600,
               ),
               textAlign: TextAlign.center,
             ),
@@ -1017,7 +1017,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
               color: isDark
                   ? (isHighContrast
                         ? Colors.white.withValues(alpha: 0.5)
-                        : Color(0xFFA5A7AE))
+                        : Color(0xFF9AA3AF))
                   : Colors.grey.shade400,
             ),
             const SizedBox(height: 16),
@@ -1034,7 +1034,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
               'This employee has not completed any wellbeing check-ins yet.',
               style: TextStyle(
                 fontSize: 14,
-                color: isDark ? Color(0xFFA5A7AE) : Colors.grey.shade600,
+                color: isDark ? Color(0xFF9AA3AF) : Colors.grey.shade600,
               ),
               textAlign: TextAlign.center,
             ),
@@ -1092,7 +1092,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
                       style: TextStyle(
                         fontSize: 14,
                         color: isDark
-                            ? (isHighContrast ? Colors.white : Color(0xFFA5A7AE))
+                            ? (isHighContrast ? Colors.white : Color(0xFF9AA3AF))
                             : Colors.grey.shade600,
                       ),
                     ),
@@ -1204,7 +1204,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: isDark
-                                      ? (isHighContrast ? Colors.white : Color(0xFFA5A7AE))
+                                      ? (isHighContrast ? Colors.white : Color(0xFF9AA3AF))
                                       : Colors.grey.shade600,
                                 ),
                               ),
@@ -1215,7 +1215,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
                             style: TextStyle(
                               fontSize: 12,
                               color: isDark
-                                  ? (isHighContrast ? Colors.white : Color(0xFFA5A7AE))
+                                  ? (isHighContrast ? Colors.white : Color(0xFF9AA3AF))
                                   : Colors.grey.shade500,
                             ),
                           ),
@@ -1229,7 +1229,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
                   'No historical data available',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Color(0xFFA5A7AE),
+                    color: Color(0xFF9AA3AF),
                   ),
                 ),
             ],

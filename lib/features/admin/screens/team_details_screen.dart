@@ -139,7 +139,7 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
                 color: isDark
                     ? (isHighContrast
                           ? Colors.white.withValues(alpha: 0.7)
-                          : Color(0xFFA5A7AE))
+                          : Color(0xFF9AA3AF))
                     : Colors.grey.shade600,
                 fontSize: 16,
               ),
@@ -315,7 +315,7 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
               color: isDark
                   ? (isHighContrast
                         ? Colors.white.withValues(alpha: 0.5)
-                        : Color(0xFFA5A7AE))
+                        : Color(0xFF9AA3AF))
                   : Colors.grey.shade400,
             ),
             const SizedBox(height: 16),
@@ -332,7 +332,7 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
               'Add members to this team',
               style: TextStyle(
                 fontSize: 14,
-                color: isDark ? Color(0xFFA5A7AE) : Colors.grey.shade600,
+                color: isDark ? Color(0xFF9AA3AF) : Colors.grey.shade600,
               ),
               textAlign: TextAlign.center,
             ),
@@ -361,7 +361,7 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
             style: TextStyle(
               fontSize: 14,
               color: isDark
-                  ? (isHighContrast ? Colors.white : Color(0xFFA5A7AE))
+                  ? (isHighContrast ? Colors.white : Color(0xFF9AA3AF))
                   : Colors.grey.shade600,
             ),
           ),
@@ -394,7 +394,7 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
             color: isDark
                 ? (isHighContrast
                       ? Colors.white.withValues(alpha: 0.5)
-                      : Color(0xFFA5A7AE))
+                      : Color(0xFF9AA3AF))
                 : Colors.grey.shade400,
           ),
           const SizedBox(height: 16),
@@ -411,7 +411,7 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
             'Activity tracking for team interactions will be available here.',
             style: TextStyle(
               fontSize: 14,
-              color: isDark ? Color(0xFFA5A7AE) : Colors.grey.shade600,
+              color: isDark ? Color(0xFF9AA3AF) : Colors.grey.shade600,
             ),
             textAlign: TextAlign.center,
           ),
@@ -434,7 +434,7 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
             color: isDark
                 ? (isHighContrast
                       ? Colors.white.withValues(alpha: 0.5)
-                      : Color(0xFFA5A7AE))
+                      : Color(0xFF9AA3AF))
                 : Colors.grey.shade400,
           ),
           const SizedBox(height: 16),
@@ -451,7 +451,7 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
             'Analytics data such as work patterns and break compliance will be displayed here.',
             style: TextStyle(
               fontSize: 14,
-              color: isDark ? Color(0xFFA5A7AE) : Colors.grey.shade600,
+              color: isDark ? Color(0xFF9AA3AF) : Colors.grey.shade600,
             ),
             textAlign: TextAlign.center,
           ),

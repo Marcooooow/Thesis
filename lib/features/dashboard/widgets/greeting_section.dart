@@ -102,11 +102,11 @@ class _GreetingSectionState extends State<GreetingSection> {
     final modeLabel = manualOverride == null ? 'Automatic' : (manualOverride ? 'Forced ON' : 'Forced OFF');
 
     final textColor = isDark
-        ? (isHighContrast ? Colors.white : Color(0xFFF2F2F2))
-        : Color(0xFF171923);
+        ? (isHighContrast ? Colors.white : Color(0xFFE8EBEF))
+        : Color(0xFF111827);
     final subColor = isDark
         ? (isHighContrast ? Colors.white70 : Color(0xFF9CA3AF))
-        : Color(0xFF6B7280);
+        : Color(0xFF5B6472);
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,

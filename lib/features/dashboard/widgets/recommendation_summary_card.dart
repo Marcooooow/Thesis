@@ -34,7 +34,7 @@ class RecommendationSummaryCard extends StatelessWidget {
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   letterSpacing: -0.5,
-                  color: isDark ? Colors.white : const Color(0xFF171923),
+                  color: isDark ? Colors.white : const Color(0xFF111827),
                 ),
               ),
               const Spacer(),
@@ -138,7 +138,7 @@ class RecommendationSummaryCard extends StatelessWidget {
                       'No pending recommendations. Your current work rhythm is well-paced.',
                       style: TextStyle(
                         fontSize: 13.5,
-                        color: isDark ? Colors.white70 : const Color(0xFF6B7280),
+                        color: isDark ? Colors.white70 : const Color(0xFF5B6472),
                       ),
                     ),
                   ),

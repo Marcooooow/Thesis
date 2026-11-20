@@ -80,18 +80,18 @@ class _WellbeingSummaryCardState extends State<WellbeingSummaryCard> {
           Row(
             children: [
               Icon(
-                Icons.balance_outlined,
+                Icons.spa_outlined,
                 size: 22,
                 color: Theme.of(context).colorScheme.primary,
               ),
               const SizedBox(width: 10),
               Text(
-                'Work–Life Balance',
+                'Daily Wellbeing & Check-in Summary',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   letterSpacing: -0.5,
-                  color: isDark ? Colors.white : const Color(0xFF171923),
+                  color: isDark ? Colors.white : const Color(0xFF111827),
                 ),
               ),
               const Spacer(),
@@ -111,15 +111,6 @@ class _WellbeingSummaryCardState extends State<WellbeingSummaryCard> {
                 ),
               ),
             ],
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'A personal view of your wellbeing, workload, and recovery during work.',
-            style: TextStyle(
-              fontSize: 13,
-              height: 1.4,
-              color: isDark ? Colors.white70 : const Color(0xFF596579),
-            ),
           ),
           const SizedBox(height: 16),
           if (_isLoading)
@@ -196,15 +187,6 @@ class _WellbeingSummaryCardState extends State<WellbeingSummaryCard> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 10),
-                Text(
-                  'Based on your check-ins. This is for reflection and is not a medical assessment.',
-                  style: TextStyle(
-                    fontSize: 11,
-                    height: 1.35,
-                    color: isDark ? Colors.white54 : const Color(0xFF788397),
-                  ),
-                ),
               ],
             ),
         ],
@@ -235,7 +217,7 @@ class _WellbeingSummaryCardState extends State<WellbeingSummaryCard> {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w600,
-              color: isDark ? Colors.white60 : const Color(0xFF6B7280),
+              color: isDark ? Colors.white60 : const Color(0xFF5B6472),
             ),
           ),
           const SizedBox(height: 6),
@@ -244,7 +226,7 @@ class _WellbeingSummaryCardState extends State<WellbeingSummaryCard> {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: isDark ? Colors.white : const Color(0xFF171923),
+              color: isDark ? Colors.white : const Color(0xFF111827),
             ),
           ),
         ],

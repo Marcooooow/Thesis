@@ -154,8 +154,8 @@ class _FocusRateProgressState extends State<FocusRateProgress> {
               value: 1.0, // Full circle as background
               strokeWidth: 12,
               color: Theme.of(context).brightness == Brightness.dark
-                  ? const Color(0xFF171923).withValues(alpha: 0.2)
-                  : Colors.grey[300] ?? const Color(0xFFE0E0E0),
+                  ? const Color(0xFF111827).withValues(alpha: 0.2)
+                  : Colors.grey[300] ?? const Color(0xFFE2E6EB),
             ),
           ),
           // Progress circle
@@ -177,7 +177,7 @@ class _FocusRateProgressState extends State<FocusRateProgress> {
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : const Color(0xFF171923),
+                  color: isDark ? Colors.white : const Color(0xFF111827),
                 ),
               ),
               Text(

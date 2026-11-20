@@ -84,7 +84,7 @@ class AdminSidebar extends StatelessWidget {
     return Container(
       width: 230,
       color: isDark
-          ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF1B1D24))
+          ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF151A21))
           : Colors.white,
       child: Column(
         children: [
@@ -138,8 +138,8 @@ class AdminSidebar extends StatelessWidget {
                     : isDark
                     ? (isHighContrast
                           ? Colors.white.withValues(alpha: 0.7)
-                          : Color(0xFFA5A7AE))
-                    : Color(0xFF6B7280),
+                          : Color(0xFF9AA3AF))
+                    : Color(0xFF5B6472),
                 size: 21,
               ),
               const SizedBox(width: 14),
@@ -149,8 +149,8 @@ class AdminSidebar extends StatelessWidget {
                   color: selected
                       ? Theme.of(context).colorScheme.secondary
                       : isDark
-                      ? (isHighContrast ? Colors.white : Color(0xFFA5A7AE))
-                      : Color(0xFF6B7280),
+                      ? (isHighContrast ? Colors.white : Color(0xFF9AA3AF))
+                      : Color(0xFF5B6472),
                   fontSize: 14,
                   fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
                 ),

@@ -167,7 +167,7 @@ class _FocusIdleLineChartState extends State<FocusIdleLineChart> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildLegendItem('Focus Time', const Color(0xFF6C63FF), isDark),
+              _buildLegendItem('Focus Time', const Color(0xFF0F766E), isDark),
               const SizedBox(width: 16),
               _buildLegendItem(
                 'Idle / Break Time',
@@ -197,7 +197,7 @@ class _FocusIdleLineChartState extends State<FocusIdleLineChart> {
           label,
           style: TextStyle(
             fontSize: 13,
-            color: isDark ? Colors.white : const Color(0xFF171923),
+            color: isDark ? Colors.white : const Color(0xFF111827),
           ),
         ),
       ],
@@ -333,7 +333,7 @@ class _FocusIdleLineChartState extends State<FocusIdleLineChart> {
             return FlSpot(index, focusHours);
           }).toList(),
           isCurved: false,
-          color: const Color(0xFF6C63FF), // Purple/blue primary accent
+          color: const Color(0xFF0F766E), // Purple/blue primary accent
           barWidth: 3,
           isStrokeCapRound: true,
           dotData: FlDotData(
@@ -341,14 +341,14 @@ class _FocusIdleLineChartState extends State<FocusIdleLineChart> {
             getDotPainter: (spot, percent, barData, index) =>
                 FlDotCirclePainter(
                   radius: 4,
-                  color: const Color(0xFF6C63FF),
+                  color: const Color(0xFF0F766E),
                   strokeWidth: 2,
                   strokeColor: const Color(0xFFFFFFFF),
                 ),
           ),
           belowBarData: BarAreaData(
             show: true,
-            color: const Color(0xFF6C63FF).withValues(alpha: 0.1),
+            color: const Color(0xFF0F766E).withValues(alpha: 0.1),
           ),
         ),
         LineChartBarData(

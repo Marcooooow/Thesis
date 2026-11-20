@@ -131,19 +131,19 @@ class _TotpChallengeScreenState extends State<TotpChallengeScreen> {
   }
 
   Widget _buildTotpChallengeCard(bool isDark) {
-    final Color cardBgColor = isDark ? Color(0xFF222532) : Color(0xFFF8F9FA);
+    final Color cardBgColor = isDark ? Color(0xFF222532) : Color(0xFFF5F6F8);
     final Color cardBorderColor = isDark
         ? Color(0xFF303442)
-        : Color(0xFFE0E0E0);
-    final Color logoBgColor = Color(0xFF6C63FF);
+        : Color(0xFFE2E6EB);
+    final Color logoBgColor = Color(0xFF0F766E);
     final Color logoIconColor = Colors.white;
-    final Color titleTextColor = isDark ? Colors.white : Color(0xFF171923);
+    final Color titleTextColor = isDark ? Colors.white : Color(0xFF111827);
     final Color subtitleTextColor = isDark
         ? Color(0xFF9CA3AF)
-        : Color(0xFF6B7280);
-    final Color labelTextColor = isDark ? Colors.white : Color(0xFF171923);
-    final Color textFieldTextColor = isDark ? Colors.white : Color(0xFF171923);
-    final Color verifyButtonBgColor = Color(0xFF6C63FF);
+        : Color(0xFF5B6472);
+    final Color labelTextColor = isDark ? Colors.white : Color(0xFF111827);
+    final Color textFieldTextColor = isDark ? Colors.white : Color(0xFF111827);
+    final Color verifyButtonBgColor = Color(0xFF0F766E);
     final Color verifyButtonFgColor = Colors.white;
 
     return Container(
@@ -268,13 +268,13 @@ class _TotpChallengeScreenState extends State<TotpChallengeScreen> {
     required IconData icon,
     required bool isDark,
   }) {
-    final Color hintTextColor = isDark ? Color(0xFF6B7280) : Color(0xFF6B7280);
+    final Color hintTextColor = isDark ? Color(0xFF5B6472) : Color(0xFF5B6472);
     final Color prefixIconColor = isDark
         ? Color(0xFF9CA3AF)
-        : Color(0xFF6B7280);
-    final Color fillColor = isDark ? Color(0xFF171923) : Colors.white;
-    final Color borderColor = isDark ? Color(0xFF303442) : Color(0xFFE0E0E0);
-    final Color focusedBorderColor = Color(0xFF6C63FF);
+        : Color(0xFF5B6472);
+    final Color fillColor = isDark ? Color(0xFF111827) : Colors.white;
+    final Color borderColor = isDark ? Color(0xFF303442) : Color(0xFFE2E6EB);
+    final Color focusedBorderColor = Color(0xFF0F766E);
 
     return InputDecoration(
       hintText: hintText,

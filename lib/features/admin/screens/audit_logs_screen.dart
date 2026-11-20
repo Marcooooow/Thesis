@@ -324,7 +324,7 @@ class _AuditLogsScreenState extends State<AuditLogsScreen> {
           Container(
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
-              color: isDark ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF1B1D24)) : Colors.grey.shade50,
+              color: isDark ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF151A21)) : Colors.grey.shade50,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: isDark ? Colors.white12 : Colors.grey.shade300),
             ),
@@ -359,7 +359,7 @@ class _AuditLogsScreenState extends State<AuditLogsScreen> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: isDark ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF1B1D24)) : Colors.white,
+                color: isDark ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF151A21)) : Colors.white,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: isDark ? Colors.white12 : Colors.grey.shade300),
               ),
@@ -628,7 +628,7 @@ class _AuditLogsScreenState extends State<AuditLogsScreen> {
       height: 96,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF1B1D24)) : Colors.white,
+        color: isDark ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF151A21)) : Colors.white,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: isDark ? Colors.white12 : Colors.grey.shade300),
       ),

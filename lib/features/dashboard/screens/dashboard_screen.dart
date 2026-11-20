@@ -5,9 +5,9 @@ import 'package:intellibreak/features/dashboard/widgets/ai_wellness_card.dart';
 import 'package:intellibreak/features/dashboard/widgets/shift_controller.dart';
 import 'package:intellibreak/features/dashboard/widgets/metrics_section.dart';
 import 'package:intellibreak/features/dashboard/widgets/work_pattern_summary_card.dart';
-import 'package:intellibreak/features/dashboard/widgets/wellbeing_summary_card.dart';
 import 'package:intellibreak/features/dashboard/widgets/daily_timeline_card.dart';
 import 'package:intellibreak/features/dashboard/widgets/greeting_section.dart';
+import 'package:intellibreak/features/work_life_balance/widgets/wlb_hero_card.dart';
 import 'package:intellibreak/features/wellbeing/session_wellbeing_checkin.dart';
 import 'package:intellibreak/features/auth/services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,10 +33,14 @@ class DashboardScreenContent extends StatefulWidget {
   final String? userName;
   final String? userEmail;
 
+  /// Navigates to the full Work-Life Balance screen.
+  final VoidCallback? onOpenWorkLifeBalance;
+
   const DashboardScreenContent({
     super.key,
     this.userName,
     this.userEmail,
+    this.onOpenWorkLifeBalance,
   });
 
   @override
@@ -251,11 +255,12 @@ class _DashboardScreenContentState extends State<DashboardScreenContent> {
                 child: GreetingSection(isGuest: isGuest, userName: userName),
               ),
             ),
-          const SizedBox(height: DesignSystem.spacingL),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            child: WellbeingSummaryCard(),
-          ),
+            const SizedBox(height: DesignSystem.spacingL),
+            // 1b. Work-life balance headline (primary focus of the product)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: WlbHeroCard(onOpenDetails: widget.onOpenWorkLifeBalance),
+            ),
             const SizedBox(height: DesignSystem.spacingL),
             // 2. Shift Controller and Contextual Break Recommendation side by side
             Padding(
@@ -376,7 +381,7 @@ class _DashboardScreenContentState extends State<DashboardScreenContent> {
         children: [
           GreetingSection(isGuest: isGuest, userName: userName),
           const SizedBox(height: DesignSystem.spacingL),
-          const WellbeingSummaryCard(),
+          WlbHeroCard(onOpenDetails: widget.onOpenWorkLifeBalance),
           const SizedBox(height: DesignSystem.spacingL),
           DesignSystem.premiumCard(
             context: context,

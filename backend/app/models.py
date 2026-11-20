@@ -2280,11 +2280,11 @@ class WorkLifeBalanceSurvey(Base):
         nullable=False,
         comment="Foreign key to profiles - employee submitting survey"
     )
-    organization_id: Mapped[uuid.UUID] = mapped_column(
+    organization_id: Mapped[Optional[uuid.UUID]] = mapped_column(
         PG_UUID(as_uuid=True),
         ForeignKey("organizations.id", ondelete="CASCADE"),
-        nullable=False,
-        comment="Foreign key to organizations - organization context"
+        nullable=True,
+        comment="Foreign key to organizations - NULL for solo accounts"
     )
     week_start_date: Mapped[date] = mapped_column(
         Date,

@@ -11,6 +11,13 @@ import 'package:intellibreak/widgets/state_display.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Task-category choices with an "Other" option always available last.
+List<String> _categoriesWithOther(Iterable<String> names) {
+  final list = names.where((n) => n.trim().toLowerCase() != 'other').toList();
+  list.add('Other');
+  return list;
+}
+
 import 'dart:async';
 
 class WorkTasks extends StatefulWidget {
@@ -50,9 +57,6 @@ class _WorkTasksState extends State<WorkTasks> {
   final TextEditingController _otherCategoryController = TextEditingController();
   bool _isCreating = false;
   String? _selectedCategory = 'Content Creation';
-  String get _categoryValue => _selectedCategory == 'Other'
-      ? _otherCategoryController.text.trim()
-      : (_selectedCategory ?? 'Content Creation');
 
   // Role and tasks
   String _userRole = 'EMPLOYEE';
@@ -157,6 +161,26 @@ class _WorkTasksState extends State<WorkTasks> {
       }
     });
   }
+
+  String? get _effectiveCategory {
+    if (_selectedCategory == 'Other') {
+      final value = _otherCategoryController.text.trim();
+      return value.isEmpty ? null : value;
+    }
+    return _selectedCategory;
+  }
+
+  Widget _otherCategoryField() => Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: TextField(
+          controller: _otherCategoryController,
+          decoration: const InputDecoration(
+            labelText: 'Other category',
+            hintText: 'Type your own category',
+            isDense: true,
+          ),
+        ),
+      );
 
   @override
   void dispose() {
@@ -519,15 +543,14 @@ class _WorkTasksState extends State<WorkTasks> {
     String searchQuery = '';
     final titleController = TextEditingController();
     final descriptionController = TextEditingController();
-    final otherCategoryController = TextEditingController();
+    final categoryOtherController = TextEditingController();
     final categoryList = categories.isNotEmpty
         ? categories.map((c) => c['name'].toString()).toList()
         : ['General', 'Development', 'Review', 'Planning', 'Meeting', 'Support'];
-    if (!categoryList.contains('Other')) categoryList.add('Other');
     String? selectedCategory = categoryList.isNotEmpty ? categoryList[0] : 'General';
     String priority = 'MEDIUM';
 
-    await showDialog<void>(
+    showDialog(
       context: context,
       builder: (ctx) {
         return StatefulBuilder(
@@ -638,21 +661,29 @@ class _WorkTasksState extends State<WorkTasks> {
                       DropdownButtonFormField<String>(
                         decoration: const InputDecoration(labelText: 'Category'),
                         value: selectedCategory,
-                        items: categoryList
+                        items: _categoriesWithOther(categories.isNotEmpty
+                                ? categories.map((c) => c['name'].toString())
+                                : ['General', 'Development', 'Review', 'Planning', 'Meeting', 'Support'])
                             .map((cat) => DropdownMenuItem(value: cat, child: Text(cat)))
                             .toList(),
                         onChanged: (val) {
-                          if (val != null) setStateDialog(() => selectedCategory = val);
+                          if (val != null) {
+                            setStateDialog(() {
+                              selectedCategory = val;
+                              if (val != 'Other') categoryOtherController.clear();
+                            });
+                          }
                         },
                       ),
                       if (selectedCategory == 'Other') ...[
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 12),
                         TextField(
-                          controller: otherCategoryController,
-                          maxLength: 100,
-                          decoration: const InputDecoration(labelText: 'Specify category'),
-                          textCapitalization: TextCapitalization.sentences,
+                          controller: categoryOtherController,
                           onChanged: (_) => setStateDialog(() {}),
+                          decoration: const InputDecoration(
+                            labelText: 'Other category',
+                            hintText: 'Type your own category',
+                          ),
                         ),
                       ],
                       const SizedBox(height: 16),
@@ -678,7 +709,7 @@ class _WorkTasksState extends State<WorkTasks> {
                 ElevatedButton(
                   onPressed: selectedProfileIds.isEmpty ||
                           titleController.text.trim().isEmpty ||
-                          (selectedCategory == 'Other' && otherCategoryController.text.trim().isEmpty)
+                          (selectedCategory == 'Other' && categoryOtherController.text.trim().isEmpty)
                       ? null
                       : () async {
                           int successCount = 0;
@@ -693,11 +724,10 @@ class _WorkTasksState extends State<WorkTasks> {
                               if (descriptionController.text.trim().isNotEmpty) {
                                 data['description'] = descriptionController.text.trim();
                               }
-                              final categoryValue = selectedCategory == 'Other'
-                                  ? otherCategoryController.text.trim()
-                                  : selectedCategory;
-                              if (categoryValue != null && categoryValue.isNotEmpty) {
-                                data['category'] = categoryValue;
+                              if (selectedCategory != null && selectedCategory!.isNotEmpty) {
+                                data['category'] = selectedCategory == 'Other'
+                                    ? categoryOtherController.text.trim()
+                                    : selectedCategory;
                               }
                               await _workService.assignManagerTask(token, data);
                               successCount++;
@@ -727,9 +757,6 @@ class _WorkTasksState extends State<WorkTasks> {
         );
       },
     );
-    titleController.dispose();
-    descriptionController.dispose();
-    otherCategoryController.dispose();
   }
 
   Future<void> _showEditTaskGroupDialog(
@@ -744,7 +771,7 @@ class _WorkTasksState extends State<WorkTasks> {
     final titleController = TextEditingController(text: sample['title'] ?? '');
     final descriptionController = TextEditingController(text: sample['description'] ?? '');
     final estMinutesController = TextEditingController(text: sample['estimated_minutes']?.toString() ?? '');
-    final otherCategoryController = TextEditingController();
+    final categoryOtherController = TextEditingController();
     String priority = sample['priority'] ?? 'MEDIUM';
     String category = sample['category'] ?? 'General';
 
@@ -753,15 +780,14 @@ class _WorkTasksState extends State<WorkTasks> {
       categories = await _workService.getTaskCategories(token);
     } catch (_) {}
 
-    final categoryList = categories.isNotEmpty
-        ? categories.map((c) => c['name'].toString()).toList()
-        : ['General', 'Development', 'Review', 'Planning', 'Meeting', 'Support'];
-    if (!categoryList.contains('Other')) categoryList.add('Other');
+    final categoryList = _categoriesWithOther(categories.isNotEmpty
+        ? categories.map((c) => c['name'].toString())
+        : ['General', 'Development', 'Review', 'Planning', 'Meeting', 'Support']);
     if (!categoryList.contains(category)) categoryList.add(category);
 
     if (!context.mounted) return;
 
-    await showDialog<void>(
+    showDialog(
       context: context,
       builder: (ctx) {
         return StatefulBuilder(
@@ -788,17 +814,23 @@ class _WorkTasksState extends State<WorkTasks> {
                       value: category,
                       items: categoryList.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
                       onChanged: (val) {
-                        if (val != null) setStateDialog(() => category = val);
+                        if (val != null) {
+                          setStateDialog(() {
+                            category = val;
+                            if (val != 'Other') categoryOtherController.clear();
+                          });
+                        }
                       },
                     ),
                     if (category == 'Other') ...[
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 12),
                       TextField(
-                        controller: otherCategoryController,
-                        maxLength: 100,
-                        textCapitalization: TextCapitalization.sentences,
-                        decoration: const InputDecoration(labelText: 'Specify category'),
+                        controller: categoryOtherController,
                         onChanged: (_) => setStateDialog(() {}),
+                        decoration: const InputDecoration(
+                          labelText: 'Other category',
+                          hintText: 'Type your own category',
+                        ),
                       ),
                     ],
                     const SizedBox(height: 12),
@@ -827,7 +859,7 @@ class _WorkTasksState extends State<WorkTasks> {
                   child: const Text('Cancel'),
                 ),
                 ElevatedButton(
-                  onPressed: category == 'Other' && otherCategoryController.text.trim().isEmpty
+                  onPressed: category == 'Other' && categoryOtherController.text.trim().isEmpty
                       ? null
                       : () async {
                     final newTitle = titleController.text.trim();
@@ -837,7 +869,7 @@ class _WorkTasksState extends State<WorkTasks> {
                       'title': newTitle,
                       'description': descriptionController.text.trim(),
                       'category': category == 'Other'
-                          ? otherCategoryController.text.trim()
+                          ? categoryOtherController.text.trim()
                           : category,
                       'priority': priority,
                     };
@@ -872,10 +904,6 @@ class _WorkTasksState extends State<WorkTasks> {
         );
       },
     );
-    titleController.dispose();
-    descriptionController.dispose();
-    estMinutesController.dispose();
-    otherCategoryController.dispose();
   }
 
   Future<void> _showManageAssigneesDialog(
@@ -1121,15 +1149,15 @@ class _WorkTasksState extends State<WorkTasks> {
           color: isDark
               ? (isHighContrast
                     ? const Color(0xFF0D0D0D)
-                    : const Color(0xFF1B1D24))
+                    : const Color(0xFF151A21))
               : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isDark
                 ? (isHighContrast
                       ? Colors.white.withValues(alpha: 0.3)
-                      : const Color(0xFF30323A))
-                : const Color(0xFFE0E0E0),
+                      : const Color(0xFF262D37))
+                : const Color(0xFFE2E6EB),
           ),
         ),
         child: Column(
@@ -1178,9 +1206,12 @@ class _WorkTasksState extends State<WorkTasks> {
                         value: 'Documentation',
                         child: Text('Documentation'),
                       ),
+                      DropdownMenuItem(value: 'Other', child: Text('Other')),
                     ],
-                    onChanged: (value) =>
-                        setState(() => _selectedCategory = value),
+                    onChanged: (value) => setState(() {
+                      _selectedCategory = value;
+                      if (value != 'Other') _otherCategoryController.clear();
+                    }),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -1191,6 +1222,7 @@ class _WorkTasksState extends State<WorkTasks> {
                   ),
               ],
             ),
+            if (_selectedCategory == 'Other') _otherCategoryField(),
             const SizedBox(height: 12),
             Row(
               children: [
@@ -1320,15 +1352,15 @@ class _WorkTasksState extends State<WorkTasks> {
         color: isDark
             ? (isHighContrast
                   ? const Color(0xFF0D0D0D)
-                  : const Color(0xFF1B1D24))
+                  : const Color(0xFF151A21))
             : Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isDark
               ? (isHighContrast
                     ? Colors.white.withValues(alpha: 0.3)
-                    : const Color(0xFF30323A))
-              : const Color(0xFFE0E0E0),
+                    : const Color(0xFF262D37))
+              : const Color(0xFFE2E6EB),
         ),
       ),
       child: LayoutBuilder(
@@ -1353,24 +1385,22 @@ class _WorkTasksState extends State<WorkTasks> {
                   initialValue: _selectedCategory,
                   decoration: InputDecoration(isDense: true, border: OutlineInputBorder(borderRadius: BorderRadius.circular(8))),
                   items: const [DropdownMenuItem(value: 'Content Creation', child: Text('Content Creation')), DropdownMenuItem(value: 'Development', child: Text('Development')), DropdownMenuItem(value: 'Design', child: Text('Design')), DropdownMenuItem(value: 'Other', child: Text('Other'))],
-                  onChanged: (v) => setState(() => _selectedCategory = v),
+                  onChanged: (v) => setState(() {
+                    _selectedCategory = v;
+                    if (v != 'Other') _otherCategoryController.clear();
+                  }),
                 ),
-                if (_selectedCategory == 'Other') ...[
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: _otherCategoryController,
-                    maxLength: 100,
-                    textCapitalization: TextCapitalization.sentences,
-                    decoration: const InputDecoration(labelText: 'Specify category'),
-                  ),
-                ],
+                if (_selectedCategory == 'Other') _otherCategoryField(),
               ],
             );
           }
 
           // For desktop and wider screens, try row layout first
-          return Row(
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Row(
+                children: [
               // Task description - flexible, takes remaining space
               Expanded(
                 flex: 3,
@@ -1398,37 +1428,40 @@ class _WorkTasksState extends State<WorkTasks> {
                     minWidth: 120,
                     maxWidth: 180,
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      DropdownButtonFormField<String>(
-                        initialValue: _selectedCategory,
-                        decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                        ),
-                        items: const [
-                          DropdownMenuItem(value: 'Content Creation', child: Text('Content Creation')),
-                          DropdownMenuItem(value: 'Development', child: Text('Development')),
-                          DropdownMenuItem(value: 'Design', child: Text('Design')),
-                          DropdownMenuItem(value: 'Meeting', child: Text('Meeting')),
-                          DropdownMenuItem(value: 'Research', child: Text('Research')),
-                          DropdownMenuItem(value: 'Documentation', child: Text('Documentation')),
-                          DropdownMenuItem(value: 'Other', child: Text('Other')),
-                        ],
-                        onChanged: (value) => setState(() => _selectedCategory = value),
+                  child: DropdownButtonFormField<String>(
+                    initialValue: _selectedCategory,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
                       ),
-                      if (_selectedCategory == 'Other') ...[
-                        const SizedBox(height: 8),
-                        TextField(
-                          controller: _otherCategoryController,
-                          maxLength: 100,
-                          textCapitalization: TextCapitalization.sentences,
-                          decoration: const InputDecoration(labelText: 'Specify category'),
-                        ),
-                      ],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    items: const [
+                      DropdownMenuItem(
+                        value: 'Content Creation',
+                        child: Text('Content Creation'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'Development',
+                        child: Text('Development'),
+                      ),
+                      DropdownMenuItem(value: 'Design', child: Text('Design')),
+                      DropdownMenuItem(value: 'Meeting', child: Text('Meeting')),
+                      DropdownMenuItem(value: 'Research', child: Text('Research')),
+                      DropdownMenuItem(
+                        value: 'Documentation',
+                        child: Text('Documentation'),
+                      ),
+                      DropdownMenuItem(value: 'Other', child: Text('Other')),
                     ],
+                    onChanged: (value) => setState(() {
+                      _selectedCategory = value;
+                      if (value != 'Other') _otherCategoryController.clear();
+                    }),
                   ),
                 ),
               ),
@@ -1580,6 +1613,9 @@ class _WorkTasksState extends State<WorkTasks> {
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
               ),
+                ],
+              ),
+              if (_selectedCategory == 'Other') _otherCategoryField(),
             ],
           );
         },
@@ -1601,15 +1637,15 @@ class _WorkTasksState extends State<WorkTasks> {
           color: isDark
               ? (isHighContrast
                     ? const Color(0xFF0D0D0D)
-                    : const Color(0xFF1B1D24))
+                    : const Color(0xFF151A21))
               : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isDark
                 ? (isHighContrast
                       ? Colors.white.withValues(alpha: 0.3)
-                      : const Color(0xFF30323A))
-                : const Color(0xFFE0E0E0),
+                      : const Color(0xFF262D37))
+                : const Color(0xFFE2E6EB),
           ),
         ),
         child: Column(
@@ -1811,15 +1847,15 @@ class _WorkTasksState extends State<WorkTasks> {
             color: isDark
                 ? (isHighContrast
                       ? const Color(0xFF0D0D0D)
-                      : const Color(0xFF1B1D24))
+                      : const Color(0xFF151A21))
                 : Colors.white,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: isDark
                   ? (isHighContrast
                         ? Colors.white.withValues(alpha: 0.3)
-                        : const Color(0xFF30323A))
-                  : const Color(0xFFE0E0E0),
+                        : const Color(0xFF262D37))
+                  : const Color(0xFFE2E6EB),
             ),
           ),
           child: isWideScreen
@@ -2222,8 +2258,8 @@ class _WorkTasksState extends State<WorkTasks> {
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: isDark
-                        ? (isHighContrast ? Colors.white : const Color(0xFFF2F2F2))
-                        : const Color(0xFF171923),
+                        ? (isHighContrast ? Colors.white : const Color(0xFFE8EBEF))
+                        : const Color(0xFF111827),
                   ),
                 ),
                 Text(
@@ -2234,8 +2270,8 @@ class _WorkTasksState extends State<WorkTasks> {
                     color: isDark
                         ? (isHighContrast
                             ? Colors.white.withValues(alpha: 0.8)
-                            : const Color(0xFFA5A7AE))
-                        : const Color(0xFF6B7280),
+                            : const Color(0xFF9AA3AF))
+                        : const Color(0xFF5B6472),
                   ),
                 ),
               ],
@@ -2286,8 +2322,8 @@ class _WorkTasksState extends State<WorkTasks> {
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: isDark
-                    ? (isHighContrast ? Colors.white : const Color(0xFFF2F2F2))
-                    : const Color(0xFF171923),
+                    ? (isHighContrast ? Colors.white : const Color(0xFFE8EBEF))
+                    : const Color(0xFF111827),
               ),
             ),
             Text(
@@ -2298,8 +2334,8 @@ class _WorkTasksState extends State<WorkTasks> {
                 color: isDark
                     ? (isHighContrast
                           ? Colors.white.withValues(alpha: 0.7)
-                          : const Color(0xFFA5A7AE))
-                    : const Color(0xFF6B7280),
+                          : const Color(0xFF9AA3AF))
+                    : const Color(0xFF5B6472),
               ),
             ),
           ],
@@ -2310,8 +2346,8 @@ class _WorkTasksState extends State<WorkTasks> {
           color: isDark
               ? (isHighContrast
                     ? Colors.white.withValues(alpha: 0.1)
-                    : const Color(0xFF30323A))
-              : const Color(0xFFE0E0E0),
+                    : const Color(0xFF262D37))
+              : const Color(0xFFE2E6EB),
         ),
         // Task rows
         ...tasks.map(
@@ -2357,15 +2393,15 @@ class _WorkTasksState extends State<WorkTasks> {
             color: isDark
                 ? (isHighContrast
                       ? const Color(0xFF0D0D0D)
-                      : const Color(0xFF1B1D24))
+                      : const Color(0xFF151A21))
                 : Colors.white,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color: isDark
                   ? (isHighContrast
                         ? Colors.white.withValues(alpha: 0.2)
-                        : const Color(0xFF30323A))
-                  : const Color(0xFFE0E0E0),
+                        : const Color(0xFF262D37))
+                  : const Color(0xFFE2E6EB),
             ),
           ),
           child: Column(
@@ -2394,8 +2430,8 @@ class _WorkTasksState extends State<WorkTasks> {
                             color: isDark
                                 ? (isHighContrast
                                       ? Colors.white.withValues(alpha: 0.7)
-                                      : const Color(0xFFA5A7AE))
-                                : const Color(0xFF6B7280),
+                                      : const Color(0xFF9AA3AF))
+                                : const Color(0xFF5B6472),
                           ),
                         ),
                       ],
@@ -2441,8 +2477,8 @@ class _WorkTasksState extends State<WorkTasks> {
               color: isDark
                   ? (isHighContrast
                         ? Colors.white.withValues(alpha: 0.05)
-                        : const Color(0xFF30323A))
-                  : const Color(0xFFE0E0E0),
+                        : const Color(0xFF262D37))
+                  : const Color(0xFFE2E6EB),
               width: 1,
             ),
           ),
@@ -2474,8 +2510,8 @@ class _WorkTasksState extends State<WorkTasks> {
                   color: isDark
                       ? (isHighContrast
                             ? Colors.white.withValues(alpha: 0.8)
-                            : const Color(0xFFA5A7AE))
-                      : const Color(0xFF6B7280),
+                            : const Color(0xFF9AA3AF))
+                      : const Color(0xFF5B6472),
                 ),
               ),
             ),
@@ -2740,9 +2776,9 @@ final category = task.category.toLowerCase();
   }
 
   void _handleStartPressed() async {
-    if (_selectedCategory == 'Other' && _otherCategoryController.text.trim().isEmpty) {
+    if (_selectedCategory == 'Other' && _effectiveCategory == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please specify the task category.')),
+        const SnackBar(content: Text('Enter a category for Other.')),
       );
       return;
     }
@@ -2787,7 +2823,7 @@ final category = task.category.toLowerCase();
       // Look for existing task with matching title and category in current session
 final matchingTasks = sessionProvider.state.tasks.where((task) {
         return task?.title == taskTitle &&
-            task?.category == _categoryValue &&
+            task?.category == _effectiveCategory &&
             (task?.status == 'TODO' || task?.status == 'IN_PROGRESS' || task?.status == 'BLOCKED');
       }).toList();
 
@@ -2800,7 +2836,7 @@ final matchingTasks = sessionProvider.state.tasks.where((task) {
         try {
           final taskResponse = await workService.createTask(token, {
             'title': taskTitle,
-            'category': _categoryValue,
+            'category': _effectiveCategory,
             'work_session_id': sessionProvider.state.session?.id,
           });
           taskToStart = WorkTask.fromJson(taskResponse);
@@ -2836,7 +2872,6 @@ final matchingTasks = sessionProvider.state.tasks.where((task) {
         // Clear the entry bar for next task
         if (isNewTask) {
           _taskTitleController.clear();
-          _otherCategoryController.clear();
         }
 
         // Refresh to get updated task status from backend
@@ -2863,9 +2898,9 @@ final matchingTasks = sessionProvider.state.tasks.where((task) {
       // Error handling removed; error is reflected in provider state via StateDisplay
       return;
     }
-    if (_selectedCategory == 'Other' && _otherCategoryController.text.trim().isEmpty) {
+    if (_selectedCategory == 'Other' && _effectiveCategory == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please specify the task category.')),
+        const SnackBar(content: Text('Enter a category for Other.')),
       );
       return;
     }
@@ -2885,7 +2920,7 @@ final matchingTasks = sessionProvider.state.tasks.where((task) {
 
       final taskResponse = await _workService.createTask(token, {
         'title': title,
-        'category': _categoryValue,
+        'category': _effectiveCategory ?? 'Content Creation',
       });
         if (!mounted) return;
 
@@ -2902,7 +2937,6 @@ final matchingTasks = sessionProvider.state.tasks.where((task) {
       }
 
       _taskTitleController.clear();
-      _otherCategoryController.clear();
       _selectedDate = null;
       _startTime = null;
       _endTime = null;

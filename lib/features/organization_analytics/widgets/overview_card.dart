@@ -20,11 +20,11 @@ class OverviewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     // Determine the text color based on theme
     final Color textColor = isDark
-        ? (isHighContrast ? Colors.white : const Color(0xFFF2F2F2))
-        : const Color(0xFF171923);
+        ? (isHighContrast ? Colors.white : const Color(0xFFE8EBEF))
+        : const Color(0xFF111827);
     final Color labelColor = isDark
-        ? (isHighContrast ? Colors.white.withValues(alpha: 0.8) : const Color(0xFFF2F2F2).withValues(alpha: 0.8))
-        : const Color(0xFF6B7280);
+        ? (isHighContrast ? Colors.white.withValues(alpha: 0.8) : const Color(0xFFE8EBEF).withValues(alpha: 0.8))
+        : const Color(0xFF5B6472);
 
     return Container(
       padding: const EdgeInsets.all(16),

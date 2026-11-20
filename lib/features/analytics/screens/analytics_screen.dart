@@ -337,7 +337,7 @@ class _AnalyticsScreenContentState extends State<AnalyticsScreenContent> {
           color: isDark
               ? (isHighContrast
                     ? Colors.white.withValues(alpha: 0.1)
-                    : const Color(0xFF30323A))
+                    : const Color(0xFF262D37))
               : Colors.grey.withValues(alpha: 0.2),
         ),
       ),
@@ -370,8 +370,8 @@ class _AnalyticsScreenContentState extends State<AnalyticsScreenContent> {
                   color: isDark
                       ? (isHighContrast
                             ? Colors.white.withValues(alpha: 0.8)
-                            : const Color(0xFFA5A7AE))
-                      : const Color(0xFF6B7280),
+                            : const Color(0xFF9AA3AF))
+                      : const Color(0xFF5B6472),
                 ),
               ),
             ],
@@ -386,7 +386,7 @@ class _AnalyticsScreenContentState extends State<AnalyticsScreenContent> {
               color: isDark
                   ? (isHighContrast
                         ? Colors.white.withValues(alpha: 0.6)
-                        : const Color(0xFFA5A7AE))
+                        : const Color(0xFF9AA3AF))
                   : const Color(0xFF9CA3AF),
             ),
           ),
@@ -431,7 +431,7 @@ class _AnalyticsScreenContentState extends State<AnalyticsScreenContent> {
           color: isDark
               ? (isHighContrast
                     ? Colors.white.withValues(alpha: 0.1)
-                    : const Color(0xFF30323A))
+                    : const Color(0xFF262D37))
               : Colors.grey.withValues(alpha: 0.2),
         ),
       ),
@@ -464,8 +464,8 @@ class _AnalyticsScreenContentState extends State<AnalyticsScreenContent> {
                   color: isDark
                       ? (isHighContrast
                             ? Colors.white.withValues(alpha: 0.8)
-                            : const Color(0xFFA5A7AE))
-                      : const Color(0xFF6B7280),
+                            : const Color(0xFF9AA3AF))
+                      : const Color(0xFF5B6472),
                 ),
               ),
             ],
@@ -480,7 +480,7 @@ class _AnalyticsScreenContentState extends State<AnalyticsScreenContent> {
               color: isDark
                   ? (isHighContrast
                         ? Colors.white.withValues(alpha: 0.6)
-                        : const Color(0xFFA5A7AE))
+                        : const Color(0xFF9AA3AF))
                   : const Color(0xFF9CA3AF),
             ),
           ),
@@ -527,7 +527,7 @@ class _AnalyticsScreenContentState extends State<AnalyticsScreenContent> {
           color: isDark
               ? (isHighContrast
                     ? Colors.white.withValues(alpha: 0.1)
-                    : const Color(0xFF30323A))
+                    : const Color(0xFF262D37))
               : Colors.grey.withValues(alpha: 0.2),
         ),
       ),
@@ -555,8 +555,8 @@ class _AnalyticsScreenContentState extends State<AnalyticsScreenContent> {
                   color: isDark
                       ? (isHighContrast
                             ? Colors.white.withValues(alpha: 0.8)
-                            : const Color(0xFFA5A7AE))
-                      : const Color(0xFF6B7280),
+                            : const Color(0xFF9AA3AF))
+                      : const Color(0xFF5B6472),
                 ),
               ),
             ],
@@ -587,14 +587,14 @@ class _AnalyticsScreenContentState extends State<AnalyticsScreenContent> {
         color: isDark
             ? (isHighContrast
                   ? const Color(0xFF0D0D0D)
-                  : const Color(0xFF1B1D24))
+                  : const Color(0xFF151A21))
             : Colors.grey.shade200,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: isDark
               ? (isHighContrast
                     ? Colors.white.withValues(alpha: 0.2)
-                    : const Color(0xFF30323A))
+                    : const Color(0xFF262D37))
               : Colors.grey.shade300,
         ),
       ),
@@ -621,7 +621,7 @@ class _AnalyticsScreenContentState extends State<AnalyticsScreenContent> {
                     color: isDark
                         ? (isHighContrast
                               ? Colors.white
-                              : const Color(0xFFA5A7AE))
+                              : const Color(0xFF9AA3AF))
                         : Colors.grey.shade700,
                   ),
                   const SizedBox(width: 8),
@@ -640,12 +640,12 @@ class _AnalyticsScreenContentState extends State<AnalyticsScreenContent> {
           dropdownColor: isDark
               ? (isHighContrast
                     ? const Color(0xFF0D0D0D)
-                    : const Color(0xFF1B1D24))
+                    : const Color(0xFF151A21))
               : Colors.white,
           icon: Icon(
             Icons.arrow_drop_down,
             color: isDark
-                ? (isHighContrast ? Colors.white : const Color(0xFFA5A7AE))
+                ? (isHighContrast ? Colors.white : const Color(0xFF9AA3AF))
                 : Colors.grey.shade700,
           ),
         ),

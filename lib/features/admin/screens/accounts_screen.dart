@@ -226,7 +226,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
                 color: isDark
                     ? (isHighContrast
                           ? Colors.white.withValues(alpha: 0.7)
-                          : Color(0xFFA5A7AE))
+                          : Color(0xFF9AA3AF))
                     : Colors.grey.shade600,
                 fontSize: 16,
               ),
@@ -358,7 +358,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
             style: TextStyle(
               fontSize: 13,
               color: isDark
-                  ? (isHighContrast ? Colors.white70 : const Color(0xFFA5A7AE))
+                  ? (isHighContrast ? Colors.white70 : const Color(0xFF9AA3AF))
                   : Colors.grey.shade600,
             ),
           ),
@@ -408,7 +408,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
               color: isDark
                   ? (isHighContrast
                         ? Colors.white.withValues(alpha: 0.5)
-                        : Color(0xFFA5A7AE))
+                        : Color(0xFF9AA3AF))
                   : Colors.grey.shade400,
             ),
             const SizedBox(height: 24),
@@ -431,7 +431,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
                 color: isDark
                     ? (isHighContrast
                           ? Colors.white.withValues(alpha: 0.7)
-                          : Color(0xFFA5A7AE))
+                          : Color(0xFF9AA3AF))
                     : Colors.grey.shade600,
               ),
               textAlign: TextAlign.center,
@@ -517,7 +517,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
                           color: isDark
                               ? (isHighContrast
                                     ? Colors.white.withValues(alpha: 0.7)
-                                    : Color(0xFFA5A7AE))
+                                    : Color(0xFF9AA3AF))
                               : Colors.grey.shade600,
                         ),
                       ),
@@ -530,7 +530,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
                             color: isDark
                                 ? (isHighContrast
                                       ? Colors.white.withValues(alpha: 0.6)
-                                      : Color(0xFFA5A7AE))
+                                      : Color(0xFF9AA3AF))
                                 : Colors.grey.shade500,
                           ),
                         ),
@@ -545,7 +545,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
                               color: isDark
                                   ? (isHighContrast
                                         ? Colors.white.withValues(alpha: 0.6)
-                                        : Color(0xFFA5A7AE))
+                                        : Color(0xFF9AA3AF))
                                   : Colors.grey.shade500,
                             ),
                           ),
@@ -620,7 +620,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
               color: isDark
                   ? (isHighContrast
                         ? Colors.white.withValues(alpha: 0.1)
-                        : Color(0xFF30323A))
+                        : Color(0xFF262D37))
                   : Colors.grey.withValues(alpha: 0.2),
             ),
           ],
@@ -646,7 +646,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
           color: isDark
               ? (isHighContrast
                     ? const Color(0xFF0D0D0D)
-                    : const Color(0xFF1B1D24))
+                    : const Color(0xFF151A21))
               : Colors.white,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
@@ -660,8 +660,8 @@ class _AccountsScreenState extends State<AccountsScreen> {
             color: isDark
                 ? (isHighContrast
                       ? Colors.white.withValues(alpha: 0.1)
-                      : const Color(0xFF30323A))
-                : const Color(0xFFE0E0E0),
+                      : const Color(0xFF262D37))
+                : const Color(0xFFE2E6EB),
           ),
         ),
         child: Column(
@@ -677,7 +677,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
                   color: isDark
                       ? (isHighContrast
                             ? Colors.white.withValues(alpha: 0.7)
-                            : Color(0xFFA5A7AE))
+                            : Color(0xFF9AA3AF))
                       : Colors.grey.shade600,
                 ),
                 filled: true,
@@ -1036,7 +1036,7 @@ class _AddUserDialogState extends State<AddUserDialog> {
                   prefixIcon: Icon(
                     Icons.email,
                     color: isDark
-                        ? (isHighContrast ? Colors.white : Color(0xFFA5A7AE))
+                        ? (isHighContrast ? Colors.white : Color(0xFF9AA3AF))
                         : Colors.grey,
                   ),
                 ),
@@ -1058,7 +1058,7 @@ class _AddUserDialogState extends State<AddUserDialog> {
                   prefixIcon: Icon(
                     Icons.lock,
                     color: isDark
-                        ? (isHighContrast ? Colors.white : Color(0xFFA5A7AE))
+                        ? (isHighContrast ? Colors.white : Color(0xFF9AA3AF))
                         : Colors.grey,
                   ),
                 ),
@@ -1081,7 +1081,7 @@ class _AddUserDialogState extends State<AddUserDialog> {
                   prefixIcon: Icon(
                     Icons.person,
                     color: isDark
-                        ? (isHighContrast ? Colors.white : Color(0xFFA5A7AE))
+                        ? (isHighContrast ? Colors.white : Color(0xFF9AA3AF))
                         : Colors.grey,
                   ),
                 ),
@@ -1100,7 +1100,7 @@ class _AddUserDialogState extends State<AddUserDialog> {
                   prefixIcon: Icon(
                     Icons.account_circle,
                     color: isDark
-                        ? (isHighContrast ? Colors.white : Color(0xFFA5A7AE))
+                        ? (isHighContrast ? Colors.white : Color(0xFF9AA3AF))
                         : Colors.grey,
                   ),
                 ),
@@ -1129,7 +1129,7 @@ class _AddUserDialogState extends State<AddUserDialog> {
                     prefixIcon: Icon(
                       Icons.business,
                       color: isDark
-                          ? (isHighContrast ? Colors.white : Color(0xFFA5A7AE))
+                          ? (isHighContrast ? Colors.white : Color(0xFF9AA3AF))
                           : Colors.grey,
                     ),
                   ),
@@ -1142,7 +1142,7 @@ class _AddUserDialogState extends State<AddUserDialog> {
                   prefixIcon: Icon(
                     Icons.person_pin,
                     color: isDark
-                        ? (isHighContrast ? Colors.white : Color(0xFFA5A7AE))
+                        ? (isHighContrast ? Colors.white : Color(0xFF9AA3AF))
                         : Colors.grey,
                   ),
                 ),
@@ -1426,7 +1426,7 @@ class _UserActionsDialogState extends State<UserActionsDialog>
           builder: (context, setStateDialog) {
             return AlertDialog(
               backgroundColor: isDark
-                  ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF1B1D24))
+                  ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF151A21))
                   : Colors.white,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               title: Row(
@@ -1600,7 +1600,7 @@ class _UserActionsDialogState extends State<UserActionsDialog>
 
     return Dialog(
       backgroundColor: isDark
-          ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF1B1D24))
+          ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF151A21))
           : Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Container(

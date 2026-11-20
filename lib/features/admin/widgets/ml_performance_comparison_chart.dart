@@ -243,7 +243,7 @@ class MLPerformanceComparisonChart extends StatelessWidget {
   List<Color> _getModelColors(int count) {
     // Consistent color palette for models
     const palette = [
-      Color(0xFF6C63FF), // Primary violet
+      Color(0xFF0F766E), // Primary violet
       Color(0xFF4CAF50), // Green
       Color(0xFFFF9800), // Amber
       Color(0xFFF44336), // Red

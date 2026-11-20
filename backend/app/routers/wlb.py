@@ -16,7 +16,15 @@ from ..services.wlb_analysis_service import WLBAnalysisService
 
 router = APIRouter(prefix="/wlb", tags=["Work-Life Balance Survey"])
 
-def get_employee_profile_and_org(db: Session, current_user: User) -> tuple[Profile, uuid.UUID]:
+def get_employee_profile_and_org(db: Session, current_user: User) -> tuple[Profile, Optional[uuid.UUID]]:
+    """Return the caller's profile and, if any, their organization id.
+
+    Solo accounts have no organization membership. Work-life balance is a
+    personal wellbeing feature, so they are allowed; their surveys are stored
+    with organization_id = NULL and are never included in organization roll-ups.
+    A user with an organization membership that is not yet APPROVED is still
+    refused, so pending members cannot write into an organization context.
+    """
     profile = db.query(Profile).filter(Profile.user_id == current_user.id).first()
     if not profile:
         raise HTTPException(status_code=404, detail="Employee profile not found.")
@@ -25,10 +33,13 @@ def get_employee_profile_and_org(db: Session, current_user: User) -> tuple[Profi
         OrganizationMembership.user_id == current_user.id,
         OrganizationMembership.status == "APPROVED"
     ).first()
-    if not membership:
-        raise HTTPException(status_code=403, detail="Active approved organization membership required.")
+    if membership:
+        return profile, membership.organization_id
 
-    return profile, membership.organization_id
+    if getattr(current_user, "account_type", "organization") == "solo":
+        return profile, None
+
+    raise HTTPException(status_code=403, detail="Active approved organization membership required.")
 
 def get_user_timezone_today(db: Session, user_id: uuid.UUID) -> date:
     settings = db.query(UserSettings).filter(UserSettings.user_id == user_id).first()

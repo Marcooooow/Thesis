@@ -231,7 +231,7 @@ class _AdminShellState extends State<AdminShell> {
                   color: isDark
                       ? (isHighContrast
                             ? const Color(0xFF0D0D0D)
-                            : const Color(0xFF1B1D24))
+                            : const Color(0xFF151A21))
                       : Colors.white,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
@@ -259,7 +259,7 @@ class _AdminShellState extends State<AdminShell> {
                                 color: isDark
                                     ? (isHighContrast
                                           ? Colors.white
-                                          : Color(0xFFA5A7AE))
+                                          : Color(0xFF9AA3AF))
                                     : Colors.grey.shade300,
                                 shape: BoxShape.circle,
                               ),
@@ -284,7 +284,7 @@ class _AdminShellState extends State<AdminShell> {
                                       color: isDark
                                           ? (isHighContrast
                                                 ? Colors.white
-                                                : Color(0xFFF2F2F2))
+                                                : Color(0xFFE8EBEF))
                                           : Colors.black,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -300,7 +300,7 @@ class _AdminShellState extends State<AdminShell> {
                                                 ? Colors.white.withValues(
                                                     alpha: 0.7,
                                                   )
-                                                : Color(0xFFA5A7AE))
+                                                : Color(0xFF9AA3AF))
                                           : Colors.grey.shade600,
                                       fontSize: 14,
                                     ),
@@ -314,7 +314,7 @@ class _AdminShellState extends State<AdminShell> {
                                                 ? Colors.white.withValues(
                                                     alpha: 0.7,
                                                   )
-                                                : Color(0xFFA5A7AE))
+                                                : Color(0xFF9AA3AF))
                                           : Colors.grey.shade600,
                                       fontSize: 12,
                                       fontWeight: FontWeight.w500,
@@ -331,8 +331,8 @@ class _AdminShellState extends State<AdminShell> {
                         color: isDark
                             ? (isHighContrast
                                   ? Colors.white.withValues(alpha: 0.1)
-                                  : Color(0xFF30323A))
-                            : Color(0xFFE0E0E0),
+                                  : Color(0xFF262D37))
+                            : Color(0xFFE2E6EB),
                       ),
                       // Menu Items
                       ListTile(
@@ -341,7 +341,7 @@ class _AdminShellState extends State<AdminShell> {
                           color: isDark
                               ? (isHighContrast
                                     ? Colors.white
-                                    : Color(0xFFA5A7AE))
+                                    : Color(0xFF9AA3AF))
                               : Colors.black,
                           size: 22,
                         ),
@@ -351,7 +351,7 @@ class _AdminShellState extends State<AdminShell> {
                             color: isDark
                                 ? (isHighContrast
                                       ? Colors.white
-                                      : Color(0xFFF2F2F2))
+                                      : Color(0xFFE8EBEF))
                                 : Colors.black,
                             fontSize: 16,
                           ),
@@ -369,7 +369,7 @@ class _AdminShellState extends State<AdminShell> {
                           color: isDark
                               ? (isHighContrast
                                     ? Colors.white
-                                    : Color(0xFFA5A7AE))
+                                    : Color(0xFF9AA3AF))
                               : Colors.black,
                           size: 22,
                         ),
@@ -379,7 +379,7 @@ class _AdminShellState extends State<AdminShell> {
                             color: isDark
                                 ? (isHighContrast
                                       ? Colors.white
-                                      : Color(0xFFA5A7AE))
+                                      : Color(0xFF9AA3AF))
                                 : Colors.black,
                             fontSize: 16,
                           ),
@@ -397,7 +397,7 @@ class _AdminShellState extends State<AdminShell> {
                           color: isDark
                               ? (isHighContrast
                                     ? Colors.white
-                                    : Color(0xFFA5A7AE))
+                                    : Color(0xFF9AA3AF))
                               : Colors.black,
                           size: 22,
                         ),
@@ -407,7 +407,7 @@ class _AdminShellState extends State<AdminShell> {
                             color: isDark
                                 ? (isHighContrast
                                       ? Colors.white
-                                      : Color(0xFFF2F2F2))
+                                      : Color(0xFFE8EBEF))
                                 : Colors.black,
                             fontSize: 16,
                           ),

@@ -233,14 +233,14 @@ class SettingsSidebar extends StatelessWidget {
         color: isDark
             ? (isHighContrast
                   ? const Color(0xFF0D0D0D)
-                  : const Color(0xFF1B1D24))
+                  : const Color(0xFF151A21))
             : Colors.grey.shade50,
         border: Border(
           right: BorderSide(
             color: isDark
                 ? (isHighContrast
                       ? Colors.white.withValues(alpha: 0.1)
-                      : const Color(0xFF30323A))
+                      : const Color(0xFF262D37))
                 : Colors.grey.shade300,
             width: 1,
           ),
@@ -314,7 +314,7 @@ class SettingsHeader extends StatelessWidget {
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: isDark
-                  ? (isHighContrast ? Colors.white : Color(0xFFF2F2F2))
+                  ? (isHighContrast ? Colors.white : Color(0xFFE8EBEF))
                   : Colors.black,
             ),
           ),
@@ -326,7 +326,7 @@ class SettingsHeader extends StatelessWidget {
               color: isDark
                   ? (isHighContrast
                         ? Colors.white.withValues(alpha: 0.7)
-                        : Color(0xFFA5A7AE))
+                        : Color(0xFF9AA3AF))
                   : Colors.grey.shade600,
             ),
           ),
@@ -353,7 +353,7 @@ class SettingsDivider extends StatelessWidget {
         color: isDark
             ? (isHighContrast
                   ? Colors.white.withValues(alpha: 0.1)
-                  : Color(0xFF30323A))
+                  : Color(0xFF262D37))
             : Colors.grey.shade300,
         height: 1,
       ),
@@ -391,7 +391,7 @@ class SettingsMenuItem extends StatelessWidget {
           color: isSelected
               ? Theme.of(context).colorScheme.primary
               : isDark
-                  ? (isHighContrast ? Colors.white : Color(0xFFA5A7AE))
+                  ? (isHighContrast ? Colors.white : Color(0xFF9AA3AF))
                   : Colors.black,
           size: 22,
         ),
@@ -403,7 +403,7 @@ class SettingsMenuItem extends StatelessWidget {
             color: isSelected
                 ? Theme.of(context).colorScheme.primary
                 : isDark
-                    ? (isHighContrast ? Colors.white : Color(0xFFA5A7AE))
+                    ? (isHighContrast ? Colors.white : Color(0xFF9AA3AF))
                     : Colors.black,
           ),
         ),
@@ -441,7 +441,7 @@ class SettingsSectionTitle extends StatelessWidget {
           fontSize: 18,
           fontWeight: FontWeight.w600,
           color: isDark
-              ? (isHighContrast ? Colors.white : Color(0xFFF2F2F2))
+              ? (isHighContrast ? Colors.white : Color(0xFFE8EBEF))
               : Colors.black,
         ),
       ),
@@ -479,7 +479,7 @@ class SettingsListTile extends StatelessWidget {
       leading: Icon(
         leadingIcon,
         color: isDark
-            ? (isHighContrast ? Colors.white : Color(0xFFA5A7AE))
+            ? (isHighContrast ? Colors.white : Color(0xFF9AA3AF))
             : Colors.black,
         size: 22,
       ),
@@ -488,7 +488,7 @@ class SettingsListTile extends StatelessWidget {
         style: TextStyle(
           fontSize: 16,
           color: isDark
-              ? (isHighContrast ? Colors.white : Color(0xFFA5A7AE))
+              ? (isHighContrast ? Colors.white : Color(0xFF9AA3AF))
               : Colors.black,
         ),
       ),
@@ -500,7 +500,7 @@ class SettingsListTile extends StatelessWidget {
                 color: isDark
                     ? (isHighContrast
                           ? Colors.white.withValues(alpha: 0.7)
-                          : Color(0xFFA5A7AE))
+                          : Color(0xFF9AA3AF))
                     : Colors.grey.shade600,
               ),
             )
@@ -678,21 +678,21 @@ class _SettingsContentState extends State<SettingsContent> {
         const SettingsSectionTitle(title: 'Accent color'),
         SettingsListTile(
           leadingIcon: Icons.color_lens,
-          title: 'Blue',
-          isSelected: themeController.accentColor == const Color(0xFF6C63FF),
-          onTap: () => themeController.setAccentColor(const Color(0xFF6C63FF)),
+          title: 'Teal (default)',
+          isSelected: themeController.accentColor == const Color(0xFF0F766E),
+          onTap: () => themeController.setAccentColor(const Color(0xFF0F766E)),
         ),
         SettingsListTile(
           leadingIcon: Icons.color_lens,
-          title: 'Green',
-          isSelected: themeController.accentColor == const Color(0xFF4CAF50),
-          onTap: () => themeController.setAccentColor(const Color(0xFF4CAF50)),
+          title: 'Navy',
+          isSelected: themeController.accentColor == const Color(0xFF1E4E8C),
+          onTap: () => themeController.setAccentColor(const Color(0xFF1E4E8C)),
         ),
         SettingsListTile(
           leadingIcon: Icons.color_lens,
-          title: 'Purple',
-          isSelected: themeController.accentColor == const Color(0xFF9C27B0),
-          onTap: () => themeController.setAccentColor(const Color(0xFF9C27B0)),
+          title: 'Forest',
+          isSelected: themeController.accentColor == const Color(0xFF2E6B4F),
+          onTap: () => themeController.setAccentColor(const Color(0xFF2E6B4F)),
         ),
         const SizedBox(height: 24),
         const SettingsSectionTitle(title: 'Interface'),

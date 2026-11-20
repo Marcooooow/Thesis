@@ -57,6 +57,8 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
   final TextEditingController _targetDailyHoursController =
       TextEditingController();
   final TextEditingController _hireDateController = TextEditingController();
+  final Map<String, TextEditingController> _profileOtherControllers = {};
+  final Set<String> _profileOtherFields = {};
   TimeOfDay? _shiftStartTime;
   TimeOfDay? _shiftEndTime;
   final Set<String> _selectedWorkDays = {};
@@ -76,6 +78,11 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
   String _wpReminderPreference = 'gentle';
   String _wpRecommendationStyle = 'structured';
   bool _wpProfileCompleted = false;
+  final TextEditingController _wpScheduleTypeOtherController = TextEditingController();
+  final TextEditingController _wpArrangementOtherController = TextEditingController();
+  final TextEditingController _wpLunchConsistencyOtherController = TextEditingController();
+  final TextEditingController _wpReminderPreferenceOtherController = TextEditingController();
+  final TextEditingController _wpRecommendationStyleOtherController = TextEditingController();
 
   static const List<String> _daysOfWeek = [
     'monday',
@@ -107,6 +114,14 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
     _yearsOfExperienceController.dispose();
     _targetDailyHoursController.dispose();
     _hireDateController.dispose();
+    _wpScheduleTypeOtherController.dispose();
+    _wpArrangementOtherController.dispose();
+    _wpLunchConsistencyOtherController.dispose();
+    _wpReminderPreferenceOtherController.dispose();
+    _wpRecommendationStyleOtherController.dispose();
+    for (final controller in _profileOtherControllers.values) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -131,18 +146,18 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
         if (wp != null && mounted) {
           setState(() {
             _hasWorkProfile = true;
-            _wpScheduleType = wp['schedule_type'] ?? 'flexible';
-            _wpArrangement = wp['arrangement'] ?? 'remote';
+            _wpScheduleType = _coerceWorkProfileOption(wp['schedule_type'], const ['flexible', 'variable', 'other'], 'flexible', _wpScheduleTypeOtherController);
+            _wpArrangement = _coerceWorkProfileOption(wp['arrangement'], const ['remote', 'office', 'hybrid', 'other'], 'remote', _wpArrangementOtherController);
             _wpTypicalFocus = wp['typical_focus_duration'] ?? 60;
             _wpPreferredFocus = wp['preferred_focus_duration'] ?? 45;
             _wpTypicalBreakFrequency = wp['typical_break_frequency'] ?? 4;
             _wpTypicalBreakDuration = wp['typical_break_duration'] ?? 15;
             _wpLunchStartTime = wp['lunch_start_time'] ?? '12:30';
             _wpLunchDuration = wp['lunch_duration'] ?? 45;
-            _wpLunchConsistency = wp['lunch_consistency'] ?? 'consistent';
+            _wpLunchConsistency = _coerceWorkProfileOption(wp['lunch_consistency'], const ['consistent', 'variable', 'other'], 'consistent', _wpLunchConsistencyOtherController);
             _wpResponsibilities = List<String>.from(wp['responsibilities'] ?? []);
-            _wpReminderPreference = wp['reminder_preference'] ?? 'gentle';
-            _wpRecommendationStyle = wp['recommendation_style'] ?? 'structured';
+            _wpReminderPreference = _coerceWorkProfileOption(wp['reminder_preference'], const ['gentle', 'firm', 'adaptive', 'other'], 'gentle', _wpReminderPreferenceOtherController);
+            _wpRecommendationStyle = _coerceWorkProfileOption(wp['recommendation_style'], const ['structured', 'flexible', 'other'], 'structured', _wpRecommendationStyleOtherController);
             _wpProfileCompleted = wp['profile_completed'] ?? false;
           });
         }
@@ -158,6 +173,54 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
     }
   }
 
+  /// Returns [raw] when it is still an offered option, falls back to
+  /// [fallback] when empty, and maps retired values (e.g. the removed
+  /// "fixed" schedule) to 'other' so the dropdown never receives a value
+  /// that is not in its item list.
+  String _coerceOption(dynamic raw, List<String> allowed, String fallback) {
+    final value = raw?.toString().trim().toLowerCase() ?? '';
+    if (value.isEmpty) return fallback;
+    return allowed.contains(value) ? value : 'other';
+  }
+
+  String _coerceWorkProfileOption(
+    dynamic raw,
+    List<String> allowed,
+    String fallback,
+    TextEditingController otherController,
+  ) {
+    final rawValue = raw?.toString().trim() ?? '';
+    final normalized = rawValue.toLowerCase();
+    if (normalized.isEmpty) return fallback;
+    if (allowed.contains(normalized)) {
+      otherController.clear();
+      return normalized;
+    }
+    otherController.text = rawValue;
+    return 'other';
+  }
+
+  String _workProfileOptionValue(
+    String selected,
+    TextEditingController otherController,
+  ) {
+    final custom = otherController.text.trim();
+    return selected == 'other' && custom.isNotEmpty ? custom : selected;
+  }
+
+  Widget _workProfileOtherField(
+    TextEditingController controller,
+    String label,
+    Color primaryText,
+  ) => TextFormField(
+        controller: controller,
+        style: TextStyle(color: primaryText),
+        decoration: InputDecoration(
+          labelText: 'Enter your $label',
+          hintText: 'Type your own option',
+        ),
+      );
+
   void _populateForm(Profile profile) {
     _fullNameController.text = profile.fullName;
     _phoneNumberController.text = profile.phoneNumber ?? '';
@@ -168,6 +231,17 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
     _jobRoleController.text = profile.jobRole ?? '';
     _industryController.text = profile.industry ?? '';
     _departmentController.text = profile.department ?? '';
+    _hydrateDropdownOption('Gender', _genderController, const ['Male', 'Female', 'Other']);
+    _hydrateDropdownOption('Education Attainment', _educationAttainmentController,
+        const ['High School', "Bachelor's Degree", "Master's Degree", 'Doctorate', 'Trade School', 'Some College', 'Other']);
+    _hydrateDropdownOption('Marital Status', _maritalStatusController,
+        const ['Single', 'Married', 'Divorced', 'Widowed', 'In a relationship', 'Other']);
+    _hydrateDropdownOption('Job Role', _jobRoleController,
+        const ['Engineering', 'Marketing', 'Sales', 'Human Resources', 'Finance', 'Operations', 'Customer Support', 'Research & Development', 'Other']);
+    _hydrateDropdownOption('Industry', _industryController,
+        const ['Technology', 'Healthcare', 'Finance', 'Education', 'Retail', 'Manufacturing', 'Other']);
+    _hydrateDropdownOption('Department', _departmentController,
+        const ['Engineering', 'Marketing', 'Sales', 'Human Resources', 'Finance', 'Operations', 'Customer Support', 'Research & Development', 'Other']);
     _yearsOfExperienceController.text =
         profile.yearsOfExperience?.toString() ?? '';
     _targetDailyHoursController.text =
@@ -302,12 +376,12 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
       addIfNotEmpty('full_name', _fullNameController.text.trim());
       addIfNotEmpty('phone_number', _phoneNumberController.text.trim());
       addIfNotEmptyInt('age', int.tryParse(_ageController.text.trim()));
-      addIfNotEmpty('gender', _genderController.text.trim());
-      addIfNotEmpty('education_attainment', _educationAttainmentController.text.trim());
-      addIfNotEmpty('marital_status', _maritalStatusController.text.trim());
-      addIfNotEmpty('job_role', _jobRoleController.text.trim());
-      addIfNotEmpty('industry', _industryController.text.trim());
-      addIfNotEmpty('department', _departmentController.text.trim());
+      addIfNotEmpty('gender', _profileDropdownValue('Gender', _genderController));
+      addIfNotEmpty('education_attainment', _profileDropdownValue('Education Attainment', _educationAttainmentController));
+      addIfNotEmpty('marital_status', _profileDropdownValue('Marital Status', _maritalStatusController));
+      addIfNotEmpty('job_role', _profileDropdownValue('Job Role', _jobRoleController));
+      addIfNotEmpty('industry', _profileDropdownValue('Industry', _industryController));
+      addIfNotEmpty('department', _profileDropdownValue('Department', _departmentController));
       addIfNotEmptyInt('years_of_experience', int.tryParse(_yearsOfExperienceController.text.trim()));
       addIfNotEmptyInt('target_daily_hours', int.tryParse(_targetDailyHoursController.text.trim()));
       addIfNotEmpty('hire_date', _hireDateController.text.trim());
@@ -331,18 +405,18 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
         final token = await ApiService().getToken();
         if (token != null) {
           final wpData = {
-            'schedule_type': _wpScheduleType,
-            'arrangement': _wpArrangement,
+            'schedule_type': _workProfileOptionValue(_wpScheduleType, _wpScheduleTypeOtherController),
+            'arrangement': _workProfileOptionValue(_wpArrangement, _wpArrangementOtherController),
             'typical_focus_duration': _wpTypicalFocus,
             'preferred_focus_duration': _wpPreferredFocus,
             'typical_break_frequency': _wpTypicalBreakFrequency,
             'typical_break_duration': _wpTypicalBreakDuration,
             'lunch_start_time': _wpLunchStartTime,
             'lunch_duration': _wpLunchDuration,
-            'lunch_consistency': _wpLunchConsistency,
+            'lunch_consistency': _workProfileOptionValue(_wpLunchConsistency, _wpLunchConsistencyOtherController),
             'responsibilities': _wpResponsibilities,
-            'reminder_preference': _wpReminderPreference,
-            'recommendation_style': _wpRecommendationStyle,
+            'reminder_preference': _workProfileOptionValue(_wpReminderPreference, _wpReminderPreferenceOtherController),
+            'recommendation_style': _workProfileOptionValue(_wpRecommendationStyle, _wpRecommendationStyleOtherController),
             'profile_completed': true,
           };
           if (_hasWorkProfile) {
@@ -385,6 +459,38 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
     }
   }
 
+  void _hydrateDropdownOption(
+    String label,
+    TextEditingController valueController,
+    List<String> options,
+  ) {
+    final raw = valueController.text.trim();
+    if (raw.isEmpty) return;
+    final matchingOption = options.where(
+      (option) => option.toLowerCase() == raw.toLowerCase(),
+    );
+    if (matchingOption.isNotEmpty && raw.toLowerCase() != 'other') {
+      valueController.text = matchingOption.first;
+      _profileOtherFields.remove(label);
+      return;
+    }
+    final otherController = _profileOtherController(label);
+    otherController.text = raw.toLowerCase() == 'other' ? '' : raw;
+    valueController.text = 'Other';
+    _profileOtherFields.add(label);
+  }
+
+  TextEditingController _profileOtherController(String label) =>
+      _profileOtherControllers.putIfAbsent(label, TextEditingController.new);
+
+  String _profileDropdownValue(String label, TextEditingController controller) {
+    if (_profileOtherFields.contains(label)) {
+      final custom = _profileOtherController(label).text.trim();
+      return custom.isEmpty ? 'Other' : custom;
+    }
+    return controller.text.trim();
+  }
+
   List<String> _getUniqueItems(List<String> items) {
     return items.toSet().toList();
   }
@@ -421,7 +527,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
     final Color surfaceColor = isHighContrast
         ? (isDark ? AppTheme.hcPrimaryBackground : Colors.white)
         : isDark
-            ? const Color(0xFF1B1D24)
+            ? const Color(0xFF151A21)
             : Colors.white;
     final Color accentColor = themeController.accentColor;
 
@@ -572,14 +678,23 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                       value: _wpScheduleType,
                       decoration: const InputDecoration(labelText: 'Schedule Type'),
                       items: const [
-                        DropdownMenuItem(value: 'fixed', child: Text('Fixed Schedule')),
                         DropdownMenuItem(value: 'flexible', child: Text('Flexible Schedule')),
                         DropdownMenuItem(value: 'variable', child: Text('Variable Schedule')),
+                        DropdownMenuItem(value: 'other', child: Text('Other')),
                       ],
                       onChanged: (val) {
-                        if (val != null) setState(() => _wpScheduleType = val);
+                        if (val != null) {
+                          setState(() {
+                            _wpScheduleType = val;
+                            if (val != 'other') _wpScheduleTypeOtherController.clear();
+                          });
+                        }
                       },
                     ),
+                    if (_wpScheduleType == 'other') ...[
+                      const SizedBox(height: 10),
+                      _workProfileOtherField(_wpScheduleTypeOtherController, 'schedule type', primaryText),
+                    ],
                     const SizedBox(height: 16),
                     DropdownButtonFormField<String>(
                       value: _wpArrangement,
@@ -588,11 +703,21 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                         DropdownMenuItem(value: 'remote', child: Text('Remote (Work from Home)')),
                         DropdownMenuItem(value: 'office', child: Text('Office')),
                         DropdownMenuItem(value: 'hybrid', child: Text('Hybrid')),
+                        DropdownMenuItem(value: 'other', child: Text('Other')),
                       ],
                       onChanged: (val) {
-                        if (val != null) setState(() => _wpArrangement = val);
+                        if (val != null) {
+                          setState(() {
+                            _wpArrangement = val;
+                            if (val != 'other') _wpArrangementOtherController.clear();
+                          });
+                        }
                       },
                     ),
+                    if (_wpArrangement == 'other') ...[
+                      const SizedBox(height: 10),
+                      _workProfileOtherField(_wpArrangementOtherController, 'work arrangement', primaryText),
+                    ],
                     const SizedBox(height: 20),
                     Text('Typical Focus Duration: $_wpTypicalFocus minutes', style: TextStyle(color: primaryText, fontWeight: FontWeight.w500)),
                     Slider(
@@ -656,11 +781,21 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                       items: const [
                         DropdownMenuItem(value: 'consistent', child: Text('Consistent')),
                         DropdownMenuItem(value: 'variable', child: Text('Variable')),
+                        DropdownMenuItem(value: 'other', child: Text('Other')),
                       ],
                       onChanged: (val) {
-                        if (val != null) setState(() => _wpLunchConsistency = val);
+                        if (val != null) {
+                          setState(() {
+                            _wpLunchConsistency = val;
+                            if (val != 'other') _wpLunchConsistencyOtherController.clear();
+                          });
+                        }
                       },
                     ),
+                    if (_wpLunchConsistency == 'other') ...[
+                      const SizedBox(height: 10),
+                      _workProfileOtherField(_wpLunchConsistencyOtherController, 'lunch pattern', primaryText),
+                    ],
                     const SizedBox(height: 20),
                     Text('Responsibilities (Optional)', style: TextStyle(color: primaryText, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 8),
@@ -692,11 +827,21 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                         DropdownMenuItem(value: 'gentle', child: Text('Gentle')),
                         DropdownMenuItem(value: 'firm', child: Text('Firm')),
                         DropdownMenuItem(value: 'adaptive', child: Text('Adaptive')),
+                        DropdownMenuItem(value: 'other', child: Text('Other')),
                       ],
                       onChanged: (val) {
-                        if (val != null) setState(() => _wpReminderPreference = val);
+                        if (val != null) {
+                          setState(() {
+                            _wpReminderPreference = val;
+                            if (val != 'other') _wpReminderPreferenceOtherController.clear();
+                          });
+                        }
                       },
                     ),
+                    if (_wpReminderPreference == 'other') ...[
+                      const SizedBox(height: 10),
+                      _workProfileOtherField(_wpReminderPreferenceOtherController, 'reminder preference', primaryText),
+                    ],
                     const SizedBox(height: 16),
                     DropdownButtonFormField<String>(
                       value: _wpRecommendationStyle,
@@ -704,11 +849,21 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                       items: const [
                         DropdownMenuItem(value: 'structured', child: Text('Structured (Pomodoro / Timed)')),
                         DropdownMenuItem(value: 'flexible', child: Text('Flexible (Flow-based)')),
+                        DropdownMenuItem(value: 'other', child: Text('Other')),
                       ],
                       onChanged: (val) {
-                        if (val != null) setState(() => _wpRecommendationStyle = val);
+                        if (val != null) {
+                          setState(() {
+                            _wpRecommendationStyle = val;
+                            if (val != 'other') _wpRecommendationStyleOtherController.clear();
+                          });
+                        }
                       },
                     ),
+                    if (_wpRecommendationStyle == 'other') ...[
+                      const SizedBox(height: 10),
+                      _workProfileOtherField(_wpRecommendationStyleOtherController, 'recommendation style', primaryText),
+                    ],
                   ],
                   isWide: isWide,
                   isTablet: isTablet,
@@ -1030,7 +1185,8 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
           'Master\'s Degree',
           'Doctorate',
           'Trade School',
-          'Some College'
+          'Some College',
+          'Other'
         ],
         isDark: isDark,
         isHighContrast: isHighContrast,
@@ -1041,7 +1197,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
       _buildDropdownField(
         label: 'Marital Status',
         controller: _maritalStatusController,
-        items: ['Single', 'Married', 'Divorced', 'Widowed', 'In a relationship'],
+        items: ['Single', 'Married', 'Divorced', 'Widowed', 'In a relationship', 'Other'],
         isDark: isDark,
         isHighContrast: isHighContrast,
         borderColor: borderColor,
@@ -1070,7 +1226,8 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
           'Finance',
           'Operations',
           'Customer Support',
-          'Research & Development'
+          'Research & Development',
+          'Other'
         ],
         isDark: isDark,
         isHighContrast: isHighContrast,
@@ -1081,7 +1238,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
       _buildDropdownField(
         label: 'Industry',
         controller: _industryController,
-        items: ['Technology', 'Healthcare', 'Finance', 'Education', 'Retail', 'Manufacturing'],
+        items: ['Technology', 'Healthcare', 'Finance', 'Education', 'Retail', 'Manufacturing', 'Other'],
         isDark: isDark,
         isHighContrast: isHighContrast,
         borderColor: borderColor,
@@ -1099,7 +1256,8 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
           'Finance',
           'Operations',
           'Customer Support',
-          'Research & Development'
+          'Research & Development',
+          'Other'
         ],
         isDark: isDark,
         isHighContrast: isHighContrast,
@@ -1251,7 +1409,12 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
     required Color secondaryText,
   }) {
     final currentValue = controller.text;
-    final dropdownItems = _getDropdownItems(items, currentValue);
+    final isOtherSelected = _profileOtherFields.contains(label);
+    final dropdownItems = _getDropdownItems(
+      items,
+      isOtherSelected ? 'Other' : currentValue,
+    );
+    final dropdownValue = isOtherSelected ? 'Other' : currentValue;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1266,10 +1429,10 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
         ),
         const SizedBox(height: 6),
         DropdownButtonFormField<String>(
-          value: currentValue.isNotEmpty && dropdownItems.contains(currentValue)
-              ? currentValue
+          value: dropdownValue.isNotEmpty && dropdownItems.contains(dropdownValue)
+              ? dropdownValue
               : null,
-          dropdownColor: isDark ? const Color(0xFF1B1D24) : Colors.white,
+          dropdownColor: isDark ? const Color(0xFF151A21) : Colors.white,
           style: TextStyle(color: primaryText, fontSize: 14),
           items: dropdownItems
               .map((item) => DropdownMenuItem(
@@ -1279,7 +1442,17 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
               .toList(),
           onChanged: (value) {
             if (value != null) {
-              controller.text = value;
+              setState(() {
+                if (value.toLowerCase() == 'other') {
+                  _profileOtherFields.add(label);
+                  controller.text = 'Other';
+                  _profileOtherController(label);
+                } else {
+                  _profileOtherFields.remove(label);
+                  controller.text = value;
+                  _profileOtherController(label).clear();
+                }
+              });
             }
           },
           decoration: InputDecoration(
@@ -1302,6 +1475,23 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
             ),
           ),
         ),
+        if (isOtherSelected) ...[
+          const SizedBox(height: 8),
+          TextFormField(
+            controller: _profileOtherController(label),
+            style: TextStyle(color: primaryText, fontSize: 14),
+            decoration: InputDecoration(
+              hintText: 'Type your own $label',
+              filled: true,
+              fillColor: isDark ? const Color(0xFF252833) : Colors.grey.shade50,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: borderColor),
+              ),
+            ),
+          ),
+        ],
       ],
     );
   }

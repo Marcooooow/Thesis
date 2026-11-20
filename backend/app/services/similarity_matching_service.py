@@ -17,8 +17,9 @@ def _encode_categorical(val: Optional[str], mapping: Dict[str, float], default: 
         return default
     return mapping.get(val.strip().lower(), default)
 
-SCHEDULE_MAP = {"fixed": 0.0, "flexible": 0.5, "variable": 1.0}
-ARRANGEMENT_MAP = {"remote": 0.0, "hybrid": 0.5, "office": 1.0}
+# "fixed" kept only so legacy rows still encode; "other" is neutral (falls to default)
+SCHEDULE_MAP = {"fixed": 0.0, "flexible": 0.5, "variable": 1.0, "other": 0.5}
+ARRANGEMENT_MAP = {"remote": 0.0, "hybrid": 0.5, "office": 1.0, "other": 0.5}
 
 def extract_feature_vector(snapshot: BehavioralSnapshot) -> Dict[str, float]:
     """
