@@ -130,7 +130,7 @@ class _DailyWorkHoursBarChartState extends State<DailyWorkHoursBarChart> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildLegendItem('Actual Hours', const Color(0xFF6C63FF), isDark),
+              _buildLegendItem('Actual Hours', const Color(0xFF0F766E), isDark),
               const SizedBox(width: 16),
               _buildLegendItem('Target Hours', const Color(0xFF9CA3AF), isDark),
             ],
@@ -156,7 +156,7 @@ class _DailyWorkHoursBarChartState extends State<DailyWorkHoursBarChart> {
           label,
           style: TextStyle(
             fontSize: 13,
-            color: isDark ? Colors.white : const Color(0xFF171923),
+            color: isDark ? Colors.white : const Color(0xFF111827),
           ),
         ),
       ],
@@ -268,7 +268,7 @@ class _DailyWorkHoursBarChartState extends State<DailyWorkHoursBarChart> {
           barRods: [
             BarChartRodData(
               toY: actualHours,
-              color: const Color(0xFF6C63FF), // Purple/blue primary accent
+              color: const Color(0xFF0F766E), // Purple/blue primary accent
               width: 16,
             ),
             BarChartRodData(

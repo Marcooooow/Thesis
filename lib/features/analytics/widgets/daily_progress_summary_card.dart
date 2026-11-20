@@ -96,7 +96,7 @@ class _DailyProgressSummaryCardState extends State<DailyProgressSummaryCard> {
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   letterSpacing: -0.5,
-                  color: isDark ? Colors.white : const Color(0xFF171923),
+                  color: isDark ? Colors.white : const Color(0xFF111827),
                 ),
               ),
               const Spacer(),
@@ -144,7 +144,7 @@ class _DailyProgressSummaryCardState extends State<DailyProgressSummaryCard> {
                   'No activity recorded for $_selectedDateStr.',
                   style: TextStyle(
                     fontSize: 14,
-                    color: isDark ? Colors.white60 : const Color(0xFF6B7280),
+                    color: isDark ? Colors.white60 : const Color(0xFF5B6472),
                   ),
                 ),
               ),
@@ -193,7 +193,7 @@ class _DailyProgressSummaryCardState extends State<DailyProgressSummaryCard> {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: isDark ? Colors.white : const Color(0xFF171923),
+                      color: isDark ? Colors.white : const Color(0xFF111827),
                     ),
                   ),
                   Container(
@@ -333,7 +333,7 @@ class _DailyProgressSummaryCardState extends State<DailyProgressSummaryCard> {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : const Color(0xFF171923),
+                  color: isDark ? Colors.white : const Color(0xFF111827),
                 ),
               ),
             ],

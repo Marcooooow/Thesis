@@ -50,15 +50,15 @@ class BreaksCard extends StatelessWidget {
         color: isDark
             ? (isHighContrast
                   ? const Color(0xFF0D0D0D)
-                  : const Color(0xFF1B1D24))
+                  : const Color(0xFF151A21))
             : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isDark
               ? (isHighContrast
                     ? Colors.white.withValues(alpha: 0.3)
-                    : const Color(0xFF30323A))
-              : const Color(0xFFE0E0E0),
+                    : const Color(0xFF262D37))
+              : const Color(0xFFE2E6EB),
         ),
       ),
       padding: const EdgeInsets.all(24),
@@ -79,8 +79,8 @@ class BreaksCard extends StatelessWidget {
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: isDark
-                      ? (isHighContrast ? Colors.white : const Color(0xFFF2F2F2))
-                      : const Color(0xFF171923),
+                      ? (isHighContrast ? Colors.white : const Color(0xFFE8EBEF))
+                      : const Color(0xFF111827),
                 ),
               ),
             ],
@@ -118,8 +118,8 @@ class BreaksCard extends StatelessWidget {
                       color: isDark
                           ? (isHighContrast
                                 ? Colors.white.withValues(alpha: 0.7)
-                                : const Color(0xFFA5A7AE))
-                          : const Color(0xFF6B7280),
+                                : const Color(0xFF9AA3AF))
+                          : const Color(0xFF5B6472),
                       fontSize: 14,
                     ),
                   ),
@@ -197,8 +197,8 @@ class BreaksCard extends StatelessWidget {
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: isDark
-                            ? (isHighContrast ? Colors.white : const Color(0xFFF2F2F2))
-                            : const Color(0xFF171923),
+                            ? (isHighContrast ? Colors.white : const Color(0xFFE8EBEF))
+                            : const Color(0xFF111827),
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -209,8 +209,8 @@ class BreaksCard extends StatelessWidget {
                         color: isDark
                             ? (isHighContrast
                                   ? Colors.white.withValues(alpha: 0.7)
-                                  : const Color(0xFFA5A7AE))
-                            : const Color(0xFF6B7280),
+                                  : const Color(0xFF9AA3AF))
+                            : const Color(0xFF5B6472),
                       ),
                     ),
                   ],
@@ -357,8 +357,8 @@ class BreaksCard extends StatelessWidget {
             fontSize: 18,
             fontWeight: FontWeight.bold,
             color: isDark
-                ? (isHighContrast ? Colors.white : const Color(0xFFF2F2F2))
-                : const Color(0xFF171923),
+                ? (isHighContrast ? Colors.white : const Color(0xFFE8EBEF))
+                : const Color(0xFF111827),
           ),
         ),
         const SizedBox(height: 12),
@@ -394,15 +394,15 @@ class BreaksCard extends StatelessWidget {
           color: isDark
               ? (isHighContrast
                     ? const Color(0xFF0D0D0D)
-                    : const Color(0xFF1B1D24))
+                    : const Color(0xFF151A21))
               : Colors.grey.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: isDark
                 ? (isHighContrast
                       ? Colors.white.withValues(alpha: 0.1)
-                      : const Color(0xFF30323A))
-                : const Color(0xFFE0E0E0),
+                      : const Color(0xFF262D37))
+                : const Color(0xFFE2E6EB),
           ),
         ),
         child: Row(
@@ -413,8 +413,8 @@ class BreaksCard extends StatelessWidget {
               color: isDark
                   ? (isHighContrast
                         ? Colors.white.withValues(alpha: 0.7)
-                        : const Color(0xFFA5A7AE))
-                  : const Color(0xFF6B7280),
+                        : const Color(0xFF9AA3AF))
+                  : const Color(0xFF5B6472),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -427,8 +427,8 @@ class BreaksCard extends StatelessWidget {
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: isDark
-                          ? (isHighContrast ? Colors.white : const Color(0xFFF2F2F2))
-                          : const Color(0xFF171923),
+                          ? (isHighContrast ? Colors.white : const Color(0xFFE8EBEF))
+                          : const Color(0xFF111827),
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -439,8 +439,8 @@ class BreaksCard extends StatelessWidget {
                       color: isDark
                           ? (isHighContrast
                                 ? Colors.white.withValues(alpha: 0.6)
-                                : const Color(0xFFA5A7AE))
-                          : const Color(0xFF6B7280),
+                                : const Color(0xFF9AA3AF))
+                          : const Color(0xFF5B6472),
                     ),
                   ),
                 ],

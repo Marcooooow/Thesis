@@ -288,7 +288,7 @@ class _DailyTimelineCardState extends State<DailyTimelineCard> {
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   letterSpacing: -0.5,
-                  color: isDark ? Colors.white : const Color(0xFF171923),
+                  color: isDark ? Colors.white : const Color(0xFF111827),
                 ),
               ),
               const Spacer(),
@@ -349,7 +349,7 @@ class _DailyTimelineCardState extends State<DailyTimelineCard> {
                   'Start a work session to track your daily timeline and achievements.',
                   style: TextStyle(
                     fontSize: 13.5,
-                    color: isDark ? Colors.white60 : const Color(0xFF6B7280),
+                    color: isDark ? Colors.white60 : const Color(0xFF5B6472),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -412,7 +412,7 @@ class _DailyTimelineCardState extends State<DailyTimelineCard> {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: isDark ? Colors.white60 : const Color(0xFF6B7280),
+                color: isDark ? Colors.white60 : const Color(0xFF5B6472),
               ),
             ),
           ),
@@ -445,7 +445,7 @@ class _DailyTimelineCardState extends State<DailyTimelineCard> {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: isDark ? Colors.white : const Color(0xFF171923),
+                    color: isDark ? Colors.white : const Color(0xFF111827),
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -453,7 +453,7 @@ class _DailyTimelineCardState extends State<DailyTimelineCard> {
                   subtitle,
                   style: TextStyle(
                     fontSize: 12,
-                    color: isDark ? Colors.white60 : const Color(0xFF6B7280),
+                    color: isDark ? Colors.white60 : const Color(0xFF5B6472),
                   ),
                 ),
               ],

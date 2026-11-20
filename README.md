@@ -37,6 +37,21 @@ Remote workers often lose track of work-break balance. IntelliBreak aims to:
 - Notification actions disappear after the invitation is processed while the notification remains visible
 - TabTitleTicker lifecycle handling prevents deactivated-widget ancestor errors
 
+## Work-Life Balance (core module)
+
+Work-life balance is a first-class feature, not a side widget:
+
+- **Dashboard headline:** a balance score (0-100), trend and focus area sit at the top of the employee dashboard.
+- **Work-Life Balance screen:** score ring, the five self-rated dimensions (disconnecting, personal time, balance, schedule, recovery), an 8-week trend, this week's work patterns (hours, overtime days, break adherence), habit recommendations and check-in history.
+- **Weekly check-in:** five 1-5 statements; the score is computed server-side as `((sum - 5) / 20) * 100`. One submission per week.
+- **Solo accounts are supported:** surveys are stored with `organization_id = NULL` and are excluded from organization roll-ups (migration `20261120000000`).
+- Wording is self-reflection only; the system makes no medical or psychological assessment.
+
+## Account types
+
+- **Solo:** individual users. Team View, Employees, Team Attendance, Team Activity, Team Well-being, Attendance & Leave and Messages are hidden from the sidebar.
+- **Organization:** managers and invited employees see the full team modules.
+
 ## System Architecture
 
 - **Frontend:** Flutter (Dart) with Provider/ChangeNotifier state management; Flutter Web

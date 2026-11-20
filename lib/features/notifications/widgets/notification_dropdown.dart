@@ -65,7 +65,7 @@ class _NotificationDropdownState extends State<NotificationDropdown> {
             color: widget.isDark
                 ? (widget.isHighContrast
                       ? const Color(0xFF0D0D0D)
-                      : const Color(0xFF1B1D24))
+                      : const Color(0xFF151A21))
                 : Colors.white,
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
@@ -93,7 +93,7 @@ class _NotificationDropdownState extends State<NotificationDropdown> {
                           color: widget.isDark
                               ? (widget.isHighContrast
                                     ? Colors.white
-                                    : const Color(0xFFF2F2F2))
+                                    : const Color(0xFFE8EBEF))
                               : Colors.black,
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -106,7 +106,7 @@ class _NotificationDropdownState extends State<NotificationDropdown> {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF6C63FF),
+                            color: const Color(0xFF0F766E),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
@@ -126,8 +126,8 @@ class _NotificationDropdownState extends State<NotificationDropdown> {
                   color: widget.isDark
                       ? (widget.isHighContrast
                             ? Colors.white.withValues(alpha: 0.1)
-                            : const Color(0xFF30323A))
-                      : const Color(0xFFE0E0E0),
+                            : const Color(0xFF262D37))
+                      : const Color(0xFFE2E6EB),
                 ),
                 // Content
                 provider.isLoading
@@ -142,8 +142,8 @@ class _NotificationDropdownState extends State<NotificationDropdown> {
                   color: widget.isDark
                       ? (widget.isHighContrast
                             ? Colors.white.withValues(alpha: 0.1)
-                            : const Color(0xFF30323A))
-                      : const Color(0xFFE0E0E0),
+                            : const Color(0xFF262D37))
+                      : const Color(0xFFE2E6EB),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -208,7 +208,7 @@ class _NotificationDropdownState extends State<NotificationDropdown> {
                 color: widget.isDark
                     ? (widget.isHighContrast
                           ? Colors.white.withValues(alpha: 0.5)
-                          : const Color(0xFFA5A7AE))
+                          : const Color(0xFF9AA3AF))
                     : Colors.grey,
                 size: 32,
               ),
@@ -219,7 +219,7 @@ class _NotificationDropdownState extends State<NotificationDropdown> {
                   color: widget.isDark
                       ? (widget.isHighContrast
                             ? Colors.white
-                            : const Color(0xFFF2F2F2))
+                            : const Color(0xFFE8EBEF))
                       : Colors.black,
                   fontSize: 14,
                 ),
@@ -253,7 +253,7 @@ class _NotificationDropdownState extends State<NotificationDropdown> {
                 color: widget.isDark
                     ? (widget.isHighContrast
                           ? Colors.white.withValues(alpha: 0.5)
-                          : const Color(0xFFA5A7AE))
+                          : const Color(0xFF9AA3AF))
                     : Colors.grey,
                 size: 40,
               ),
@@ -264,7 +264,7 @@ class _NotificationDropdownState extends State<NotificationDropdown> {
                   color: widget.isDark
                       ? (widget.isHighContrast
                             ? Colors.white
-                            : const Color(0xFFF2F2F2))
+                            : const Color(0xFFE8EBEF))
                       : Colors.black,
                   fontSize: 14,
                 ),
@@ -287,7 +287,7 @@ class _NotificationDropdownState extends State<NotificationDropdown> {
           color: widget.isDark
               ? (widget.isHighContrast
                     ? Colors.white.withValues(alpha: 0.05)
-                    : const Color(0xFF30323A))
+                    : const Color(0xFF262D37))
               : const Color(0xFFF0F0F0),
         ),
         itemBuilder: (context, index) {
@@ -320,7 +320,7 @@ class _NotificationDropdownState extends State<NotificationDropdown> {
                     ? (widget.isHighContrast
                           ? Colors.white.withValues(alpha: 0.05)
                           : const Color(0xFF2A2C34))
-                    : const Color(0xFFF8F9FA))
+                    : const Color(0xFFF5F6F8))
               : Colors.transparent,
           padding: const EdgeInsets.all(12.0),
           child: Column(
@@ -336,7 +336,7 @@ class _NotificationDropdownState extends State<NotificationDropdown> {
                         color: widget.isDark
                             ? (widget.isHighContrast
                                   ? Colors.white
-                                  : const Color(0xFFF2F2F2))
+                                  : const Color(0xFFE8EBEF))
                             : Colors.black,
                         fontSize: 14,
                         fontWeight: !notification.isRead
@@ -353,7 +353,7 @@ class _NotificationDropdownState extends State<NotificationDropdown> {
                       width: 8,
                       height: 8,
                       decoration: const BoxDecoration(
-                        color: Color(0xFF6C63FF),
+                        color: Color(0xFF0F766E),
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -366,7 +366,7 @@ class _NotificationDropdownState extends State<NotificationDropdown> {
                   color: widget.isDark
                       ? (widget.isHighContrast
                             ? Colors.white.withValues(alpha: 0.7)
-                            : const Color(0xFFA5A7AE))
+                            : const Color(0xFF9AA3AF))
                       : Colors.grey.shade600,
                   fontSize: 13,
                 ),
@@ -380,7 +380,7 @@ class _NotificationDropdownState extends State<NotificationDropdown> {
                   color: widget.isDark
                       ? (widget.isHighContrast
                             ? Colors.white.withValues(alpha: 0.5)
-                            : const Color(0xFFA5A7AE))
+                            : const Color(0xFF9AA3AF))
                       : Colors.grey.shade500,
                   fontSize: 12,
                 ),

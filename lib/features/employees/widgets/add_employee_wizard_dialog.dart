@@ -271,7 +271,7 @@ class _AddEmployeeWizardDialogState extends State<AddEmployeeWizardDialog> {
     final primaryColor = Theme.of(context).colorScheme.secondary;
 
     return Dialog(
-      backgroundColor: isDark ? const Color(0xFF1B1D24) : Colors.white,
+      backgroundColor: isDark ? const Color(0xFF151A21) : Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Container(
         width: 650,

@@ -23,7 +23,7 @@ class WorkLifeBalanceSurveyCreate(BaseModel):
 class WorkLifeBalanceSurveyResponse(BaseModel):
     id: uuid.UUID
     profile_id: uuid.UUID
-    organization_id: uuid.UUID
+    organization_id: Optional[uuid.UUID] = None
     week_start_date: date
     rating_disconnect: int
     rating_personal_time: int

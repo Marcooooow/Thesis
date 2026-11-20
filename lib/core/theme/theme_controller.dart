@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'app_theme.dart';
 import 'light_theme.dart';
 import 'dark_theme.dart';
 import 'high_contrast_theme.dart';
 
 class ThemeController extends ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.dark;
-  Color _accentColor = const Color(0xFF176B5B);
+  Color _accentColor = AppTheme.defaultAccent;
   bool _isHighContrast = false;
 
   ThemeMode get themeMode => _themeMode;
@@ -27,7 +28,9 @@ class ThemeController extends ChangeNotifier {
     if (themeModeIndex != null) {
       _themeMode = ThemeMode.values[themeModeIndex];
     }
-    if (accentColorValue != null) {
+    // 0xFF6C63FF was the previous default (violet). Anyone still on it is
+    // moved to the new default; deliberately chosen accents are kept.
+    if (accentColorValue != null && accentColorValue != 0xFF6C63FF) {
       _accentColor = Color(accentColorValue);
     }
     if (isHighContrastValue != null) {

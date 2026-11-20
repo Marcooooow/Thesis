@@ -310,7 +310,7 @@ class _AdminScreenContentState extends State<AdminScreenContent>
                     : const Color(0xFF1A1A1A))
               : Colors.white,
           foregroundColor: isDark
-              ? (isHighContrast ? Colors.white : Color(0xFFF2F2F2))
+              ? (isHighContrast ? Colors.white : Color(0xFFE8EBEF))
               : Colors.black,
           elevation: 0,
           bottom: TabBar(
@@ -326,12 +326,12 @@ class _AdminScreenContentState extends State<AdminScreenContent>
               }
             },
             labelColor: isDark
-                ? (isHighContrast ? Colors.white : Color(0xFFF2F2F2))
+                ? (isHighContrast ? Colors.white : Color(0xFFE8EBEF))
                 : Colors.black,
             unselectedLabelColor: isDark
                 ? (isHighContrast
                       ? Colors.white.withValues(alpha: 0.5)
-                      : Color(0xFFA5A7AE))
+                      : Color(0xFF9AA3AF))
                 : Colors.grey.shade600,
             indicatorColor: DesignSystem.getSemanticColor(
               context,
@@ -402,7 +402,7 @@ class _AdminScreenContentState extends State<AdminScreenContent>
               color: isDark
                   ? (isHighContrast
                         ? const Color(0xFF0D0D0D)
-                        : const Color(0xFF1B1D24))
+                        : const Color(0xFF151A21))
                   : Colors.grey.shade50,
               borderRadius: BorderRadius.circular(8),
             ),
@@ -700,7 +700,7 @@ class _AdminScreenContentState extends State<AdminScreenContent>
             dropdownColor: isDark
                 ? (isHighContrast
                       ? const Color(0xFF0D0D0D)
-                      : const Color(0xFF1B1D24))
+                      : const Color(0xFF151A21))
                 : Colors.white,
           ),
         ),
@@ -768,7 +768,7 @@ class _AdminScreenContentState extends State<AdminScreenContent>
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       color: isDark
-          ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF1B1D24))
+          ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF151A21))
           : Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -781,7 +781,7 @@ class _AdminScreenContentState extends State<AdminScreenContent>
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: isDark
-                    ? (isHighContrast ? Colors.white : Color(0xFFF2F2F2))
+                    ? (isHighContrast ? Colors.white : Color(0xFFE8EBEF))
                     : Colors.black,
               ),
             ),
@@ -793,7 +793,7 @@ class _AdminScreenContentState extends State<AdminScreenContent>
                 color: isDark
                     ? (isHighContrast
                           ? Colors.white.withValues(alpha: 0.7)
-                          : Color(0xFFA5A7AE))
+                          : Color(0xFF9AA3AF))
                     : Colors.grey.shade600,
               ),
             ),
@@ -805,7 +805,7 @@ class _AdminScreenContentState extends State<AdminScreenContent>
                 color: isDark
                     ? (isHighContrast
                           ? Colors.white.withValues(alpha: 0.7)
-                          : Color(0xFFA5A7AE))
+                          : Color(0xFF9AA3AF))
                     : Colors.grey.shade600,
               ),
             ),
@@ -817,7 +817,7 @@ class _AdminScreenContentState extends State<AdminScreenContent>
                 color: isDark
                     ? (isHighContrast
                           ? Colors.white.withValues(alpha: 0.5)
-                          : Color(0xFFA5A7AE))
+                          : Color(0xFF9AA3AF))
                     : Colors.grey.shade500,
               ),
             ),
@@ -895,7 +895,7 @@ class _AdminScreenContentState extends State<AdminScreenContent>
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       color: isDark
-          ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF1B1D24))
+          ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF151A21))
           : Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -911,7 +911,7 @@ class _AdminScreenContentState extends State<AdminScreenContent>
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: isDark
-                          ? (isHighContrast ? Colors.white : Color(0xFFF2F2F2))
+                          ? (isHighContrast ? Colors.white : Color(0xFFE8EBEF))
                           : Colors.black,
                     ),
                   ),
@@ -923,7 +923,7 @@ class _AdminScreenContentState extends State<AdminScreenContent>
                     color: isDark
                         ? (isHighContrast
                               ? Colors.white.withValues(alpha: 0.5)
-                              : Color(0xFFA5A7AE))
+                              : Color(0xFF9AA3AF))
                         : Colors.grey.shade500,
                   ),
                 ),
@@ -937,7 +937,7 @@ class _AdminScreenContentState extends State<AdminScreenContent>
                 color: isDark
                     ? (isHighContrast
                           ? Colors.white.withValues(alpha: 0.7)
-                          : Color(0xFFA5A7AE))
+                          : Color(0xFF9AA3AF))
                     : Colors.grey.shade600,
               ),
             ),
@@ -951,7 +951,7 @@ class _AdminScreenContentState extends State<AdminScreenContent>
                     color: isDark
                         ? (isHighContrast
                               ? Colors.white.withValues(alpha: 0.5)
-                              : Color(0xFFA5A7AE))
+                              : Color(0xFF9AA3AF))
                         : Colors.grey.shade500,
                   ),
                 ),
@@ -964,7 +964,7 @@ class _AdminScreenContentState extends State<AdminScreenContent>
                 color: isDark
                     ? (isHighContrast
                           ? Colors.white.withValues(alpha: 0.7)
-                          : Color(0xFFA5A7AE))
+                          : Color(0xFF9AA3AF))
                     : Colors.grey.shade600,
               ),
             ),
@@ -978,7 +978,7 @@ class _AdminScreenContentState extends State<AdminScreenContent>
                     color: isDark
                         ? (isHighContrast
                               ? Colors.white.withValues(alpha: 0.4)
-                              : Color(0xFFA5A7AE).withValues(alpha: 0.6))
+                              : Color(0xFF9AA3AF).withValues(alpha: 0.6))
                         : Colors.grey.shade400,
                   ),
                 ),
@@ -993,7 +993,7 @@ class _AdminScreenContentState extends State<AdminScreenContent>
                     color: isDark
                         ? (isHighContrast
                               ? Colors.white.withValues(alpha: 0.3)
-                              : Color(0xFFA5A7AE).withValues(alpha: 0.5))
+                              : Color(0xFF9AA3AF).withValues(alpha: 0.5))
                         : Colors.grey.shade300,
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intellibreak/features/work_life_balance/screens/work_life_balance_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:intellibreak/core/theme/theme_controller.dart';
 import 'package:intellibreak/features/dashboard/screens/dashboard_screen.dart';
@@ -57,9 +58,9 @@ class _AppShellState extends State<AppShell> {
   bool _isLoadingToken = true;
   bool _hasBackendToken = false;
   DashboardDestination _selectedDestination = DashboardDestination.dashboard;
+  bool _isSolo = false;
   DashboardDestination _previousDestination = DashboardDestination.dashboard;
   String _userRole = 'GUEST';
-  String _accountType = 'solo';
   final AuthService _authService = AuthService();
   final ApiService _apiService = ApiService();
   bool _showProfileMenu = false;
@@ -103,7 +104,7 @@ class _AppShellState extends State<AppShell> {
         if (!mounted) return;
         setState(() {
           _userRole = role;
-          _accountType = (userData['account_type'] as String?) ?? 'solo';
+          _isSolo = userData['account_type'] == 'solo';
           _backendUserName = userData['full_name'] as String?;
           _backendUserEmail = userData['email'] as String?;
           print('[NAME-TRACE-4] AppShell._backendUserName = "$_backendUserName"');
@@ -120,7 +121,6 @@ class _AppShellState extends State<AppShell> {
         if (!mounted) return;
         setState(() {
           _userRole = 'GUEST'; // Still show as guest in sidebar but don't use Firebase identity
-          _accountType = 'solo';
           _selectedDestination = DashboardDestination.dashboard;
           _backendUserName = null; // Keep as null to show loading state or handle appropriately
           _backendUserEmail = null;
@@ -132,7 +132,6 @@ class _AppShellState extends State<AppShell> {
       if (!mounted) return;
       setState(() {
         _userRole = 'GUEST';
-        _accountType = 'solo';
         _selectedDestination = DashboardDestination.dashboard;
         _backendUserName = null;
         _backendUserEmail = null;
@@ -166,9 +165,13 @@ class _AppShellState extends State<AppShell> {
           child: DashboardScreenContent(
             userName: _backendUserName,
             userEmail: _backendUserEmail,
+            onOpenWorkLifeBalance: () =>
+                _onDestinationSelected(DashboardDestination.workLifeBalance),
           ),
           onDismissed: widget.onTutorialDismissed,
         );
+      case DashboardDestination.workLifeBalance:
+        return const WorkLifeBalanceScreen();
       case DashboardDestination.teamView:
         return const TeamViewScreenContent();
       case DashboardDestination.attendance:
@@ -254,7 +257,7 @@ class _AppShellState extends State<AppShell> {
                     selectedDestination: _selectedDestination,
                     onDestinationSelected: _onDestinationSelected,
                     userRole: _userRole,
-                    accountType: _accountType,
+                    isSolo: _isSolo,
                   ),
                 ),
           body: Row(
@@ -264,7 +267,7 @@ class _AppShellState extends State<AppShell> {
                   selectedDestination: _selectedDestination,
                   onDestinationSelected: _onDestinationSelected,
                   userRole: _userRole,
-                    accountType: _accountType,
+                  isSolo: _isSolo,
                 ),
               Expanded(
                 child: _isLoadingToken
@@ -291,7 +294,7 @@ class _AppShellState extends State<AppShell> {
                   color: isDark
                       ? (isHighContrast
                             ? const Color(0xFF0D0D0D)
-                            : const Color(0xFF1B1D24))
+                            : const Color(0xFF151A21))
                       : Colors.white,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
@@ -319,7 +322,7 @@ class _AppShellState extends State<AppShell> {
                                 color: isDark
                                     ? (isHighContrast
                                           ? Colors.white
-                                          : Color(0xFFA5A7AE))
+                                          : Color(0xFF9AA3AF))
                                     : Colors.grey.shade300,
                                 shape: BoxShape.circle,
                               ),
@@ -344,7 +347,7 @@ class _AppShellState extends State<AppShell> {
                                       color: isDark
                                           ? (isHighContrast
                                                 ? Colors.white
-                                                : Color(0xFFF2F2F2))
+                                                : Color(0xFFE8EBEF))
                                           : Colors.black,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -360,7 +363,7 @@ class _AppShellState extends State<AppShell> {
                                                 ? Colors.white.withValues(
                                                     alpha: 0.7,
                                                   )
-                                                : Color(0xFFA5A7AE))
+                                                : Color(0xFF9AA3AF))
                                           : Colors.grey.shade600,
                                       fontSize: 14,
                                     ),
@@ -376,8 +379,8 @@ class _AppShellState extends State<AppShell> {
                         color: isDark
                             ? (isHighContrast
                                   ? Colors.white.withValues(alpha: 0.1)
-                                  : Color(0xFF30323A))
-                            : Color(0xFFE0E0E0),
+                                  : Color(0xFF262D37))
+                            : Color(0xFFE2E6EB),
                       ),
                       // Menu Items
                       ListTile(
@@ -386,7 +389,7 @@ class _AppShellState extends State<AppShell> {
                           color: isDark
                               ? (isHighContrast
                                     ? Colors.white
-                                    : Color(0xFFA5A7AE))
+                                    : Color(0xFF9AA3AF))
                               : Colors.black,
                           size: 22,
                         ),
@@ -396,7 +399,7 @@ class _AppShellState extends State<AppShell> {
                             color: isDark
                                 ? (isHighContrast
                                       ? Colors.white
-                                      : Color(0xFFF2F2F2))
+                                      : Color(0xFFE8EBEF))
                                 : Colors.black,
                             fontSize: 16,
                           ),
@@ -412,7 +415,7 @@ class _AppShellState extends State<AppShell> {
                           color: isDark
                               ? (isHighContrast
                                     ? Colors.white
-                                    : Color(0xFFA5A7AE))
+                                    : Color(0xFF9AA3AF))
                               : Colors.black,
                           size: 22,
                         ),
@@ -422,7 +425,7 @@ class _AppShellState extends State<AppShell> {
                             color: isDark
                                 ? (isHighContrast
                                       ? Colors.white
-                                      : Color(0xFFF2F2F2))
+                                      : Color(0xFFE8EBEF))
                                 : Colors.black,
                             fontSize: 16,
                           ),
@@ -438,7 +441,7 @@ class _AppShellState extends State<AppShell> {
                           color: isDark
                               ? (isHighContrast
                                     ? Colors.white
-                                    : Color(0xFFA5A7AE))
+                                    : Color(0xFF9AA3AF))
                               : Colors.black,
                           size: 22,
                         ),
@@ -448,7 +451,7 @@ class _AppShellState extends State<AppShell> {
                             color: isDark
                                 ? (isHighContrast
                                       ? Colors.white
-                                      : Color(0xFFF2F2F2))
+                                      : Color(0xFFE8EBEF))
                                 : Colors.black,
                             fontSize: 16,
                           ),

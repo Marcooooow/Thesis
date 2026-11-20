@@ -143,8 +143,8 @@ class _MetricsSectionState extends State<MetricsSection> {
             fontWeight: FontWeight.bold,
             letterSpacing: -0.5,
             color: isDark
-                ? (isHighContrast ? Colors.white : const Color(0xFFF2F2F2))
-                : const Color(0xFF171923),
+                ? (isHighContrast ? Colors.white : const Color(0xFFE8EBEF))
+                : const Color(0xFF111827),
           ),
         ),
         const SizedBox(height: 16),
@@ -248,7 +248,7 @@ class FocusRateHero extends StatelessWidget {
               fontSize: 11,
               fontWeight: FontWeight.w600,
               letterSpacing: 1.2,
-              color: isDark ? Colors.white.withValues(alpha: 0.5) : const Color(0xFF6B7280),
+              color: isDark ? Colors.white.withValues(alpha: 0.5) : const Color(0xFF5B6472),
             ),
           ),
           const SizedBox(height: 4),
@@ -306,7 +306,7 @@ class SecondaryMetricCard extends StatelessWidget {
               fontWeight: FontWeight.bold,
               letterSpacing: -0.8,
               height: 1.1,
-              color: isDark ? Colors.white : const Color(0xFF171923),
+              color: isDark ? Colors.white : const Color(0xFF111827),
             ),
           ),
           const SizedBox(height: 2),
@@ -315,7 +315,7 @@ class SecondaryMetricCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w500,
-              color: isDark ? Colors.white.withValues(alpha: 0.6) : const Color(0xFF6B7280),
+              color: isDark ? Colors.white.withValues(alpha: 0.6) : const Color(0xFF5B6472),
             ),
           ),
         ],

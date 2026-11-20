@@ -273,8 +273,8 @@ class _ShiftControllerState extends State<ShiftController> {
                     color: isDark
                         ? (isHighContrast
                               ? Colors.white
-                              : const Color(0xFFF2F2F2))
-                        : const Color(0xFF171923),
+                              : const Color(0xFFE8EBEF))
+                        : const Color(0xFF111827),
                   ),
                 ),
                 const Spacer(),
@@ -335,7 +335,7 @@ class _ShiftControllerState extends State<ShiftController> {
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
                           letterSpacing: 0.5,
-                          color: isDark ? Colors.white54 : const Color(0xFF6B7280),
+                          color: isDark ? Colors.white54 : const Color(0xFF5B6472),
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -345,7 +345,7 @@ class _ShiftControllerState extends State<ShiftController> {
                           fontSize: 26,
                           fontWeight: FontWeight.bold,
                           letterSpacing: -0.5,
-                          color: isDark ? Colors.white : const Color(0xFF171923),
+                          color: isDark ? Colors.white : const Color(0xFF111827),
                         ),
                       ),
                     ],
@@ -368,7 +368,7 @@ class _ShiftControllerState extends State<ShiftController> {
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
                             letterSpacing: 0.5,
-                            color: isDark ? Colors.white54 : const Color(0xFF6B7280),
+                            color: isDark ? Colors.white54 : const Color(0xFF5B6472),
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -378,7 +378,7 @@ class _ShiftControllerState extends State<ShiftController> {
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: (state.currentTask != null || _preShiftSelectedTask != null)
-                                ? (isDark ? Colors.white : const Color(0xFF171923))
+                                ? (isDark ? Colors.white : const Color(0xFF111827))
                                 : (isDark ? Colors.white38 : const Color(0xFF9CA3AF)),
                           ),
                           maxLines: 1,
@@ -1140,7 +1140,7 @@ class _ShiftControllerState extends State<ShiftController> {
       final Color disabledFg =
           (isHighContrast
                   ? Colors.white
-                  : (isDark ? Colors.white : const Color(0xFF171923)))
+                  : (isDark ? Colors.white : const Color(0xFF111827)))
               .withValues(alpha: 0.4);
       final Color borderColor = color.withValues(alpha: 0.25);
 
@@ -1504,11 +1504,10 @@ class _ShiftControllerState extends State<ShiftController> {
 
   Future<void> _showCreateTaskDialog(BuildContext context, WorkSessionProvider sessionProvider) async {
     final titleController = TextEditingController();
-    final otherCategoryController = TextEditingController();
     String selectedCategory = 'Development';
     String selectedPriority = 'MEDIUM';
 
-    await showDialog<void>(
+    await showDialog(
       context: context,
       builder: (dialogContext) {
         return StatefulBuilder(
@@ -1542,16 +1541,6 @@ class _ShiftControllerState extends State<ShiftController> {
                     ],
                     onChanged: (val) => setDialogState(() => selectedCategory = val ?? 'Development'),
                   ),
-                  if (selectedCategory == 'Other') ...[
-                    const SizedBox(height: 10),
-                    TextField(
-                      controller: otherCategoryController,
-                      maxLength: 100,
-                      textCapitalization: TextCapitalization.sentences,
-                      decoration: const InputDecoration(labelText: 'Specify category'),
-                      onChanged: (_) => setDialogState(() {}),
-                    ),
-                  ],
                   const SizedBox(height: 16),
                   DropdownButtonFormField<String>(
                     initialValue: selectedPriority,
@@ -1571,14 +1560,9 @@ class _ShiftControllerState extends State<ShiftController> {
                   child: const Text('Cancel'),
                 ),
                 ElevatedButton(
-                  onPressed: selectedCategory == 'Other' && otherCategoryController.text.trim().isEmpty
-                      ? null
-                      : () async {
+                  onPressed: () async {
                     final title = titleController.text.trim();
                     if (title.isEmpty) return;
-                    final category = selectedCategory == 'Other'
-                        ? otherCategoryController.text.trim()
-                        : selectedCategory;
 
                     Navigator.pop(dialogContext);
 
@@ -1589,7 +1573,7 @@ class _ShiftControllerState extends State<ShiftController> {
 
                       final taskResponse = await _workService.createTask(token, {
                         'title': title,
-                        'category': category,
+                        'category': selectedCategory,
                         'priority': selectedPriority,
                         'work_session_id': sessionProvider.state.session?.id,
                       });
@@ -1625,8 +1609,6 @@ class _ShiftControllerState extends State<ShiftController> {
         );
       },
     );
-    titleController.dispose();
-    otherCategoryController.dispose();
   }
 }
 

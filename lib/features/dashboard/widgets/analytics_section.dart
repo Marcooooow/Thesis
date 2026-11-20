@@ -124,8 +124,8 @@ class _AnalyticsSectionState extends State<AnalyticsSection> {
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: isDark
-                    ? (isHighContrast ? Colors.white : Color(0xFFF2F2F2))
-                    : Color(0xFF171923),
+                    ? (isHighContrast ? Colors.white : Color(0xFFE8EBEF))
+                    : Color(0xFF111827),
               ),
             ),
           ],
@@ -210,7 +210,7 @@ class _AnalyticsSectionState extends State<AnalyticsSection> {
           color: isDark
               ? (isHighContrast
                     ? Colors.white.withValues(alpha: 0.1)
-                    : Color(0xFF30323A))
+                    : Color(0xFF262D37))
               : Colors.grey.withValues(alpha: 0.2),
         ),
       ),
@@ -238,8 +238,8 @@ class _AnalyticsSectionState extends State<AnalyticsSection> {
                   color: isDark
                       ? (isHighContrast
                             ? Colors.white.withValues(alpha: 0.8)
-                            : Color(0xFFA5A7AE))
-                      : Color(0xFF6B7280),
+                            : Color(0xFF9AA3AF))
+                      : Color(0xFF5B6472),
                 ),
               ),
             ],

@@ -26,13 +26,13 @@ class WeeklyWorkHoursChart extends StatelessWidget {
     maxHours = (maxHours * 1.15).ceilToDouble();
     if (maxHours < 8) maxHours = 8;
 
-    final Color barColor = isDark ? (isHighContrast ? Colors.white : const Color(0xFF6C63FF)) : const Color(0xFF6C63FF);
-    final Color targetColor = isDark ? (isHighContrast ? Colors.white.withValues(alpha: 0.5) : const Color(0xFFF2F2F2).withValues(alpha: 0.5)) : const Color(0xFF6B7280).withValues(alpha: 0.3);
+    final Color barColor = isDark ? (isHighContrast ? Colors.white : const Color(0xFF0F766E)) : const Color(0xFF0F766E);
+    final Color targetColor = isDark ? (isHighContrast ? Colors.white.withValues(alpha: 0.5) : const Color(0xFFE8EBEF).withValues(alpha: 0.5)) : const Color(0xFF5B6472).withValues(alpha: 0.3);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Weekly Work Hours', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, letterSpacing: -0.3, color: isDark ? (isHighContrast ? Colors.white : const Color(0xFFF2F2F2)) : const Color(0xFF171923))),
+        Text('Weekly Work Hours', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, letterSpacing: -0.3, color: isDark ? (isHighContrast ? Colors.white : const Color(0xFFE8EBEF)) : const Color(0xFF111827))),
         const SizedBox(height: 12),
         // Chart: fixed total height 260px, Expanded plotting area
         SizedBox(
@@ -81,7 +81,7 @@ class WeeklyWorkHoursChart extends StatelessWidget {
                             Text(
                               name.length > 3 ? name.substring(0, 3) : name,
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, letterSpacing: -0.1, color: isDark ? (isHighContrast ? Colors.white : const Color(0xFFF2F2F2)) : const Color(0xFF6B7280)),
+                              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, letterSpacing: -0.1, color: isDark ? (isHighContrast ? Colors.white : const Color(0xFFE8EBEF)) : const Color(0xFF5B6472)),
                             ),
                           ],
                         ),

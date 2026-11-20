@@ -248,7 +248,7 @@ class _TeamViewScreenContentState extends State<TeamViewScreenContent>
               color: isDark
                   ? (isHighContrast
                         ? Colors.white.withValues(alpha: 0.5)
-                        : Color(0xFFA5A7AE))
+                        : Color(0xFF9AA3AF))
                   : Colors.grey.shade400,
             ),
             const SizedBox(height: 24),
@@ -271,7 +271,7 @@ class _TeamViewScreenContentState extends State<TeamViewScreenContent>
                 color: isDark
                     ? (isHighContrast
                           ? Colors.white.withValues(alpha: 0.7)
-                          : Color(0xFFA5A7AE))
+                          : Color(0xFF9AA3AF))
                     : Colors.grey.shade600,
               ),
               textAlign: TextAlign.center,
@@ -334,7 +334,7 @@ class _TeamViewScreenContentState extends State<TeamViewScreenContent>
                   style: TextStyle(
                     fontSize: 14,
                     color: isDark
-                        ? const Color(0xFFA5A7AE)
+                        ? const Color(0xFF9AA3AF)
                         : Colors.grey.shade600,
                   ),
                 ),
@@ -353,7 +353,7 @@ class _TeamViewScreenContentState extends State<TeamViewScreenContent>
             ],
             labelColor: isDark ? Colors.white : Colors.black,
             unselectedLabelColor: isDark
-                ? const Color(0xFFA5A7AE)
+                ? const Color(0xFF9AA3AF)
                 : Colors.grey.shade600,
             indicatorColor: Colors.blue,
           ),
@@ -452,7 +452,7 @@ class _TeamViewScreenContentState extends State<TeamViewScreenContent>
           label,
           style: TextStyle(
             fontSize: 12,
-            color: isDark ? Color(0xFFA5A7AE) : Colors.grey.shade600,
+            color: isDark ? Color(0xFF9AA3AF) : Colors.grey.shade600,
           ),
         ),
         const SizedBox(height: 4),
@@ -575,7 +575,7 @@ class _TeamViewScreenContentState extends State<TeamViewScreenContent>
             Icon(
               Icons.mail_outline,
               size: 20,
-              color: isDark ? const Color(0xFFA5A7AE) : Colors.grey.shade600,
+              color: isDark ? const Color(0xFF9AA3AF) : Colors.grey.shade600,
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -596,7 +596,7 @@ class _TeamViewScreenContentState extends State<TeamViewScreenContent>
                     style: TextStyle(
                       fontSize: 12,
                       color: isDark
-                          ? const Color(0xFFA5A7AE)
+                          ? const Color(0xFF9AA3AF)
                           : Colors.grey.shade600,
                     ),
                   ),
@@ -830,7 +830,7 @@ class _TeamViewScreenContentState extends State<TeamViewScreenContent>
             itemCount: members.length,
             separatorBuilder: (_, _) => Divider(
               height: 1,
-              color: isDark ? const Color(0xFF30323A) : Colors.grey.shade300,
+              color: isDark ? const Color(0xFF262D37) : Colors.grey.shade300,
             ),
             itemBuilder: (context, index) {
               final member = members[index];
@@ -862,7 +862,7 @@ class _TeamViewScreenContentState extends State<TeamViewScreenContent>
                         style: TextStyle(
                           fontSize: 13,
                           color: isDark
-                              ? const Color(0xFFA5A7AE)
+                              ? const Color(0xFF9AA3AF)
                               : Colors.grey.shade600,
                         ),
                         overflow: TextOverflow.ellipsis,
@@ -1006,7 +1006,7 @@ class _TeamViewScreenContentState extends State<TeamViewScreenContent>
               color: isDark
                   ? (isHighContrast
                         ? Colors.white.withValues(alpha: 0.5)
-                        : Color(0xFFA5A7AE))
+                        : Color(0xFF9AA3AF))
                   : Colors.grey.shade400,
             ),
             const SizedBox(height: 16),
@@ -1023,7 +1023,7 @@ class _TeamViewScreenContentState extends State<TeamViewScreenContent>
               'Invite employees to start building your team.',
               style: TextStyle(
                 fontSize: 14,
-                color: isDark ? Color(0xFFA5A7AE) : Colors.grey.shade600,
+                color: isDark ? Color(0xFF9AA3AF) : Colors.grey.shade600,
               ),
               textAlign: TextAlign.center,
             ),
@@ -1080,7 +1080,7 @@ class _TeamViewScreenContentState extends State<TeamViewScreenContent>
                     style: TextStyle(
                       fontSize: 14,
                       color: isDark
-                          ? const Color(0xFFA5A7AE)
+                          ? const Color(0xFF9AA3AF)
                           : Colors.grey.shade600,
                     ),
                   ),
@@ -1131,7 +1131,7 @@ class _TeamViewScreenContentState extends State<TeamViewScreenContent>
                                           style: TextStyle(
                                             fontSize: 13,
                                             color: isDark
-                                                ? const Color(0xFFA5A7AE)
+                                                ? const Color(0xFF9AA3AF)
                                                 : Colors.grey.shade600,
                                           ),
                                         ),
@@ -1324,7 +1324,7 @@ class _TeamViewScreenContentState extends State<TeamViewScreenContent>
                                   style: TextStyle(
                                     fontSize: 11,
                                     color: isDark
-                                        ? const Color(0xFFA5A7AE)
+                                        ? const Color(0xFF9AA3AF)
                                         : Colors.grey.shade600,
                                   ),
                                 ),

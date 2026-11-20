@@ -114,7 +114,7 @@ class UserAvatar extends StatelessWidget {
         break;
       case 'offline':
       default:
-        color = const Color(0xFF6B7280); // Gray
+        color = const Color(0xFF5B6472); // Gray
         break;
     }
 
@@ -127,7 +127,7 @@ class UserAvatar extends StatelessWidget {
         color: color,
         shape: BoxShape.circle,
         border: Border.all(
-          color: isDark ? const Color(0xFF1B1D24) : Colors.white,
+          color: isDark ? const Color(0xFF151A21) : Colors.white,
           width: 1.5,
         ),
       ),

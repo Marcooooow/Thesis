@@ -21,8 +21,8 @@ class FocusRateChart extends StatelessWidget {
           'No focus rate data available',
           style: TextStyle(
             color: isDark
-                ? (isHighContrast ? Colors.white : const Color(0xFFF2F2F2))
-                : const Color(0xFF6B7280),
+                ? (isHighContrast ? Colors.white : const Color(0xFFE8EBEF))
+                : const Color(0xFF5B6472),
           ),
         ),
       );
@@ -47,8 +47,8 @@ class FocusRateChart extends StatelessWidget {
     // double maxFocusRate = 100.0; // Unused variable removed
 
     final Color lineColor = isDark
-        ? (isHighContrast ? Colors.white : const Color(0xFF6C63FF))
-        : const Color(0xFF6C63FF);
+        ? (isHighContrast ? Colors.white : const Color(0xFF0F766E))
+        : const Color(0xFF0F766E);
     final Color pointColor = lineColor;
 
     return Column(
@@ -62,8 +62,8 @@ class FocusRateChart extends StatelessWidget {
             fontWeight: FontWeight.w600,
             letterSpacing: -0.3,
             color: isDark
-                ? (isHighContrast ? Colors.white : const Color(0xFFF2F2F2))
-                : const Color(0xFF171923),
+                ? (isHighContrast ? Colors.white : const Color(0xFFE8EBEF))
+                : const Color(0xFF111827),
           ),
         ),
         const SizedBox(height: 16),
@@ -108,8 +108,8 @@ class FocusRateChart extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     letterSpacing: -0.1,
                     color: isDark
-                        ? (isHighContrast ? Colors.white : const Color(0xFFF2F2F2))
-                        : const Color(0xFF6B7280),
+                        ? (isHighContrast ? Colors.white : const Color(0xFFE8EBEF))
+                        : const Color(0xFF5B6472),
                   ),
                 ),
               );
@@ -151,8 +151,8 @@ class _FocusRateChartPainter extends CustomPainter {
 
     final Paint gridPaint = Paint()
       ..color = isDark
-          ? (isHighContrast ? Colors.white.withValues(alpha: 0.1) : const Color(0xFFF2F2F2).withValues(alpha: 0.1))
-          : const Color(0xFF6B7280).withValues(alpha: 0.1)
+          ? (isHighContrast ? Colors.white.withValues(alpha: 0.1) : const Color(0xFFE8EBEF).withValues(alpha: 0.1))
+          : const Color(0xFF5B6472).withValues(alpha: 0.1)
       ..strokeWidth = 0.5;
 
     // We'll draw the chart with some padding
@@ -173,8 +173,8 @@ class _FocusRateChartPainter extends CustomPainter {
         style: TextStyle(
           fontSize: 10,
           color: isDark
-              ? (isHighContrast ? Colors.white : const Color(0xFFF2F2F2))
-              : const Color(0xFF6B7280),
+              ? (isHighContrast ? Colors.white : const Color(0xFFE8EBEF))
+              : const Color(0xFF5B6472),
         ),
       );
       final TextPainter tp = TextPainter(

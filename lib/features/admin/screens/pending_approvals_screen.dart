@@ -190,7 +190,7 @@ class _PendingApprovalsScreenState extends State<PendingApprovalsScreen> {
                 color: isDark
                     ? (isHighContrast
                           ? Colors.white.withValues(alpha: 0.7)
-                          : Color(0xFFA5A7AE))
+                          : Color(0xFF9AA3AF))
                     : Colors.grey.shade600,
                 fontSize: 16,
               ),
@@ -229,7 +229,7 @@ class _PendingApprovalsScreenState extends State<PendingApprovalsScreen> {
               color: isDark
                   ? (isHighContrast
                         ? Colors.white.withValues(alpha: 0.5)
-                        : Color(0xFFA5A7AE))
+                        : Color(0xFF9AA3AF))
                   : Colors.grey.shade400,
             ),
             const SizedBox(height: 24),
@@ -252,7 +252,7 @@ class _PendingApprovalsScreenState extends State<PendingApprovalsScreen> {
                 color: isDark
                     ? (isHighContrast
                           ? Colors.white.withValues(alpha: 0.7)
-                          : Color(0xFFA5A7AE))
+                          : Color(0xFF9AA3AF))
                     : Colors.grey.shade600,
               ),
               textAlign: TextAlign.center,
@@ -277,7 +277,7 @@ class _PendingApprovalsScreenState extends State<PendingApprovalsScreen> {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       color: isDark
-          ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF1B1D24))
+          ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF151A21))
           : Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -290,7 +290,7 @@ class _PendingApprovalsScreenState extends State<PendingApprovalsScreen> {
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: isDark
-                    ? (isHighContrast ? Colors.white : Color(0xFFF2F2F2))
+                    ? (isHighContrast ? Colors.white : Color(0xFFE8EBEF))
                     : Colors.black,
               ),
             ),
@@ -302,7 +302,7 @@ class _PendingApprovalsScreenState extends State<PendingApprovalsScreen> {
                 color: isDark
                     ? (isHighContrast
                           ? Colors.white.withValues(alpha: 0.7)
-                          : Color(0xFFA5A7AE))
+                          : Color(0xFF9AA3AF))
                     : Colors.grey.shade600,
               ),
             ),
@@ -314,7 +314,7 @@ class _PendingApprovalsScreenState extends State<PendingApprovalsScreen> {
                 color: isDark
                     ? (isHighContrast
                           ? Colors.white.withValues(alpha: 0.7)
-                          : Color(0xFFA5A7AE))
+                          : Color(0xFF9AA3AF))
                     : Colors.grey.shade600,
               ),
             ),
@@ -326,7 +326,7 @@ class _PendingApprovalsScreenState extends State<PendingApprovalsScreen> {
                 color: isDark
                     ? (isHighContrast
                           ? Colors.white.withValues(alpha: 0.5)
-                          : Color(0xFFA5A7AE))
+                          : Color(0xFF9AA3AF))
                     : Colors.grey.shade500,
               ),
             ),

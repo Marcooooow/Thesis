@@ -70,11 +70,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String _lunchStartTime = '12:30';
   int _lunchDuration = 45;
   String _lunchConsistency = 'consistent';
-  final TextEditingController _scheduleTypeOtherController = TextEditingController();
-  final TextEditingController _arrangementOtherController = TextEditingController();
-  final TextEditingController _lunchConsistencyOtherController = TextEditingController();
-  final TextEditingController _reminderPreferenceOtherController = TextEditingController();
-  final TextEditingController _recommendationStyleOtherController = TextEditingController();
   final List<String> _responsibilities = [];
   String _reminderPreference = 'gentle';
   String _recommendationStyle = 'structured';
@@ -97,6 +92,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _maritalOtherController = TextEditingController();
   final TextEditingController _jobRoleOtherController = TextEditingController();
   final TextEditingController _industryOtherController = TextEditingController();
+  final TextEditingController _scheduleTypeOtherController = TextEditingController();
+  final TextEditingController _arrangementOtherController = TextEditingController();
+  final TextEditingController _lunchConsistencyOtherController = TextEditingController();
+  final TextEditingController _reminderPreferenceOtherController = TextEditingController();
+  final TextEditingController _recommendationStyleOtherController = TextEditingController();
 
   String? _selectedGender;
   String? _selectedEducation;
@@ -124,6 +124,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     'Married',
     'Divorced',
     'Widowed',
+    'Other',
     'Prefer not to say',
   ];
 
@@ -280,7 +281,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           return _validateSchedule();
 
         case 4:
-          return _validateWorkProfile();
+          return true; // Work profile is flexible/optional
 
         case 5:
           return _validateConsent();
@@ -475,40 +476,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return true;
   }
 
-  bool _validateWorkProfile() {
-    final otherChoices = <({String value, TextEditingController controller, String label})>[
-      (value: _scheduleType, controller: _scheduleTypeOtherController, label: 'schedule type'),
-      (value: _arrangement, controller: _arrangementOtherController, label: 'work arrangement'),
-      (value: _lunchConsistency, controller: _lunchConsistencyOtherController, label: 'lunch consistency'),
-      (value: _reminderPreference, controller: _reminderPreferenceOtherController, label: 'reminder preference'),
-      (value: _recommendationStyle, controller: _recommendationStyleOtherController, label: 'recommendation style'),
-    ];
-    for (final choice in otherChoices) {
-      if (choice.value == 'other' && choice.controller.text.trim().isEmpty) {
-        _showError('Please specify your ${choice.label}.');
-        return false;
-      }
-    }
-    return true;
-  }
-
-  Widget _otherChoiceField({
-    required String value,
-    required TextEditingController controller,
-    required String label,
-  }) {
-    if (value != 'other') return const SizedBox.shrink();
-    return Padding(
-      padding: const EdgeInsets.only(top: 10),
-      child: TextFormField(
-        controller: controller,
-        maxLength: 50,
-        textCapitalization: TextCapitalization.sentences,
-        decoration: InputDecoration(labelText: 'Specify $label'),
-      ),
-    );
-  }
-
   bool _validateConsent() {
     if (!_dataConsent) {
       _showError('Please provide consent before creating your account.');
@@ -516,6 +483,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
 
     return true;
+  }
+
+  String _workProfileOption(
+    String selected,
+    TextEditingController otherController,
+  ) {
+    final customValue = otherController.text.trim();
+    return selected == 'other' && customValue.isNotEmpty
+        ? customValue
+        : selected;
+  }
+
+  Widget _otherWorkProfileField(
+    TextEditingController controller,
+    String label,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: 'Enter your $label',
+          hintText: 'Type your own option',
+        ),
+      ),
+    );
   }
 
   Future<void> _completeRegistration() async {
@@ -535,18 +528,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
       Map<String, dynamic>? workProfile;
       if (_accountType == 'solo') {
         workProfile = {
-          'schedule_type': _scheduleType == 'other' ? _scheduleTypeOtherController.text.trim() : _scheduleType,
-          'arrangement': _arrangement == 'other' ? _arrangementOtherController.text.trim() : _arrangement,
+          'schedule_type': _workProfileOption(_scheduleType, _scheduleTypeOtherController),
+          'arrangement': _workProfileOption(_arrangement, _arrangementOtherController),
           'typical_focus_duration': _typicalFocusDuration,
           'preferred_focus_duration': _preferredFocusDuration,
           'typical_break_frequency': _typicalBreakFrequency,
           'typical_break_duration': _typicalBreakDuration,
           'lunch_start_time': _lunchStartTime,
           'lunch_duration': _lunchDuration,
-          'lunch_consistency': _lunchConsistency == 'other' ? _lunchConsistencyOtherController.text.trim() : _lunchConsistency,
+          'lunch_consistency': _workProfileOption(_lunchConsistency, _lunchConsistencyOtherController),
           'responsibilities': _responsibilities,
-          'reminder_preference': _reminderPreference == 'other' ? _reminderPreferenceOtherController.text.trim() : _reminderPreference,
-          'recommendation_style': _recommendationStyle == 'other' ? _recommendationStyleOtherController.text.trim() : _recommendationStyle,
+          'reminder_preference': _workProfileOption(_reminderPreference, _reminderPreferenceOtherController),
+          'recommendation_style': _workProfileOption(_recommendationStyle, _recommendationStyleOtherController),
           'profile_completed': true,
         };
       }
@@ -801,7 +794,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget _buildWorkProfileStep(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color textColor = isDark ? Colors.white : const Color(0xFF171923);
+    final Color textColor = isDark ? Colors.white : const Color(0xFF111827);
     final Color secondaryTextColor = isDark ? Colors.grey[400]! : Colors.grey[600]!;
 
     return SingleChildScrollView(
@@ -829,16 +822,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
             value: _scheduleType,
             decoration: const InputDecoration(labelText: 'Schedule Type'),
             items: const [
-              DropdownMenuItem(value: 'fixed', child: Text('Fixed Schedule')),
               DropdownMenuItem(value: 'flexible', child: Text('Flexible Schedule')),
               DropdownMenuItem(value: 'variable', child: Text('Variable Schedule')),
               DropdownMenuItem(value: 'other', child: Text('Other')),
             ],
             onChanged: (val) {
-              if (val != null) setState(() => _scheduleType = val);
+              if (val != null) {
+                setState(() {
+                  _scheduleType = val;
+                  if (val != 'other') _scheduleTypeOtherController.clear();
+                });
+              }
             },
           ),
-          _otherChoiceField(value: _scheduleType, controller: _scheduleTypeOtherController, label: 'schedule type'),
+          if (_scheduleType == 'other')
+            _otherWorkProfileField(_scheduleTypeOtherController, 'schedule type'),
           const SizedBox(height: 16),
           DropdownButtonFormField<String>(
             value: _arrangement,
@@ -850,10 +848,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
               DropdownMenuItem(value: 'other', child: Text('Other')),
             ],
             onChanged: (val) {
-              if (val != null) setState(() => _arrangement = val);
+              if (val != null) {
+                setState(() {
+                  _arrangement = val;
+                  if (val != 'other') _arrangementOtherController.clear();
+                });
+              }
             },
           ),
-          _otherChoiceField(value: _arrangement, controller: _arrangementOtherController, label: 'work arrangement'),
+          if (_arrangement == 'other')
+            _otherWorkProfileField(_arrangementOtherController, 'work arrangement'),
           const SizedBox(height: 20),
           Text('Typical Focus Duration: $_typicalFocusDuration minutes', style: TextStyle(color: textColor, fontWeight: FontWeight.w500)),
           Slider(
@@ -923,10 +927,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
               DropdownMenuItem(value: 'other', child: Text('Other')),
             ],
             onChanged: (val) {
-              if (val != null) setState(() => _lunchConsistency = val);
+              if (val != null) {
+                setState(() {
+                  _lunchConsistency = val;
+                  if (val != 'other') _lunchConsistencyOtherController.clear();
+                });
+              }
             },
           ),
-          _otherChoiceField(value: _lunchConsistency, controller: _lunchConsistencyOtherController, label: 'lunch consistency'),
+          if (_lunchConsistency == 'other')
+            _otherWorkProfileField(_lunchConsistencyOtherController, 'lunch pattern'),
           const SizedBox(height: 20),
           Text('Responsibilities (Optional)', style: TextStyle(color: textColor, fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
@@ -961,10 +971,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
               DropdownMenuItem(value: 'other', child: Text('Other')),
             ],
             onChanged: (val) {
-              if (val != null) setState(() => _reminderPreference = val);
+              if (val != null) {
+                setState(() {
+                  _reminderPreference = val;
+                  if (val != 'other') _reminderPreferenceOtherController.clear();
+                });
+              }
             },
           ),
-          _otherChoiceField(value: _reminderPreference, controller: _reminderPreferenceOtherController, label: 'reminder preference'),
+          if (_reminderPreference == 'other')
+            _otherWorkProfileField(_reminderPreferenceOtherController, 'reminder preference'),
           const SizedBox(height: 16),
           DropdownButtonFormField<String>(
             value: _recommendationStyle,
@@ -975,10 +991,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
               DropdownMenuItem(value: 'other', child: Text('Other')),
             ],
             onChanged: (val) {
-              if (val != null) setState(() => _recommendationStyle = val);
+              if (val != null) {
+                setState(() {
+                  _recommendationStyle = val;
+                  if (val != 'other') _recommendationStyleOtherController.clear();
+                });
+              }
             },
           ),
-          _otherChoiceField(value: _recommendationStyle, controller: _recommendationStyleOtherController, label: 'recommendation style'),
+          if (_recommendationStyle == 'other')
+            _otherWorkProfileField(_recommendationStyleOtherController, 'recommendation style'),
         ],
       ),
     );
@@ -997,7 +1019,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Text(
           'Account Information',
           style: TextStyle(
-            color: isDark ? Colors.white : Color(0xFF171923),
+            color: isDark ? Colors.white : Color(0xFF111827),
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -1006,7 +1028,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Text(
           'Create your IntelliBreak account.',
           style: TextStyle(
-            color: isDark ? Color(0xFF9CA3AF) : Color(0xFF6B7280),
+            color: isDark ? Color(0xFF9CA3AF) : Color(0xFF5B6472),
             fontSize: 13,
           ),
         ),
@@ -1036,7 +1058,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             context,
                             SemanticColor.primary,
                           ).withValues(alpha: 0.1)
-                        : (isDark ? Color(0xFF1B1D24) : Colors.white),
+                        : (isDark ? Color(0xFF151A21) : Colors.white),
                     borderRadius: BorderRadius.circular(DesignSystem.radiusM),
                     border: Border.all(
                       color: _accountType == 'solo'
@@ -1044,7 +1066,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               context,
                               SemanticColor.primary,
                             )
-                          : (isDark ? Color(0xFF30323A) : Color(0xFFE0E0E0)),
+                          : (isDark ? Color(0xFF262D37) : Color(0xFFE2E6EB)),
                       width: _accountType == 'solo' ? 1.5 : 1,
                     ),
                   ),
@@ -1057,7 +1079,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 context,
                                 SemanticColor.primary,
                               )
-                            : (isDark ? Color(0xFF9CA3AF) : Color(0xFF6B7280)),
+                            : (isDark ? Color(0xFF9CA3AF) : Color(0xFF5B6472)),
                         fontWeight: _accountType == 'solo'
                             ? FontWeight.w600
                             : FontWeight.w500,
@@ -1088,7 +1110,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             context,
                             SemanticColor.primary,
                           ).withValues(alpha: 0.1)
-                        : (isDark ? Color(0xFF1B1D24) : Colors.white),
+                        : (isDark ? Color(0xFF151A21) : Colors.white),
                     borderRadius: BorderRadius.circular(DesignSystem.radiusM),
                     border: Border.all(
                       color: _accountType == 'organization'
@@ -1096,7 +1118,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               context,
                               SemanticColor.primary,
                             )
-                          : (isDark ? Color(0xFF30323A) : Color(0xFFE0E0E0)),
+                          : (isDark ? Color(0xFF262D37) : Color(0xFFE2E6EB)),
                       width: _accountType == 'organization' ? 1.5 : 1,
                     ),
                   ),
@@ -1109,7 +1131,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 context,
                                 SemanticColor.primary,
                               )
-                            : (isDark ? Color(0xFF9CA3AF) : Color(0xFF6B7280)),
+                            : (isDark ? Color(0xFF9CA3AF) : Color(0xFF5B6472)),
                         fontWeight: _accountType == 'organization'
                             ? FontWeight.w600
                             : FontWeight.w500,
@@ -1171,7 +1193,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               _obscurePassword
                   ? Icons.visibility_off_outlined
                   : Icons.visibility_outlined,
-              color: isDark ? Color(0xFF9CA3AF) : Color(0xFF6B7280),
+              color: isDark ? Color(0xFF9CA3AF) : Color(0xFF5B6472),
             ),
           ),
           validator: (value) {
@@ -1206,7 +1228,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               _obscureConfirmPassword
                   ? Icons.visibility_off_outlined
                   : Icons.visibility_outlined,
-              color: isDark ? Color(0xFF9CA3AF) : Color(0xFF6B7280),
+              color: isDark ? Color(0xFF9CA3AF) : Color(0xFF5B6472),
             ),
           ),
           validator: (value) {
@@ -1325,7 +1347,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           style: TextStyle(
                             color: isDark
                                 ? Color(0xFF9CA3AF)
-                                : Color(0xFF6B7280),
+                                : Color(0xFF5B6472),
                             fontSize: 13,
                           ),
                           children: [
@@ -1403,7 +1425,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Text(
           'Personal Information',
           style: TextStyle(
-            color: isDark ? Colors.white : Color(0xFF171923),
+            color: isDark ? Colors.white : Color(0xFF111827),
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -1412,7 +1434,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Text(
           'Tell us a little about yourself.',
           style: TextStyle(
-            color: isDark ? Color(0xFF9CA3AF) : Color(0xFF6B7280),
+            color: isDark ? Color(0xFF9CA3AF) : Color(0xFF5B6472),
             fontSize: 13,
           ),
         ),
@@ -1466,7 +1488,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Text(
                 'Please specify your gender',
                 style: TextStyle(
-                  color: isDark ? Colors.white : Color(0xFF171923),
+                  color: isDark ? Colors.white : Color(0xFF111827),
                   fontSize: 13,
                 ),
               ),
@@ -1518,7 +1540,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Text(
                 'Please specify your education attainment',
                 style: TextStyle(
-                  color: isDark ? Colors.white : Color(0xFF171923),
+                  color: isDark ? Colors.white : Color(0xFF111827),
                   fontSize: 13,
                 ),
               ),
@@ -1570,7 +1592,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Text(
                 'Please specify your marital status',
                 style: TextStyle(
-                  color: isDark ? Colors.white : Color(0xFF171923),
+                  color: isDark ? Colors.white : Color(0xFF111827),
                   fontSize: 13,
                 ),
               ),
@@ -1607,7 +1629,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Text(
           'Work Information',
           style: TextStyle(
-            color: isDark ? Colors.white : Color(0xFF171923),
+            color: isDark ? Colors.white : Color(0xFF111827),
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -1616,7 +1638,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Text(
           'Tell us about your professional background.',
           style: TextStyle(
-            color: isDark ? Color(0xFF9CA3AF) : Color(0xFF6B7280),
+            color: isDark ? Color(0xFF9CA3AF) : Color(0xFF5B6472),
             fontSize: 13,
           ),
         ),
@@ -1652,7 +1674,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Text(
                 'Please specify your job role',
                 style: TextStyle(
-                  color: isDark ? Colors.white : Color(0xFF171923),
+                  color: isDark ? Colors.white : Color(0xFF111827),
                   fontSize: 13,
                 ),
               ),
@@ -1704,7 +1726,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Text(
                 'Please specify your industry',
                 style: TextStyle(
-                  color: isDark ? Colors.white : Color(0xFF171923),
+                  color: isDark ? Colors.white : Color(0xFF111827),
                   fontSize: 13,
                 ),
               ),
@@ -1759,7 +1781,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Text(
           'Work Schedule',
           style: TextStyle(
-            color: isDark ? Colors.white : Color(0xFF171923),
+            color: isDark ? Colors.white : Color(0xFF111827),
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -1768,7 +1790,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Text(
           'Set your normal working schedule.',
           style: TextStyle(
-            color: isDark ? Color(0xFF9CA3AF) : Color(0xFF6B7280),
+            color: isDark ? Color(0xFF9CA3AF) : Color(0xFF5B6472),
             fontSize: 13,
           ),
         ),
@@ -1800,7 +1822,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             min: 1,
             max: 16,
             divisions: 30,
-            activeColor: Color(0xFF6C63FF),
+            activeColor: Color(0xFF0F766E),
             onChanged: (value) {
               setState(() {
                 _dailyHours = value;

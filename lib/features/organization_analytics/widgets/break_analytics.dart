@@ -14,8 +14,8 @@ class BreakAnalytics extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color textColor = isDark ? (isHighContrast ? Colors.white : const Color(0xFFF2F2F2)) : const Color(0xFF171923);
-    final Color labelColor = isDark ? (isHighContrast ? Colors.white.withValues(alpha: 0.8) : const Color(0xFFF2F2F2).withValues(alpha: 0.8)) : const Color(0xFF6B7280);
+    final Color textColor = isDark ? (isHighContrast ? Colors.white : const Color(0xFFE8EBEF)) : const Color(0xFF111827);
+    final Color labelColor = isDark ? (isHighContrast ? Colors.white.withValues(alpha: 0.8) : const Color(0xFFE8EBEF).withValues(alpha: 0.8)) : const Color(0xFF5B6472);
 
     return Container(
       width: double.infinity,

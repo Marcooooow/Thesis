@@ -12,7 +12,7 @@ class FocusRatioCard extends StatelessWidget {
         color: isDark ? const Color(0xFF222532) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isDark ? const Color(0xFF303442) : const Color(0xFFE0E0E0),
+          color: isDark ? const Color(0xFF303442) : const Color(0xFFE2E6EB),
         ),
       ),
       padding: const EdgeInsets.all(24),
@@ -24,7 +24,7 @@ class FocusRatioCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: isDark ? Colors.white : const Color(0xFF171923),
+              color: isDark ? Colors.white : const Color(0xFF111827),
             ),
           ),
           const SizedBox(height: 24),
@@ -48,7 +48,7 @@ class FocusRatioCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: isDark ? Colors.white : const Color(0xFF171923),
+                  color: isDark ? Colors.white : const Color(0xFF111827),
                 ),
               ),
             ),
@@ -58,13 +58,13 @@ class FocusRatioCard extends StatelessWidget {
                 height: 24,
                 decoration: BoxDecoration(
                   color: isDark
-                      ? const Color(0xFF171923)
-                      : const Color(0xFFF8F9FA),
+                      ? const Color(0xFF111827)
+                      : const Color(0xFFF5F6F8),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: isDark
                         ? const Color(0xFF303442)
-                        : const Color(0xFFE0E0E0),
+                        : const Color(0xFFE2E6EB),
                   ),
                 ),
                 child: LayoutBuilder(
@@ -77,8 +77,8 @@ class FocusRatioCard extends StatelessWidget {
                           height: 24,
                           decoration: BoxDecoration(
                             color: isDark
-                                ? const Color(0xFF171923)
-                                : const Color(0xFFF8F9FA),
+                                ? const Color(0xFF111827)
+                                : const Color(0xFFF5F6F8),
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
@@ -87,7 +87,7 @@ class FocusRatioCard extends StatelessWidget {
                           width: constraints.maxWidth * 0.8, // 80% active
                           height: 24,
                           decoration: BoxDecoration(
-                            color: const Color(0xFF6C63FF),
+                            color: const Color(0xFF0F766E),
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
@@ -110,7 +110,7 @@ class FocusRatioCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: isDark ? Colors.white : const Color(0xFF171923),
+                  color: isDark ? Colors.white : const Color(0xFF111827),
                 ),
               ),
             ),
@@ -120,13 +120,13 @@ class FocusRatioCard extends StatelessWidget {
                 height: 24,
                 decoration: BoxDecoration(
                   color: isDark
-                      ? const Color(0xFF171923)
-                      : const Color(0xFFF8F9FA),
+                      ? const Color(0xFF111827)
+                      : const Color(0xFFF5F6F8),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: isDark
                         ? const Color(0xFF303442)
-                        : const Color(0xFFE0E0E0),
+                        : const Color(0xFFE2E6EB),
                   ),
                 ),
                 child: LayoutBuilder(
@@ -139,8 +139,8 @@ class FocusRatioCard extends StatelessWidget {
                           height: 24,
                           decoration: BoxDecoration(
                             color: isDark
-                                ? const Color(0xFF171923)
-                                : const Color(0xFFF8F9FA),
+                                ? const Color(0xFF111827)
+                                : const Color(0xFFF5F6F8),
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),

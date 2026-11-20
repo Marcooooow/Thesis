@@ -229,7 +229,7 @@ class _EmployeeAnalyticsScreenState extends State<EmployeeAnalyticsScreenContent
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
-        color: isDark ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF1B1D24)) : Colors.grey.shade200,
+        color: isDark ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF151A21)) : Colors.grey.shade200,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.2) : Colors.grey.shade300),
       ),
@@ -244,7 +244,7 @@ class _EmployeeAnalyticsScreenState extends State<EmployeeAnalyticsScreenContent
             }
           },
           items: periods.map((p) => DropdownMenuItem(value: p, child: Text(p, style: TextStyle(fontSize: 13, color: isDark ? Colors.white : Colors.black)))).toList(),
-          dropdownColor: isDark ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF1B1D24)) : Colors.white,
+          dropdownColor: isDark ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF151A21)) : Colors.white,
           icon: Icon(Icons.arrow_drop_down, size: 18, color: isDark ? Colors.white : Colors.grey.shade700),
         ),
       ),

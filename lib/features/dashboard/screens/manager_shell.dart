@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intellibreak/features/work_life_balance/screens/work_life_balance_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:intellibreak/core/theme/theme_controller.dart';
 import 'package:intellibreak/features/auth/services/auth_service.dart';
@@ -134,6 +135,8 @@ class _ManagerShellState extends State<ManagerShell> {
     switch (_selectedDestination) {
       case DashboardDestination.dashboard:
         return const ManagerDashboardContent();
+      case DashboardDestination.workLifeBalance:
+        return const WorkLifeBalanceScreen();
       case DashboardDestination.teamView:
         return const TeamViewScreenContent();
       case DashboardDestination.attendance:
@@ -264,7 +267,7 @@ class _ManagerShellState extends State<ManagerShell> {
                   color: isDark
                       ? (isHighContrast
                             ? const Color(0xFF0D0D0D)
-                            : const Color(0xFF1B1D24))
+                            : const Color(0xFF151A21))
                       : Colors.white,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
@@ -292,7 +295,7 @@ class _ManagerShellState extends State<ManagerShell> {
                                 color: isDark
                                     ? (isHighContrast
                                           ? Colors.white
-                                          : Color(0xFFA5A7AE))
+                                          : Color(0xFF9AA3AF))
                                     : Colors.grey.shade300,
                                 shape: BoxShape.circle,
                               ),
@@ -317,7 +320,7 @@ class _ManagerShellState extends State<ManagerShell> {
                                       color: isDark
                                           ? (isHighContrast
                                                 ? Colors.white
-                                                : Color(0xFFF2F2F2))
+                                                : Color(0xFFE8EBEF))
                                           : Colors.black,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -332,7 +335,7 @@ class _ManagerShellState extends State<ManagerShell> {
                                                 ? Colors.white.withValues(
                                                     alpha: 0.7,
                                                   )
-                                                : Color(0xFFA5A7AE))
+                                                : Color(0xFF9AA3AF))
                                           : Colors.grey.shade600,
                                       fontSize: 14,
                                     ),
@@ -348,8 +351,8 @@ class _ManagerShellState extends State<ManagerShell> {
                         color: isDark
                             ? (isHighContrast
                                   ? Colors.white.withValues(alpha: 0.1)
-                                  : Color(0xFF30323A))
-                            : Color(0xFFE0E0E0),
+                                  : Color(0xFF262D37))
+                            : Color(0xFFE2E6EB),
                       ),
                       // Menu Items
                       ListTile(
@@ -358,7 +361,7 @@ class _ManagerShellState extends State<ManagerShell> {
                           color: isDark
                               ? (isHighContrast
                                     ? Colors.white
-                                    : Color(0xFFA5A7AE))
+                                    : Color(0xFF9AA3AF))
                               : Colors.black,
                           size: 22,
                         ),
@@ -368,7 +371,7 @@ class _ManagerShellState extends State<ManagerShell> {
                             color: isDark
                                 ? (isHighContrast
                                       ? Colors.white
-                                      : Color(0xFFF2F2F2))
+                                      : Color(0xFFE8EBEF))
                                 : Colors.black,
                             fontSize: 16,
                           ),
@@ -384,7 +387,7 @@ class _ManagerShellState extends State<ManagerShell> {
                           color: isDark
                               ? (isHighContrast
                                     ? Colors.white
-                                    : Color(0xFFA5A7AE))
+                                    : Color(0xFF9AA3AF))
                               : Colors.black,
                           size: 22,
                         ),
@@ -394,7 +397,7 @@ class _ManagerShellState extends State<ManagerShell> {
                             color: isDark
                                 ? (isHighContrast
                                       ? Colors.white
-                                      : Color(0xFFA5A7AE))
+                                      : Color(0xFF9AA3AF))
                                 : Colors.black,
                             fontSize: 16,
                           ),
@@ -410,7 +413,7 @@ class _ManagerShellState extends State<ManagerShell> {
                           color: isDark
                               ? (isHighContrast
                                     ? Colors.white
-                                    : Color(0xFFA5A7AE))
+                                    : Color(0xFF9AA3AF))
                               : Colors.black,
                           size: 22,
                         ),
@@ -420,7 +423,7 @@ class _ManagerShellState extends State<ManagerShell> {
                             color: isDark
                                 ? (isHighContrast
                                       ? Colors.white
-                                      : Color(0xFFF2F2F2))
+                                      : Color(0xFFE8EBEF))
                                 : Colors.black,
                             fontSize: 16,
                           ),
