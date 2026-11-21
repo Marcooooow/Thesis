@@ -133,8 +133,8 @@ class CurrentTaskSection extends StatelessWidget {
           color: isDark
               ? (isHighContrast
                     ? Colors.white.withValues(alpha: 0.1)
-                    : Color(0xFF262D37))
-              : Color(0xFFE2E6EB),
+                    : Color(0xFF2D3643))
+              : Color(0xFFD3D9E1),
         ),
       ),
       padding: const EdgeInsets.all(20),

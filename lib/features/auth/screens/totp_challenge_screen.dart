@@ -131,10 +131,10 @@ class _TotpChallengeScreenState extends State<TotpChallengeScreen> {
   }
 
   Widget _buildTotpChallengeCard(bool isDark) {
-    final Color cardBgColor = isDark ? Color(0xFF222532) : Color(0xFFF5F6F8);
+    final Color cardBgColor = isDark ? Color(0xFF222532) : Color(0xFFECEFF3);
     final Color cardBorderColor = isDark
         ? Color(0xFF303442)
-        : Color(0xFFE2E6EB);
+        : Color(0xFFD3D9E1);
     final Color logoBgColor = Color(0xFF0F766E);
     final Color logoIconColor = Colors.white;
     final Color titleTextColor = isDark ? Colors.white : Color(0xFF111827);
@@ -273,7 +273,7 @@ class _TotpChallengeScreenState extends State<TotpChallengeScreen> {
         ? Color(0xFF9CA3AF)
         : Color(0xFF5B6472);
     final Color fillColor = isDark ? Color(0xFF111827) : Colors.white;
-    final Color borderColor = isDark ? Color(0xFF303442) : Color(0xFFE2E6EB);
+    final Color borderColor = isDark ? Color(0xFF303442) : Color(0xFFD3D9E1);
     final Color focusedBorderColor = Color(0xFF0F766E);
 
     return InputDecoration(

@@ -51,7 +51,7 @@ class ReportExportsSection extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF151A21) : Colors.white,
+        color: isDark ? const Color(0xFF182029) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.1) : Colors.grey.withValues(alpha: 0.2)),
       ),

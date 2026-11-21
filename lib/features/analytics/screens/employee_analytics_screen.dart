@@ -29,6 +29,7 @@ class _EmployeeAnalyticsScreenState extends State<EmployeeAnalyticsScreenContent
   bool _isLoading = true;
   bool _isExporting = false;
   String _selectedPeriod = 'This Week';
+  int _customDays = 14; // used when _selectedPeriod == 'Custom'
   final AnalyticsService _analyticsService = AnalyticsService();
   final ApiService _apiService = ApiService();
 
@@ -114,6 +115,10 @@ class _EmployeeAnalyticsScreenState extends State<EmployeeAnalyticsScreenContent
         final y = now.subtract(const Duration(days: 1));
         return (DateTime(y.year, y.month, y.day), DateTime(y.year, y.month, y.day, 23, 59, 59));
       case 'Last 7 Days': return (now.subtract(const Duration(days: 7)), now);
+      case 'Last 14 Days': return (now.subtract(const Duration(days: 14)), now);
+      case 'Last 30 Days': return (now.subtract(const Duration(days: 30)), now);
+      case 'Last 90 Days': return (now.subtract(const Duration(days: 90)), now);
+      case 'Custom': return (now.subtract(Duration(days: _customDays)), now);
       case 'This Week':
         int off = now.weekday - 1; if (off < 0) off = 6;
         return (DateTime(now.year, now.month, now.day - off), now);
@@ -224,12 +229,72 @@ class _EmployeeAnalyticsScreenState extends State<EmployeeAnalyticsScreenContent
     );
   }
 
+  /// Asks for a number of days (1-365). Returns null when cancelled.
+  Future<int?> _pickCustomDays(BuildContext context) {
+    final controller = TextEditingController(text: _customDays.toString());
+    String? error;
+    return showDialog<int>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          title: const Text('Custom date range'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Show data for the last how many days?'),
+              const SizedBox(height: 12),
+              TextField(
+                controller: controller,
+                autofocus: true,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(labelText: 'Number of days (1-365)', errorText: error),
+              ),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                children: [
+                  for (final d in [3, 5, 10, 21, 45, 60])
+                    ActionChip(
+                      label: Text('$d days'),
+                      onPressed: () => setDialogState(() {
+                        controller.text = '$d';
+                        error = null;
+                      }),
+                    ),
+                ],
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+            ElevatedButton(
+              onPressed: () {
+                final n = int.tryParse(controller.text.trim());
+                if (n == null || n < 1 || n > 365) {
+                  setDialogState(() => error = 'Enter a whole number from 1 to 365');
+                  return;
+                }
+                Navigator.pop(ctx, n);
+              },
+              child: const Text('Apply'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildPeriodDropdown(BuildContext context, bool isDark, bool isHighContrast) {
-    final periods = ['Today', 'Yesterday', 'Last 7 Days', 'This Week', 'This Month', 'Last Month'];
+    final periods = [
+      'Today', 'Yesterday', 'Last 7 Days', 'Last 14 Days', 'Last 30 Days', 'Last 90 Days',
+      'This Week', 'This Month', 'Last Month', 'Custom',
+    ];
+    String labelFor(String p) => p == 'Custom' ? 'Last $_customDays days (custom)' : p;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
-        color: isDark ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF151A21)) : Colors.grey.shade200,
+        color: isDark ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF182029)) : Colors.grey.shade200,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.2) : Colors.grey.shade300),
       ),
@@ -237,14 +302,22 @@ class _EmployeeAnalyticsScreenState extends State<EmployeeAnalyticsScreenContent
         child: DropdownButton<String>(
           value: _selectedPeriod,
           isDense: true,
-          onChanged: (v) {
-            if (v != null) {
+          onChanged: (v) async {
+            if (v == null) return;
+            if (v == 'Custom') {
+              final days = await _pickCustomDays(context);
+              if (days == null) return; // cancelled: keep the previous period
+              setState(() {
+                _customDays = days;
+                _selectedPeriod = 'Custom';
+              });
+            } else {
               setState(() => _selectedPeriod = v);
-              _fetchAll();
             }
+            _fetchAll();
           },
-          items: periods.map((p) => DropdownMenuItem(value: p, child: Text(p, style: TextStyle(fontSize: 13, color: isDark ? Colors.white : Colors.black)))).toList(),
-          dropdownColor: isDark ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF151A21)) : Colors.white,
+          items: periods.map((p) => DropdownMenuItem(value: p, child: Text(labelFor(p), style: TextStyle(fontSize: 13, color: isDark ? Colors.white : Colors.black)))).toList(),
+          dropdownColor: isDark ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF182029)) : Colors.white,
           icon: Icon(Icons.arrow_drop_down, size: 18, color: isDark ? Colors.white : Colors.grey.shade700),
         ),
       ),

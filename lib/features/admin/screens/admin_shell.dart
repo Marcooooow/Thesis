@@ -231,7 +231,7 @@ class _AdminShellState extends State<AdminShell> {
                   color: isDark
                       ? (isHighContrast
                             ? const Color(0xFF0D0D0D)
-                            : const Color(0xFF151A21))
+                            : const Color(0xFF182029))
                       : Colors.white,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
@@ -331,8 +331,8 @@ class _AdminShellState extends State<AdminShell> {
                         color: isDark
                             ? (isHighContrast
                                   ? Colors.white.withValues(alpha: 0.1)
-                                  : Color(0xFF262D37))
-                            : Color(0xFFE2E6EB),
+                                  : Color(0xFF2D3643))
+                            : Color(0xFFD3D9E1),
                       ),
                       // Menu Items
                       ListTile(

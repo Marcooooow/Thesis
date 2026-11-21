@@ -277,7 +277,7 @@ class _PendingApprovalsScreenState extends State<PendingApprovalsScreen> {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       color: isDark
-          ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF151A21))
+          ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF182029))
           : Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(16.0),

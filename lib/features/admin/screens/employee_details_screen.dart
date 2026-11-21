@@ -280,10 +280,10 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
             padding: const EdgeInsets.all(20),
             margin: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF151A21) : Colors.white,
+              color: isDark ? const Color(0xFF182029) : Colors.white,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: isDark ? const Color(0xFF262D37) : Colors.grey.shade200,
+                color: isDark ? const Color(0xFF2D3643) : Colors.grey.shade200,
               ),
               boxShadow: [
                 BoxShadow(
@@ -370,7 +370,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
           ),
           // Tab Bar
           Container(
-            color: isDark ? const Color(0xFF151A21) : Colors.grey.shade100,
+            color: isDark ? const Color(0xFF182029) : Colors.grey.shade100,
             child: TabBar(
               isScrollable: true,
               labelColor: isDark ? Colors.white : Colors.blue.shade800,
@@ -525,10 +525,10 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF151A21) : Colors.white,
+        color: isDark ? const Color(0xFF182029) : Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: isDark ? const Color(0xFF262D37) : Colors.grey.shade200,
+          color: isDark ? const Color(0xFF2D3643) : Colors.grey.shade200,
         ),
         boxShadow: [
           BoxShadow(

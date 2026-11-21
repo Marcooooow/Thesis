@@ -127,7 +127,7 @@ class UserAvatar extends StatelessWidget {
         color: color,
         shape: BoxShape.circle,
         border: Border.all(
-          color: isDark ? const Color(0xFF151A21) : Colors.white,
+          color: isDark ? const Color(0xFF182029) : Colors.white,
           width: 1.5,
         ),
       ),

@@ -527,7 +527,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
     final Color surfaceColor = isHighContrast
         ? (isDark ? AppTheme.hcPrimaryBackground : Colors.white)
         : isDark
-            ? const Color(0xFF151A21)
+            ? const Color(0xFF182029)
             : Colors.white;
     final Color accentColor = themeController.accentColor;
 
@@ -1432,7 +1432,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
           value: dropdownValue.isNotEmpty && dropdownItems.contains(dropdownValue)
               ? dropdownValue
               : null,
-          dropdownColor: isDark ? const Color(0xFF151A21) : Colors.white,
+          dropdownColor: isDark ? const Color(0xFF182029) : Colors.white,
           style: TextStyle(color: primaryText, fontSize: 14),
           items: dropdownItems
               .map((item) => DropdownMenuItem(

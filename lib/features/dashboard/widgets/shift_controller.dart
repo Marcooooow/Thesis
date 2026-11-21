@@ -1504,6 +1504,7 @@ class _ShiftControllerState extends State<ShiftController> {
 
   Future<void> _showCreateTaskDialog(BuildContext context, WorkSessionProvider sessionProvider) async {
     final titleController = TextEditingController();
+    final customCategoryController = TextEditingController();
     String selectedCategory = 'Development';
     String selectedPriority = 'MEDIUM';
 
@@ -1539,8 +1540,22 @@ class _ShiftControllerState extends State<ShiftController> {
                       DropdownMenuItem(value: 'Documentation', child: Text('Documentation')),
                       DropdownMenuItem(value: 'Other', child: Text('Other')),
                     ],
-                    onChanged: (val) => setDialogState(() => selectedCategory = val ?? 'Development'),
+                    onChanged: (val) => setDialogState(() {
+                      selectedCategory = val ?? 'Development';
+                      if (selectedCategory != 'Other') customCategoryController.clear();
+                    }),
                   ),
+                  if (selectedCategory == 'Other') ...[
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: customCategoryController,
+                      maxLength: 100,
+                      decoration: const InputDecoration(
+                        labelText: 'Custom category',
+                        hintText: 'e.g. Client onboarding',
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: 16),
                   DropdownButtonFormField<String>(
                     initialValue: selectedPriority,
@@ -1563,6 +1578,9 @@ class _ShiftControllerState extends State<ShiftController> {
                   onPressed: () async {
                     final title = titleController.text.trim();
                     if (title.isEmpty) return;
+                    final customCategory = customCategoryController.text.trim();
+                    if (selectedCategory == 'Other' && customCategory.isEmpty) return;
+                    final categoryToSave = selectedCategory == 'Other' ? customCategory : selectedCategory;
 
                     Navigator.pop(dialogContext);
 
@@ -1573,7 +1591,7 @@ class _ShiftControllerState extends State<ShiftController> {
 
                       final taskResponse = await _workService.createTask(token, {
                         'title': title,
-                        'category': selectedCategory,
+                        'category': categoryToSave,
                         'priority': selectedPriority,
                         'work_session_id': sessionProvider.state.session?.id,
                       });

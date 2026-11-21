@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intellibreak/features/notifications/notification_navigator.dart';
 import 'package:provider/provider.dart';
 import 'package:intellibreak/providers/notification_provider.dart';
 import 'package:intellibreak/features/notifications/models/notification_model.dart';
@@ -257,6 +258,10 @@ class _NotificationCenterScreenState extends State<NotificationCenterScreen> wit
               onTap: () {
                 if (!notification.isRead) {
                   provider.markAsRead(notification.id);
+                }
+                // Leave the notification center and open the related screen.
+                if (NotificationNavigator.open(notification) && widget.onBack == null && Navigator.of(context).canPop()) {
+                  Navigator.of(context).pop();
                 }
               },
             );

@@ -84,7 +84,7 @@ class AdminSidebar extends StatelessWidget {
     return Container(
       width: 230,
       color: isDark
-          ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF151A21))
+          ? (isHighContrast ? const Color(0xFF0D0D0D) : const Color(0xFF182029))
           : Colors.white,
       child: Column(
         children: [

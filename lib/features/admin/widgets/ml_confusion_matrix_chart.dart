@@ -337,7 +337,7 @@ class MLConfusionMatrixChart extends StatelessWidget {
     // Blue-green heatmap: light for low, dark for high
     if (isDark) {
       return Color.lerp(
-        const Color(0xFF151A21),
+        const Color(0xFF182029),
         const Color(0xFF0D9488), // Teal
         normalized,
       )!;

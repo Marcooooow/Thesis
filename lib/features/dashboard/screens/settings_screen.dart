@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intellibreak/features/auth/screens/change_password_screen.dart';
+import 'package:intellibreak/features/auth/screens/totp_management_screen.dart';
+import 'package:intellibreak/features/sandbox/screens/demo_sandbox_screen.dart';
 import 'package:intellibreak/core/theme/theme_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:intellibreak/providers/settings_provider.dart';
@@ -233,14 +236,14 @@ class SettingsSidebar extends StatelessWidget {
         color: isDark
             ? (isHighContrast
                   ? const Color(0xFF0D0D0D)
-                  : const Color(0xFF151A21))
+                  : const Color(0xFF182029))
             : Colors.grey.shade50,
         border: Border(
           right: BorderSide(
             color: isDark
                 ? (isHighContrast
                       ? Colors.white.withValues(alpha: 0.1)
-                      : const Color(0xFF262D37))
+                      : const Color(0xFF2D3643))
                 : Colors.grey.shade300,
             width: 1,
           ),
@@ -353,7 +356,7 @@ class SettingsDivider extends StatelessWidget {
         color: isDark
             ? (isHighContrast
                   ? Colors.white.withValues(alpha: 0.1)
-                  : Color(0xFF262D37))
+                  : Color(0xFF2D3643))
             : Colors.grey.shade300,
         height: 1,
       ),
@@ -740,6 +743,16 @@ class _SettingsContentState extends State<SettingsContent> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SettingsSectionTitle(title: 'Demo & testing'),
+        SettingsListTile(
+          leadingIcon: Icons.science_outlined,
+          title: 'Open demo sandbox',
+          subtitle: 'Simulate notifications, recommendations and work-life balance',
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => const DemoSandboxScreen()),
+          ),
+        ),
+        const SizedBox(height: 24),
         const SettingsSectionTitle(title: 'Notifications'),
         SettingsListTile(
           leadingIcon: Icons.notifications,
@@ -1371,7 +1384,18 @@ class _SettingsContentState extends State<SettingsContent> {
         SettingsListTile(
           leadingIcon: Icons.lock,
           title: 'Change password',
-          onTap: null,
+          subtitle: 'Minimum 12 characters, with a strength meter',
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => const ChangePasswordScreen()),
+          ),
+        ),
+        SettingsListTile(
+          leadingIcon: Icons.phonelink_lock,
+          title: 'Two-factor authentication',
+          subtitle: 'Set up or manage authenticator-app (TOTP) verification',
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => const TotpManagementScreen()),
+          ),
         ),
         SettingsListTile(
           leadingIcon: Icons.logout,

@@ -10,6 +10,7 @@ import 'package:intellibreak/providers/work_session_models.dart';
 import 'package:intellibreak/widgets/state_display.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intellibreak/features/tasks/widgets/task_priority.dart';
 
 /// Task-category choices with an "Other" option always available last.
 List<String> _categoriesWithOther(Iterable<String> names) {
@@ -298,6 +299,10 @@ class _WorkTasksState extends State<WorkTasks> {
         final deadline = task['deadline'];
         return Card(
           margin: const EdgeInsets.only(bottom: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: TaskPriorityStyle.border(priority.toString()),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -315,7 +320,7 @@ class _WorkTasksState extends State<WorkTasks> {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    Text('Priority: $priority', style: const TextStyle(fontWeight: FontWeight.w500)),
+                    TaskPriorityStyle.badge(priority.toString()),
                     const SizedBox(width: 16),
                     if (deadline != null) Text('Deadline: ${deadline.toString().substring(0, 10)}', style: const TextStyle(color: Colors.orange)),
                   ],
@@ -373,8 +378,11 @@ class _WorkTasksState extends State<WorkTasks> {
 
             return Card(
               margin: const EdgeInsets.only(bottom: 16),
-              elevation: 2,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: TaskPriorityStyle.border(priority.toString()),
+              ),
               child: ExpansionTile(
                 tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -422,7 +430,7 @@ class _WorkTasksState extends State<WorkTasks> {
                     const SizedBox(height: 6),
                     Row(
                       children: [
-                        Text('Priority: $priority', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+                        TaskPriorityStyle.badge(priority.toString(), fontSize: 11),
                         const SizedBox(width: 12),
                         if (deadline != null)
                           Text('Deadline: ${deadline.toString().substring(0, 10)}', style: const TextStyle(fontSize: 12, color: Colors.orange)),
@@ -1149,15 +1157,15 @@ class _WorkTasksState extends State<WorkTasks> {
           color: isDark
               ? (isHighContrast
                     ? const Color(0xFF0D0D0D)
-                    : const Color(0xFF151A21))
+                    : const Color(0xFF182029))
               : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isDark
                 ? (isHighContrast
                       ? Colors.white.withValues(alpha: 0.3)
-                      : const Color(0xFF262D37))
-                : const Color(0xFFE2E6EB),
+                      : const Color(0xFF2D3643))
+                : const Color(0xFFD3D9E1),
           ),
         ),
         child: Column(
@@ -1352,15 +1360,15 @@ class _WorkTasksState extends State<WorkTasks> {
         color: isDark
             ? (isHighContrast
                   ? const Color(0xFF0D0D0D)
-                  : const Color(0xFF151A21))
+                  : const Color(0xFF182029))
             : Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isDark
               ? (isHighContrast
                     ? Colors.white.withValues(alpha: 0.3)
-                    : const Color(0xFF262D37))
-              : const Color(0xFFE2E6EB),
+                    : const Color(0xFF2D3643))
+              : const Color(0xFFD3D9E1),
         ),
       ),
       child: LayoutBuilder(
@@ -1637,15 +1645,15 @@ class _WorkTasksState extends State<WorkTasks> {
           color: isDark
               ? (isHighContrast
                     ? const Color(0xFF0D0D0D)
-                    : const Color(0xFF151A21))
+                    : const Color(0xFF182029))
               : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isDark
                 ? (isHighContrast
                       ? Colors.white.withValues(alpha: 0.3)
-                      : const Color(0xFF262D37))
-                : const Color(0xFFE2E6EB),
+                      : const Color(0xFF2D3643))
+                : const Color(0xFFD3D9E1),
           ),
         ),
         child: Column(
@@ -1847,15 +1855,15 @@ class _WorkTasksState extends State<WorkTasks> {
             color: isDark
                 ? (isHighContrast
                       ? const Color(0xFF0D0D0D)
-                      : const Color(0xFF151A21))
+                      : const Color(0xFF182029))
                 : Colors.white,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: isDark
                   ? (isHighContrast
                         ? Colors.white.withValues(alpha: 0.3)
-                        : const Color(0xFF262D37))
-                  : const Color(0xFFE2E6EB),
+                        : const Color(0xFF2D3643))
+                  : const Color(0xFFD3D9E1),
             ),
           ),
           child: isWideScreen
@@ -2346,8 +2354,8 @@ class _WorkTasksState extends State<WorkTasks> {
           color: isDark
               ? (isHighContrast
                     ? Colors.white.withValues(alpha: 0.1)
-                    : const Color(0xFF262D37))
-              : const Color(0xFFE2E6EB),
+                    : const Color(0xFF2D3643))
+              : const Color(0xFFD3D9E1),
         ),
         // Task rows
         ...tasks.map(
@@ -2393,15 +2401,15 @@ class _WorkTasksState extends State<WorkTasks> {
             color: isDark
                 ? (isHighContrast
                       ? const Color(0xFF0D0D0D)
-                      : const Color(0xFF151A21))
+                      : const Color(0xFF182029))
                 : Colors.white,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color: isDark
                   ? (isHighContrast
                         ? Colors.white.withValues(alpha: 0.2)
-                        : const Color(0xFF262D37))
-                  : const Color(0xFFE2E6EB),
+                        : const Color(0xFF2D3643))
+                  : const Color(0xFFD3D9E1),
             ),
           ),
           child: Column(
@@ -2477,8 +2485,8 @@ class _WorkTasksState extends State<WorkTasks> {
               color: isDark
                   ? (isHighContrast
                         ? Colors.white.withValues(alpha: 0.05)
-                        : const Color(0xFF262D37))
-                  : const Color(0xFFE2E6EB),
+                        : const Color(0xFF2D3643))
+                  : const Color(0xFFD3D9E1),
               width: 1,
             ),
           ),

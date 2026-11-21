@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intellibreak/features/notifications/notification_navigator.dart';
 import 'package:intellibreak/features/work_life_balance/screens/work_life_balance_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:intellibreak/core/theme/theme_controller.dart';
@@ -52,7 +53,31 @@ class _ManagerShellState extends State<ManagerShell> {
   @override
   void initState() {
     super.initState();
+    NotificationNavigator.register(_handleNotificationTarget);
     _loadToken();
+  }
+
+  @override
+  void dispose() {
+    NotificationNavigator.unregister(_handleNotificationTarget);
+    super.dispose();
+  }
+
+  /// Opens the screen a pressed notification refers to.
+  void _handleNotificationTarget(NotificationTarget target) {
+    final DashboardDestination destination = switch (target) {
+      NotificationTarget.dashboard => DashboardDestination.dashboard,
+      NotificationTarget.tasks => DashboardDestination.tasks,
+      NotificationTarget.team => DashboardDestination.teamView,
+      NotificationTarget.shiftLogs => DashboardDestination.shiftLogs,
+      NotificationTarget.workLifeBalance => DashboardDestination.workLifeBalance,
+      NotificationTarget.wellbeing => DashboardDestination.wellbeing,
+      NotificationTarget.analytics => DashboardDestination.analytics,
+      NotificationTarget.messages => DashboardDestination.messages,
+    };
+    if (!mounted) return;
+    setState(() => _showNotificationDropdown = false);
+    _onDestinationSelected(destination);
   }
 
   void _toggleProfileMenu() {
@@ -267,7 +292,7 @@ class _ManagerShellState extends State<ManagerShell> {
                   color: isDark
                       ? (isHighContrast
                             ? const Color(0xFF0D0D0D)
-                            : const Color(0xFF151A21))
+                            : const Color(0xFF182029))
                       : Colors.white,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
@@ -351,8 +376,8 @@ class _ManagerShellState extends State<ManagerShell> {
                         color: isDark
                             ? (isHighContrast
                                   ? Colors.white.withValues(alpha: 0.1)
-                                  : Color(0xFF262D37))
-                            : Color(0xFFE2E6EB),
+                                  : Color(0xFF2D3643))
+                            : Color(0xFFD3D9E1),
                       ),
                       // Menu Items
                       ListTile(

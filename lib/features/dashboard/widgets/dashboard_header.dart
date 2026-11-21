@@ -93,15 +93,15 @@ class _DashboardHeaderState extends State<DashboardHeader> {
             color: isDark
                 ? (isHighContrast
                       ? const Color(0xFF0D0D0D)
-                      : const Color(0xFF151A21))
+                      : const Color(0xFF182029))
                 : Colors.white,
             border: Border(
               bottom: BorderSide(
                 color: isDark
                     ? (isHighContrast
                           ? Colors.white.withValues(alpha: 0.2)
-                          : const Color(0xFF262D37))
-                    : const Color(0xFFE2E6EB),
+                          : const Color(0xFF2D3643))
+                    : const Color(0xFFD3D9E1),
                 width: 1,
               ),
             ),
@@ -178,7 +178,7 @@ class _DashboardHeaderState extends State<DashboardHeader> {
                       fillColor: isDark
                           ? (isHighContrast
                                 ? const Color(0xFF0D0D0D)
-                                : const Color(0xFF151A21))
+                                : const Color(0xFF182029))
                           : Colors.grey.shade200,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -298,15 +298,15 @@ class _DashboardHeaderState extends State<DashboardHeader> {
             color: isDark
                 ? (isHighContrast
                       ? const Color(0xFF0D0D0D)
-                      : const Color(0xFF151A21))
+                      : const Color(0xFF182029))
                 : Colors.white,
             border: Border(
               bottom: BorderSide(
                 color: isDark
                     ? (isHighContrast
                           ? Colors.white.withValues(alpha: 0.2)
-                          : const Color(0xFF262D37))
-                    : const Color(0xFFE2E6EB),
+                          : const Color(0xFF2D3643))
+                    : const Color(0xFFD3D9E1),
                 width: 1,
               ),
             ),
@@ -351,7 +351,7 @@ class _DashboardHeaderState extends State<DashboardHeader> {
                         fillColor: isDark
                             ? (isHighContrast
                                   ? const Color(0xFF0D0D0D)
-                                  : const Color(0xFF151A21))
+                                  : const Color(0xFF182029))
                             : Colors.grey.shade200,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -493,7 +493,7 @@ class _DashboardHeaderState extends State<DashboardHeader> {
                   color: isDark
                       ? (isHighContrast
                             ? const Color(0xFF0D0D0D)
-                            : const Color(0xFF151A21))
+                            : const Color(0xFF182029))
                       : Colors.white,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
@@ -561,8 +561,8 @@ class _DashboardHeaderState extends State<DashboardHeader> {
                         color: isDark
                             ? (isHighContrast
                                   ? Colors.white.withValues(alpha: 0.1)
-                                  : const Color(0xFF262D37))
-                            : const Color(0xFFE2E6EB),
+                                  : const Color(0xFF2D3643))
+                            : const Color(0xFFD3D9E1),
                       ),
                       // Menu Items
                       ListTile(

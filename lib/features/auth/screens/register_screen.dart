@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intellibreak/features/auth/widgets/legal_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:intellibreak/core/design_system.dart';
 import 'package:intellibreak/core/theme/theme_controller.dart';
@@ -370,7 +371,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     // Validate Terms of Use (required for both account types)
     if (!_termsAgreed) {
       setState(() {
-        _termsError = 'Please agree to the IntelliBreak Terms of Use.';
+        _termsError = 'Please agree to the IntelliBreak Terms of Use and Data Privacy Notice.';
       });
       isValid = false;
     }
@@ -1058,7 +1059,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             context,
                             SemanticColor.primary,
                           ).withValues(alpha: 0.1)
-                        : (isDark ? Color(0xFF151A21) : Colors.white),
+                        : (isDark ? Color(0xFF182029) : Colors.white),
                     borderRadius: BorderRadius.circular(DesignSystem.radiusM),
                     border: Border.all(
                       color: _accountType == 'solo'
@@ -1066,7 +1067,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               context,
                               SemanticColor.primary,
                             )
-                          : (isDark ? Color(0xFF262D37) : Color(0xFFE2E6EB)),
+                          : (isDark ? Color(0xFF2D3643) : Color(0xFFD3D9E1)),
                       width: _accountType == 'solo' ? 1.5 : 1,
                     ),
                   ),
@@ -1110,7 +1111,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             context,
                             SemanticColor.primary,
                           ).withValues(alpha: 0.1)
-                        : (isDark ? Color(0xFF151A21) : Colors.white),
+                        : (isDark ? Color(0xFF182029) : Colors.white),
                     borderRadius: BorderRadius.circular(DesignSystem.radiusM),
                     border: Border.all(
                       color: _accountType == 'organization'
@@ -1118,7 +1119,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               context,
                               SemanticColor.primary,
                             )
-                          : (isDark ? Color(0xFF262D37) : Color(0xFFE2E6EB)),
+                          : (isDark ? Color(0xFF2D3643) : Color(0xFFD3D9E1)),
                       width: _accountType == 'organization' ? 1.5 : 1,
                     ),
                   ),
@@ -1331,41 +1332,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 12),
-                    child: GestureDetector(
-                      onTap: () {
-                        // TODO: Navigate to Terms of Use page when it exists
-                        // For now, just toggle the checkbox
-                        setState(() {
-                          _termsAgreed = !_termsAgreed;
-                          if (_termsAgreed) {
-                            _termsError = null;
-                          }
-                        });
-                      },
-                      child: RichText(
-                        text: TextSpan(
-                          style: TextStyle(
-                            color: isDark
-                                ? Color(0xFF9CA3AF)
-                                : Color(0xFF5B6472),
-                            fontSize: 13,
-                          ),
-                          children: [
-                            TextSpan(text: 'I agree to IntelliBreak '),
-                            TextSpan(
-                              text: 'Terms of Use',
-                              style: TextStyle(
-                                color: DesignSystem.getSemanticColor(
-                                  context,
-                                  SemanticColor.primary,
-                                ),
-                                decoration: TextDecoration.underline,
-                              ),
+                    child: Builder(builder: (context) {
+                      final linkColor = DesignSystem.getSemanticColor(context, SemanticColor.primary);
+                      final textStyle = TextStyle(
+                        color: isDark ? const Color(0xFF9CA3AF) : const Color(0xFF5B6472),
+                        fontSize: 13,
+                      );
+                      Widget link(String label, LegalDoc doc) => InkWell(
+                            onTap: () => showLegalDialog(context, doc),
+                            child: Text(
+                              label,
+                              style: textStyle.copyWith(color: linkColor, decoration: TextDecoration.underline),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
+                          );
+                      return Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Text('I agree to the IntelliBreak ', style: textStyle),
+                          link('Terms of Use', LegalDoc.terms),
+                          Text(' and ', style: textStyle),
+                          link('Data Privacy Notice', LegalDoc.privacy),
+                          Text('.', style: textStyle),
+                        ],
+                      );
+                    }),
                   ),
                 ),
               ],
@@ -1954,6 +1944,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
           'Your collected data may be analyzed by the '
               'IntelliBreak prediction system to provide '
               'personalized productivity recommendations.',
+        ),
+        const SizedBox(height: 12),
+        _buildDataSection(
+          Icons.balance_rounded,
+          'Work-Life Balance Check-ins',
+          'Your weekly self-rated answers are stored to compute your '
+              'balance score and habit suggestions. They are advisory '
+              'reflections, not a medical or psychological diagnosis'
+              '${_accountType == 'solo' ? ', and only you can see them.' : ', and organization managers can see only what their role allows.'}',
         ),
         const SizedBox(height: 24),
         // Consent checkbox

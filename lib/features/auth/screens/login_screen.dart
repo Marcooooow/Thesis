@@ -7,6 +7,7 @@ import 'package:intellibreak/features/auth/widgets/auth_layout.dart';
 import 'package:intellibreak/features/auth/widgets/auth_logo.dart';
 import 'package:intellibreak/features/auth/widgets/auth_form_field.dart';
 import 'package:intellibreak/features/auth/widgets/auth_header.dart';
+import 'package:intellibreak/features/auth/widgets/auth_brand_panel.dart';
 
 import '../services/api_service.dart';
 import 'register_screen.dart';
@@ -126,7 +127,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildTabletLogin(BuildContext context) => _buildFullPageLogin(context);
 
-  Widget _buildDesktopLogin(BuildContext context) => _buildFullPageLogin(context);
+  Widget _buildDesktopLogin(BuildContext context) {
+    // Wide windows get a brand panel on the left; narrower ones keep the
+    // single centred form.
+    if (MediaQuery.sizeOf(context).width < 1000) return _buildFullPageLogin(context);
+    return Row(
+      children: [
+        const Expanded(flex: 5, child: AuthBrandPanel()),
+        Expanded(flex: 4, child: _buildFullPageLogin(context)),
+      ],
+    );
+  }
 
   Widget _buildFullPageLogin(BuildContext context) {
     return GestureDetector(

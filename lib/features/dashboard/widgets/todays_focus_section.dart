@@ -125,7 +125,7 @@ class TodaysFocusSection extends StatelessWidget {
           color: isDark
               ? (isHighContrast
                     ? Colors.white.withValues(alpha: 0.1)
-                    : Color(0xFF262D37))
+                    : Color(0xFF2D3643))
               : Colors.grey.withValues(alpha: 0.2),
         ),
       ),

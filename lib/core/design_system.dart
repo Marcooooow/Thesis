@@ -41,7 +41,7 @@ class DesignSystem {
     ).isHighContrast;
 
     // FlareLine-inspired dark theme colors
-    const Color flarelineCardBackground = Color(0xFF151A21);
+    const Color flarelineCardBackground = Color(0xFF182029);
     const Color flarelinePrimaryText = Color(0xFFE8EBEF);
     const Color flarelineSecondaryText = Color(0xFF9AA3AF);
     final Color flarelineAccent = theme.colorScheme.primary;
@@ -1290,7 +1290,7 @@ class DesignSystem {
         suffixIcon: suffixIcon,
         filled: true,
         fillColor: isDark
-            ? (isHighContrast ? Color(0xFF111827) : Color(0xFF151A21))
+            ? (isHighContrast ? Color(0xFF111827) : Color(0xFF182029))
             : Colors.white,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusM),
@@ -1301,9 +1301,9 @@ class DesignSystem {
           borderSide: BorderSide(
             color: isDark
                 ? (isHighContrast
-                      ? Color(0xFF262D37).withValues(alpha: 0.3)
-                      : Color(0xFF262D37))
-                : Color(0xFFE2E6EB),
+                      ? Color(0xFF2D3643).withValues(alpha: 0.3)
+                      : Color(0xFF2D3643))
+                : Color(0xFFD3D9E1),
           ),
         ),
         focusedBorder: OutlineInputBorder(
@@ -1371,7 +1371,7 @@ class DesignSystem {
         ),
       ),
       dropdownColor: isDark
-          ? (isHighContrast ? Color(0xFF111827) : Color(0xFF151A21))
+          ? (isHighContrast ? Color(0xFF111827) : Color(0xFF182029))
           : Colors.white,
       style: TextStyle(
         color: isDark
@@ -1385,7 +1385,7 @@ class DesignSystem {
       decoration: InputDecoration(
         filled: true,
         fillColor: isDark
-            ? (isHighContrast ? Color(0xFF111827) : Color(0xFF151A21))
+            ? (isHighContrast ? Color(0xFF111827) : Color(0xFF182029))
             : Colors.white,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusM),
@@ -1396,9 +1396,9 @@ class DesignSystem {
           borderSide: BorderSide(
             color: isDark
                 ? (isHighContrast
-                      ? Color(0xFF262D37).withValues(alpha: 0.3)
-                      : Color(0xFF262D37))
-                : Color(0xFFE2E6EB),
+                      ? Color(0xFF2D3643).withValues(alpha: 0.3)
+                      : Color(0xFF2D3643))
+                : Color(0xFFD3D9E1),
           ),
         ),
         focusedBorder: OutlineInputBorder(
@@ -1526,14 +1526,14 @@ class DesignSystem {
       padding: EdgeInsets.all(spacingM),
       decoration: BoxDecoration(
         color: isDark
-            ? (isHighContrast ? Color(0xFF1A1A1A) : Color(0xFF151A21))
+            ? (isHighContrast ? Color(0xFF1A1A1A) : Color(0xFF182029))
             : Colors.red.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(radiusM),
         border: Border.all(
           color: isDark
               ? (isHighContrast
                     ? Colors.white.withValues(alpha: 0.1)
-                    : Color(0xFF262D37))
+                    : Color(0xFF2D3643))
               : Colors.red.withValues(alpha: 0.3),
         ),
       ),
@@ -1566,14 +1566,14 @@ class DesignSystem {
       padding: EdgeInsets.all(spacingM),
       decoration: BoxDecoration(
         color: isDark
-            ? (isHighContrast ? Color(0xFF1A1A1A) : Color(0xFF151A21))
+            ? (isHighContrast ? Color(0xFF1A1A1A) : Color(0xFF182029))
             : Colors.green.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(radiusM),
         border: Border.all(
           color: isDark
               ? (isHighContrast
                     ? Colors.white.withValues(alpha: 0.1)
-                    : Color(0xFF262D37))
+                    : Color(0xFF2D3643))
               : Colors.green.withValues(alpha: 0.3),
         ),
       ),
@@ -1642,14 +1642,14 @@ class DesignSystem {
       padding: EdgeInsets.all(spacingL),
       decoration: BoxDecoration(
         color: isDark
-            ? (isHighContrast ? Color(0xFF111827) : Color(0xFF151A21))
+            ? (isHighContrast ? Color(0xFF111827) : Color(0xFF182029))
             : Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(radiusL),
         border: Border.all(
           color: isDark
               ? (isHighContrast
-                    ? Color(0xFF262D37).withValues(alpha: 0.2)
-                    : Color(0xFF262D37))
+                    ? Color(0xFF2D3643).withValues(alpha: 0.2)
+                    : Color(0xFF2D3643))
               : Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
         ),
       ),
@@ -1854,7 +1854,7 @@ class DesignSystem {
             ),
           ),
           const SizedBox(height: spacingM),
-          Divider(color: isDark ? const Color(0xFF262D37) : const Color(0xFFE2E6EB)),
+          Divider(color: isDark ? const Color(0xFF2D3643) : const Color(0xFFD3D9E1)),
           const SizedBox(height: spacingS),
           ...List.generate(
             rows,

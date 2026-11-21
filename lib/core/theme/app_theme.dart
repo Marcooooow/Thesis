@@ -16,18 +16,18 @@ class AppTheme {
 
   // Dark
   static const Color darkPrimaryBackground = Color(0xFF0E1217);
-  static const Color darkSecondaryBackground = Color(0xFF151A21);
+  static const Color darkSecondaryBackground = Color(0xFF182029);
   static const Color darkPrimaryText = Color(0xFFE8EBEF);
   static const Color darkSecondaryText = Color(0xFF9AA3AF);
-  static const Color darkBorders = Color(0xFF262D37);
+  static const Color darkBorders = Color(0xFF2D3643);
   static const Color darkAccent = defaultAccent;
 
   // Light
-  static const Color lightPrimaryBackground = Color(0xFFF5F6F8);
+  static const Color lightPrimaryBackground = Color(0xFFECEFF3);
   static const Color lightSecondaryBackground = Colors.white;
   static const Color lightPrimaryText = Color(0xFF111827);
   static const Color lightSecondaryText = Color(0xFF5B6472);
-  static const Color lightBorders = Color(0xFFE2E6EB);
+  static const Color lightBorders = Color(0xFFD3D9E1);
   static const Color lightAccent = defaultAccent;
 
   // High contrast

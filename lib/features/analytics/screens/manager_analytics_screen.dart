@@ -59,6 +59,11 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
         final start = now.subtract(const Duration(days: 30)).toIso8601String().substring(0, 10);
         final end = now.toIso8601String().substring(0, 10);
         endpoint += '?start_date=$start&end_date=$end';
+      } else if (RegExp(r'^\d+ days$').hasMatch(_selectedDateRange)) {
+        final n = int.parse(_selectedDateRange.split(' ').first);
+        final start = now.subtract(Duration(days: n)).toIso8601String().substring(0, 10);
+        final end = now.toIso8601String().substring(0, 10);
+        endpoint += '?start_date=$start&end_date=$end';
       } else if (_selectedDateRange == 'All time') {
         final end = now.toIso8601String().substring(0, 10);
         endpoint += '?end_date=$end';
@@ -86,6 +91,11 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
         queryStr = '?start_date=$start&end_date=$end';
       } else if (_selectedDateRange == '30 days') {
         final start = now.subtract(const Duration(days: 30)).toIso8601String().substring(0, 10);
+        final end = now.toIso8601String().substring(0, 10);
+        queryStr = '?start_date=$start&end_date=$end';
+      } else if (RegExp(r'^\d+ days$').hasMatch(_selectedDateRange)) {
+        final n = int.parse(_selectedDateRange.split(' ').first);
+        final start = now.subtract(Duration(days: n)).toIso8601String().substring(0, 10);
         final end = now.toIso8601String().substring(0, 10);
         queryStr = '?start_date=$start&end_date=$end';
       } else if (_selectedDateRange == 'All time') {
@@ -279,11 +289,68 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
   }
 
   Widget _buildDateControls(bool isDark) {
-    final ranges = ['All available data', '7 days', '30 days', 'All time'];
+    final presets = ['All available data', '7 days', '14 days', '30 days', '90 days', 'All time'];
+    // A previously chosen custom range stays visible as its own chip.
+    final ranges = [
+      ...presets,
+      if (!presets.contains(_selectedDateRange)) _selectedDateRange,
+    ];
     return Wrap(
       spacing: 8,
       runSpacing: 8,
-      children: ranges.map((range) {
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        ..._buildRangeChips(isDark, ranges),
+        ActionChip(
+          avatar: const Icon(Icons.edit_calendar_outlined, size: 16),
+          label: const Text('Custom days…'),
+          onPressed: _pickCustomDays,
+        ),
+      ],
+    );
+  }
+
+  Future<void> _pickCustomDays() async {
+    final controller = TextEditingController();
+    String? error;
+    final days = await showDialog<int>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          title: const Text('Custom date range'),
+          content: TextField(
+            controller: controller,
+            autofocus: true,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: 'Last how many days? (1-365)',
+              errorText: error,
+            ),
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+            ElevatedButton(
+              onPressed: () {
+                final n = int.tryParse(controller.text.trim());
+                if (n == null || n < 1 || n > 365) {
+                  setDialogState(() => error = 'Enter a whole number from 1 to 365');
+                  return;
+                }
+                Navigator.pop(ctx, n);
+              },
+              child: const Text('Apply'),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (days == null || !mounted) return;
+    setState(() => _selectedDateRange = '$days days');
+    _fetchSummary();
+  }
+
+  List<Widget> _buildRangeChips(bool isDark, List<String> ranges) {
+    return ranges.map((range) {
         final bool isSelected = _selectedDateRange == range;
         return ChoiceChip(
           label: Text(range),
@@ -295,7 +362,7 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
             }
           },
           selectedColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
-          backgroundColor: isDark ? const Color(0xFF151A21) : Colors.grey.shade100,
+          backgroundColor: isDark ? const Color(0xFF182029) : Colors.grey.shade100,
           labelStyle: TextStyle(
             color: isSelected
                 ? Theme.of(context).colorScheme.primary
@@ -303,8 +370,7 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         );
-      }).toList(),
-    );
+    }).toList();
   }
 
   Widget _buildKpiOverview(bool isDark, bool isDesktop, bool isTablet, int employees, double totalHours, double avgHours, double acceptanceRate, int accepted, int totalFeedback) {
@@ -377,7 +443,7 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF151A21) : Colors.white,
+        color: isDark ? const Color(0xFF182029) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.1) : Colors.grey.withValues(alpha: 0.2)),
       ),
@@ -404,7 +470,7 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF151A21) : Colors.white,
+        color: isDark ? const Color(0xFF182029) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.1) : Colors.grey.withValues(alpha: 0.2)),
       ),
@@ -461,7 +527,7 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF151A21) : Colors.white,
+        color: isDark ? const Color(0xFF182029) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.1) : Colors.grey.withValues(alpha: 0.2)),
       ),
@@ -575,7 +641,7 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF151A21) : Colors.white,
+        color: isDark ? const Color(0xFF182029) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.1) : Colors.grey.withValues(alpha: 0.2)),
       ),

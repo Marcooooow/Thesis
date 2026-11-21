@@ -703,7 +703,7 @@ class _TeamsOrganizationScreenState extends State<TeamsOrganizationScreen> {
             itemCount: _teams.length,
             separatorBuilder: (_, _) => Divider(
               height: 1,
-              color: isDark ? const Color(0xFF262D37) : Colors.grey.shade300,
+              color: isDark ? const Color(0xFF2D3643) : Colors.grey.shade300,
             ),
             itemBuilder: (context, index) {
               final team = _teams[index];

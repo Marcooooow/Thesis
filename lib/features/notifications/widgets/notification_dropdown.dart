@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intellibreak/features/notifications/notification_navigator.dart';
 import 'package:provider/provider.dart';
 import 'package:intellibreak/features/notifications/models/notification_model.dart';
 import 'package:intellibreak/features/notifications/screens/notification_center_screen.dart';
@@ -65,7 +66,7 @@ class _NotificationDropdownState extends State<NotificationDropdown> {
             color: widget.isDark
                 ? (widget.isHighContrast
                       ? const Color(0xFF0D0D0D)
-                      : const Color(0xFF151A21))
+                      : const Color(0xFF182029))
                 : Colors.white,
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
@@ -126,8 +127,8 @@ class _NotificationDropdownState extends State<NotificationDropdown> {
                   color: widget.isDark
                       ? (widget.isHighContrast
                             ? Colors.white.withValues(alpha: 0.1)
-                            : const Color(0xFF262D37))
-                      : const Color(0xFFE2E6EB),
+                            : const Color(0xFF2D3643))
+                      : const Color(0xFFD3D9E1),
                 ),
                 // Content
                 provider.isLoading
@@ -142,8 +143,8 @@ class _NotificationDropdownState extends State<NotificationDropdown> {
                   color: widget.isDark
                       ? (widget.isHighContrast
                             ? Colors.white.withValues(alpha: 0.1)
-                            : const Color(0xFF262D37))
-                      : const Color(0xFFE2E6EB),
+                            : const Color(0xFF2D3643))
+                      : const Color(0xFFD3D9E1),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -287,7 +288,7 @@ class _NotificationDropdownState extends State<NotificationDropdown> {
           color: widget.isDark
               ? (widget.isHighContrast
                     ? Colors.white.withValues(alpha: 0.05)
-                    : const Color(0xFF262D37))
+                    : const Color(0xFF2D3643))
               : const Color(0xFFF0F0F0),
         ),
         itemBuilder: (context, index) {
@@ -313,6 +314,8 @@ class _NotificationDropdownState extends State<NotificationDropdown> {
                 if (!notification.isRead) {
                   provider.markAsRead(notification.id);
                 }
+                // Take the user to whatever the notification is about.
+                NotificationNavigator.open(notification);
               },
         child: Container(
           color: !notification.isRead
@@ -320,7 +323,7 @@ class _NotificationDropdownState extends State<NotificationDropdown> {
                     ? (widget.isHighContrast
                           ? Colors.white.withValues(alpha: 0.05)
                           : const Color(0xFF2A2C34))
-                    : const Color(0xFFF5F6F8))
+                    : const Color(0xFFECEFF3))
               : Colors.transparent,
           padding: const EdgeInsets.all(12.0),
           child: Column(

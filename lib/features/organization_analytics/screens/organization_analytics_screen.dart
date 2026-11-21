@@ -206,7 +206,7 @@ class _OrganizationAnalyticsScreenState extends State<OrganizationAnalyticsScree
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: isDark ? const Color(0xFF151A21) : Colors.white,
+                          color: isDark ? const Color(0xFF182029) : Colors.white,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
                         ),
@@ -277,7 +277,7 @@ class _OrganizationAnalyticsScreenState extends State<OrganizationAnalyticsScree
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF151A21) : Colors.white,
+                color: isDark ? const Color(0xFF182029) : Colors.white,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
               ),
@@ -368,7 +368,7 @@ class _OrganizationAnalyticsScreenState extends State<OrganizationAnalyticsScree
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF151A21) : Colors.white,
+        color: isDark ? const Color(0xFF182029) : Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.08) : Colors.grey.withValues(alpha: 0.15)),
       ),
@@ -396,7 +396,7 @@ class _OrganizationAnalyticsScreenState extends State<OrganizationAnalyticsScree
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF151A21) : Colors.white,
+        color: isDark ? const Color(0xFF182029) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.08) : Colors.grey.withValues(alpha: 0.15)),
       ),
@@ -444,7 +444,7 @@ class _OrganizationAnalyticsScreenState extends State<OrganizationAnalyticsScree
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF151A21) : Colors.white,
+        color: isDark ? const Color(0xFF182029) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.08) : Colors.grey.withValues(alpha: 0.15)),
       ),
@@ -479,7 +479,7 @@ class _OrganizationAnalyticsScreenState extends State<OrganizationAnalyticsScree
     if (teams.isEmpty) {
       return Container(
         padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(color: isDark ? const Color(0xFF151A21) : Colors.white, borderRadius: BorderRadius.circular(16)),
+        decoration: BoxDecoration(color: isDark ? const Color(0xFF182029) : Colors.white, borderRadius: BorderRadius.circular(16)),
         child: const Text('No active teams found in organization.'),
       );
     }
@@ -494,7 +494,7 @@ class _OrganizationAnalyticsScreenState extends State<OrganizationAnalyticsScree
           margin: const EdgeInsets.only(bottom: 12),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF151A21) : Colors.white,
+            color: isDark ? const Color(0xFF182029) : Colors.white,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.08) : Colors.grey.withValues(alpha: 0.15)),
           ),
@@ -536,7 +536,7 @@ class _OrganizationAnalyticsScreenState extends State<OrganizationAnalyticsScree
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF151A21) : Colors.white,
+        color: isDark ? const Color(0xFF182029) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.08) : Colors.grey.withValues(alpha: 0.15)),
       ),
@@ -600,7 +600,7 @@ class _OrganizationAnalyticsScreenState extends State<OrganizationAnalyticsScree
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF151A21) : Colors.white,
+        color: isDark ? const Color(0xFF182029) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.08) : Colors.grey.withValues(alpha: 0.15)),
       ),
@@ -640,7 +640,7 @@ class _OrganizationAnalyticsScreenState extends State<OrganizationAnalyticsScree
     if (insights.isEmpty) {
       return Container(
         padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(color: isDark ? const Color(0xFF151A21) : Colors.white, borderRadius: BorderRadius.circular(16)),
+        decoration: BoxDecoration(color: isDark ? const Color(0xFF182029) : Colors.white, borderRadius: BorderRadius.circular(16)),
         child: const Text('No organizational insights generated for this period.'),
       );
     }
@@ -653,7 +653,7 @@ class _OrganizationAnalyticsScreenState extends State<OrganizationAnalyticsScree
           margin: const EdgeInsets.only(bottom: 12),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF151A21) : Colors.white,
+            color: isDark ? const Color(0xFF182029) : Colors.white,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(color: color.withValues(alpha: 0.3)),
           ),

@@ -56,7 +56,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final Color surfaceColor = isHighContrast
         ? (isDark ? AppTheme.hcPrimaryBackground : Colors.white)
         : isDark
-            ? const Color(0xFF151A21)
+            ? const Color(0xFF182029)
             : Colors.white;
     final Color accentColor = themeController.accentColor;
 

@@ -121,7 +121,7 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
               border: Border.all(
                 color: isDark
                     ? Colors.white.withValues(alpha: 0.15)
-                    : const Color(0xFFE2E6EB),
+                    : const Color(0xFFD3D9E1),
               ),
             ),
             child: Column(
@@ -200,7 +200,7 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
               border: Border.all(
                 color: isDark
                     ? Colors.white.withValues(alpha: 0.15)
-                    : const Color(0xFFE2E6EB),
+                    : const Color(0xFFD3D9E1),
               ),
             ),
             child: Column(
