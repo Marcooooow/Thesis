@@ -77,7 +77,7 @@ class AdminOrganizationReportService:
     Covers 9 sections: Executive Summary, Organizational Productivity, Work Sustainability,
     Work-Life Balance, Organizational Wellbeing, Team Comparison, Recommendation Effectiveness,
     Organizational Insights, and Metric Definitions & Methodology.
-    Enforces tenant isolation, admin RBAC, and N >= 3 privacy suppression.
+    Enforces tenant isolation, admin RBAC, and N >= 5 privacy suppression.
     """
 
     def __init__(self, db: Session, current_user: User):
@@ -507,7 +507,7 @@ class AdminOrganizationReportService:
             "metric_definitions": {
                 "wsi_methodology": "Work Sustainability Index (0-100) combining break compliance, overtime avoidance, and shift timing heuristics.",
                 "wlb_methodology": "Work-Life Balance survey composite score (0-100) across disconnect, personal time, and recovery.",
-                "privacy_rule": "Strict N >= 3 active employee suppression for team-level aggregations to protect individual confidentiality.",
+                "privacy_rule": "Strict N >= 5 active employee suppression for team-level aggregations to protect individual confidentiality.",
                 "insufficient_data_handling": "Missing sessions or zero employee activity flagged explicitly as insufficient_data; never treated as zero-performance or assigned default perfect scores."
             }
         }
@@ -535,7 +535,7 @@ class AdminOrganizationReportService:
             profiles = prof_q.all()
             profile_ids = [p.id for p in profiles]
             total_employees = len(profile_ids)
-            is_suppressed = total_employees < 3
+            is_suppressed = total_employees < 5
 
             sessions = db.query(WorkSession).filter(
                 WorkSession.profile_id.in_(profile_ids),
@@ -684,12 +684,12 @@ class AdminOrganizationReportService:
         story.append(Spacer(1, 10))
 
         # Team Comparison Section
-        story.append(Paragraph("6. Team Comparison (N >= 3 Privacy Rule Enforced)", h2_style))
+        story.append(Paragraph("6. Team Comparison (N >= 5 Privacy Rule Enforced)", h2_style))
         teams = ctx["team_comparison"]
         team_rows = [["Team Name", "Active Emps", "Work Hours", "WSI", "WLB Score", "Status"]]
         for t in teams:
             if t["privacy_suppressed"]:
-                team_rows.append([t["team_name"], str(t["active_employees"]), "Suppressed (N<3)", "Suppressed", "Suppressed", "Suppressed"])
+                team_rows.append([t["team_name"], "Not enough people", "Not enough people to show this safely", "Suppressed", "Suppressed", "Suppressed"])
             else:
                 team_rows.append([
                     t["team_name"],
@@ -848,13 +848,13 @@ class AdminOrganizationReportService:
         for t in teams:
             team_rows.append([
                 t["team_name"],
-                t["active_employees"],
+                "Not enough people" if t["privacy_suppressed"] else t["active_employees"],
                 "Suppressed" if t["privacy_suppressed"] else t["productivity"]["total_work_hours"],
                 "Suppressed" if t["privacy_suppressed"] else t["work_sustainability"]["sustainability_index"],
                 "Suppressed" if t["privacy_suppressed"] else t["work_life_balance"]["avg_wlb_score"],
                 "Suppressed" if t["privacy_suppressed"] else "Active"
             ])
-        style_ws(ws6, "Team Comparison (N >= 3 Privacy Enforced)", ["Team Name", "Active Employees", "Total Work Hours", "WSI", "WLB Score", "Status"], team_rows)
+        style_ws(ws6, "Team Comparison (N >= 5 Privacy Enforced)", ["Team Name", "Active Employees", "Total Work Hours", "WSI", "WLB Score", "Status"], team_rows)
 
         # Sheet 7: Recommendation Effectiveness
         ws7 = wb.create_sheet(title="Recommendation Effectiveness")
@@ -966,7 +966,7 @@ class AdminOrganizationReportService:
             for t in ctx["team_comparison"]:
                 writer.writerow([
                     sanitize(t["team_name"]),
-                    sanitize(t["active_employees"]),
+                    sanitize("Not enough people" if t["privacy_suppressed"] else t["active_employees"]),
                     sanitize(t["privacy_suppressed"]),
                     sanitize("Suppressed" if t["privacy_suppressed"] else t["productivity"]["total_work_hours"]),
                     sanitize("Suppressed" if t["privacy_suppressed"] else t["work_sustainability"]["sustainability_index"]),

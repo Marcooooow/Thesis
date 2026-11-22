@@ -2734,12 +2734,12 @@ class MonitoringThresholds(Base):
         comment="Number of MEDIUM/HIGH strength patterns for Red",
     )
 
-    # Privacy: minimum employees for detailed aggregation
+    # Privacy: minimum employees for detailed aggregation (runtime floor is five)
     min_employees_for_detail: Mapped[int] = mapped_column(
         Integer,
         nullable=False,
-        default=3,
-        comment="Minimum employees for non-suppressed team aggregates",
+        default=5,
+        comment="Minimum employees for non-suppressed team aggregates (minimum privacy floor: 5)",
     )
 
     # Five-tier compatibility (map 3-tier back to 5-tier for existing consumers)

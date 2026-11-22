@@ -4,10 +4,9 @@ from datetime import date, datetime, timezone, timedelta
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
-from ..models import User, Profile, TeamMembership, Team, WorkSession, Break, Task, SessionWellbeingCheckin, RecommendationFeedback
+from ..models import User, Break, SessionWellbeingCheckin
 from ..auth.security import should_include_test_data
 from .team_analytics_service import compute_team_analytics
-from .wellbeing_monitoring import WellbeingMonitoringService
 
 
 def generate_team_wellness_advisor_report(
@@ -33,6 +32,31 @@ def generate_team_wellness_advisor_report(
     analytics = compute_team_analytics(db, current_user, team_id=team_id, start_date=eff_start, end_date=eff_end)
 
     total_members = analytics.get("total_employees", 0)
+    if total_members < 5:
+        return {
+            "analysis_period_start": eff_start.isoformat(),
+            "analysis_period_end": eff_end.isoformat(),
+            "team_data_coverage": {
+                "sample_size_adequate": False,
+                "analysis_period": f"{eff_start.strftime('%b %d, %Y')} - {eff_end.strftime('%b %d, %Y')}",
+                "data_quality": "privacy_suppressed",
+            },
+            "overall_assessment": {
+                "status": "privacy_suppressed",
+                "risk_tier": 0,
+                "title": "Not enough people to show this safely",
+                "explanation": "Group insights require at least 5 people. Team figures are advisory and not a diagnosis.",
+            },
+            "insights": [],
+            "recommendations": [],
+            "model_metadata": {
+                "engine_status": "active",
+                "model_version": "cold-start-baseline",
+                "model_type": "heuristic-rule-based-aggregation",
+                "description": "No team-level metrics were generated because the privacy group-size threshold was not met.",
+            },
+        }
+
     sessions = analytics.get("sessions", [])
     session_ids = [session.id for session in sessions]
     work_sessions_count = analytics.get("session_count", len(sessions))
@@ -348,59 +372,6 @@ def generate_team_wellness_advisor_report(
             "suggested_manager_action": "Monitor feedback distribution to ensure relevance.",
             "timestamp": now_iso
         })
-
-        # Add employee-specific recovery prompts to the manager's advisor.
-        # These are deterministic safeguards based on the same evidence shown
-        # in employee detail; they never submit or approve leave.
-        profile_ids = analytics.get("profile_ids", [])
-        if len(profile_ids) >= 3:
-            monitor = WellbeingMonitoringService(db)
-            report_week = getattr(analytics.get("overview"), "week_start", eff_start)
-            for profile in db.query(Profile).filter(Profile.id.in_(profile_ids)).all():
-                detail = monitor.compute_weekly_risk(profile.id, report_week)
-                patterns = {pattern.pattern_id: pattern for pattern in detail.detected_patterns}
-                has_overwork = "RECURRING_OVERWORK" in patterns and patterns["RECURRING_OVERWORK"].detected
-                has_skipped_breaks = "REPEATED_SKIPPED_BREAKS" in patterns and patterns["REPEATED_SKIPPED_BREAKS"].detected
-                high_risk = int(detail.risk_tier) >= 3
-                if not high_risk or not (has_overwork or has_skipped_breaks):
-                    continue
-
-                employee = db.query(User).filter(User.id == profile.user_id).first()
-                employee_name = employee.full_name if employee else "Employee"
-                evidence_parts = [patterns[key].measurement for key in ("RECURRING_OVERWORK", "REPEATED_SKIPPED_BREAKS") if key in patterns and patterns[key].detected]
-                evidence_text = "; ".join(part for part in evidence_parts if part) or "High-risk overwork pattern detected in the weekly assessment."
-                insight_id = f"ins_recovery_{uuid.uuid4().hex[:8]}"
-                insight = {
-                    "id": insight_id,
-                    "category": "employee_recovery_support",
-                    "title": f"Recovery support recommended for {employee_name}",
-                    "severity": "warning",
-                    "description": "The employee's work pattern indicates elevated risk and may warrant prompt recovery support.",
-                    "evidence": evidence_text,
-                    "measurement_period": period_str,
-                    "affected_employee_count": 1,
-                    "trend_comparison": "elevated",
-                    "suggested_manager_action": "Discuss a recovery break and workload barriers with the employee.",
-                    "timestamp": now_iso,
-                }
-                insights.append(insight)
-                recommendations.append({
-                    "id": f"rec_break_{uuid.uuid4().hex[:8]}",
-                    "priority": "high",
-                    "action": f"Discuss a recovery break with {employee_name}",
-                    "reason": evidence_text,
-                    "related_insight_id": insight_id,
-                    "status": "pending",
-                })
-                if int(detail.risk_tier) == 4 and has_overwork:
-                    recommendations.append({
-                        "id": f"rec_leave_{uuid.uuid4().hex[:8]}",
-                        "priority": "high",
-                        "action": f"Discuss whether time off would help {employee_name} recover",
-                        "reason": f"Critical risk with recurring overwork: {evidence_text}. Any leave request remains the employee's choice and follows normal approval.",
-                        "related_insight_id": insight_id,
-                        "status": "pending",
-                    })
 
         warning_count = sum(1 for i in insights if i["severity"] == "warning")
         risk_tier = 2 if warning_count >= 2 else (1 if warning_count == 1 else 1)

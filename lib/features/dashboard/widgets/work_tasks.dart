@@ -61,6 +61,7 @@ class _WorkTasksState extends State<WorkTasks> {
 
   // Role and tasks
   String _userRole = 'EMPLOYEE';
+  bool _isSolo = false;
   bool get _isManager => _userRole == 'MANAGER' || _userRole == 'ADMIN';
   List<Map<String, dynamic>> _assignedWorkTasks = [];
   List<Map<String, dynamic>> _teamAssignments = [];
@@ -97,28 +98,34 @@ class _WorkTasksState extends State<WorkTasks> {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('jwt_token');
     String role = 'EMPLOYEE';
+    bool isSolo = false;
 
     if (token != null) {
       try {
         final apiService = ApiService();
         final userData = await apiService.getMe(token);
         role = (userData['role'] ?? 'EMPLOYEE').toString().toUpperCase();
+        isSolo = (userData['account_type'] ?? '').toString().toLowerCase() == 'solo';
         await prefs.setString('user_role', role);
+        await prefs.setString('account_type', isSolo ? 'solo' : 'organization');
       } catch (_) {
         role = prefs.getString('user_role') ?? prefs.getString('role') ?? prefs.getString('auth_role') ?? 'EMPLOYEE';
         role = role.toUpperCase();
+        isSolo = (prefs.getString('account_type') ?? '').toLowerCase() == 'solo';
       }
     } else {
       role = prefs.getString('user_role') ?? prefs.getString('role') ?? 'EMPLOYEE';
       role = role.toUpperCase();
+      isSolo = (prefs.getString('account_type') ?? '').toLowerCase() == 'solo';
     }
 
     if (!mounted) return;
     setState(() {
       _userRole = role;
+      _isSolo = isSolo;
     });
 
-    if (token != null) {
+    if (token != null && !_isSolo) {
       try {
         final history = await _workService.getTasksHistory(token);
         if (mounted) {
@@ -235,7 +242,7 @@ class _WorkTasksState extends State<WorkTasks> {
     );
 
     return DefaultTabController(
-      length: _isManager ? 3 : 2,
+      length: _isSolo ? 1 : (_isManager ? 3 : 2),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -249,13 +256,14 @@ class _WorkTasksState extends State<WorkTasks> {
               ),
             ),
             child: TabBar(
+              isScrollable: true,
               labelColor: DesignSystem.getSemanticColor(context, SemanticColor.primary),
               unselectedLabelColor: DesignSystem.getSemanticColor(context, SemanticColor.onSurfaceVariant),
               indicatorColor: DesignSystem.getSemanticColor(context, SemanticColor.primary),
               tabs: [
-                const Tab(text: 'Assigned to Me'),
+                if (!_isSolo) const Tab(text: 'Assigned to Me'),
                 const Tab(text: 'My Tasks'),
-                if (_isManager) const Tab(text: 'Team Assignments'),
+                if (_isManager && !_isSolo) const Tab(text: 'Team Assignments'),
               ],
             ),
           ),
@@ -264,9 +272,9 @@ class _WorkTasksState extends State<WorkTasks> {
             height: MediaQuery.of(context).size.height * 0.75,
             child: TabBarView(
               children: [
-                _buildAssignedToMeTab(context),
+                if (!_isSolo) _buildAssignedToMeTab(context),
                 personalTaskWidget,
-                if (_isManager) _buildTeamAssignmentsTab(context),
+                if (_isManager && !_isSolo) _buildTeamAssignmentsTab(context),
               ],
             ),
           ),

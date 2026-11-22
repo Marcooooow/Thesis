@@ -239,9 +239,11 @@ class _DashboardScreenContentState extends State<DashboardScreenContent> {
   Widget _buildDesktop({required bool isGuest, required String userName}) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Derive a bounded height from the viewport, never from panel content.
-        final panelHeight = (MediaQuery.sizeOf(context).height * 0.42)
-            .clamp(320.0, 520.0);
+        // Keep the two primary panels balanced and leave room for the coach.
+        final panelHeight = (MediaQuery.sizeOf(context).height * 0.39)
+            .clamp(300.0, 360.0);
+        final coachHeight = (MediaQuery.sizeOf(context).height * 0.34)
+            .clamp(260.0, 320.0);
         return Column(
           children: [
             // 1. Greeting and date at top
@@ -256,20 +258,19 @@ class _DashboardScreenContentState extends State<DashboardScreenContent> {
               ),
             ),
             const SizedBox(height: DesignSystem.spacingL),
-            // 1b. Work-life balance headline (primary focus of the product)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: WlbHeroCard(onOpenDetails: widget.onOpenWorkLifeBalance),
-            ),
-            const SizedBox(height: DesignSystem.spacingL),
-            // 2. Shift Controller and Contextual Break Recommendation side by side
+            // 1b. Put the two primary employee actions side by side.
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    flex: 6,
+                    flex: 5,
+                    child: SizedBox(height: panelHeight, child: WlbHeroCard(onOpenDetails: widget.onOpenWorkLifeBalance)),
+                  ),
+                  const SizedBox(width: 24),
+                  Expanded(
+                    flex: 5,
                     child: SizedBox(
                       height: panelHeight,
                       child: DesignSystem.premiumCard(
@@ -278,15 +279,16 @@ class _DashboardScreenContentState extends State<DashboardScreenContent> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 24),
-                  Expanded(
-                    flex: 4,
-                    child: SizedBox(
-                      height: panelHeight,
-                      child: const AIWellnessCard(useInternalScroll: true),
-                    ),
-                  ),
                 ],
+              ),
+            ),
+            const SizedBox(height: DesignSystem.spacingL),
+            // 2. Keep the Break Coach visible directly below work and balance controls.
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: SizedBox(
+                height: coachHeight,
+                child: const AIWellnessCard(useInternalScroll: true),
               ),
             ),
         const SizedBox(height: DesignSystem.spacingL),
@@ -381,12 +383,12 @@ class _DashboardScreenContentState extends State<DashboardScreenContent> {
         children: [
           GreetingSection(isGuest: isGuest, userName: userName),
           const SizedBox(height: DesignSystem.spacingL),
-          WlbHeroCard(onOpenDetails: widget.onOpenWorkLifeBalance),
-          const SizedBox(height: DesignSystem.spacingL),
           DesignSystem.premiumCard(
             context: context,
             child: const ShiftController(),
           ),
+          const SizedBox(height: DesignSystem.spacingL),
+          WlbHeroCard(onOpenDetails: widget.onOpenWorkLifeBalance),
           const SizedBox(height: DesignSystem.spacingL),
           const AIWellnessCard(),
           const SizedBox(height: DesignSystem.spacingL),

@@ -758,7 +758,7 @@ class WellbeingMonitoringService:
                 week_end=week_end,
                 generated_at=datetime.now(timezone.utc),
                 team_summary=TeamSummary(
-                    total_employees=eligible_count,
+                    total_employees=0,
                     by_tier=tier_counts_3tier,
                     privacy_suppressed=True
                 ),
@@ -1175,7 +1175,7 @@ class WellbeingMonitoringService:
             weekly_record = {
                 "week_start": week_start.isoformat(),
                 "week_end": week_end.isoformat(),
-                "privacy_suppressed": suppress_detail and (eligible_count < 3),
+                "privacy_suppressed": suppress_detail and (eligible_count < 5),
                 "eligible_employee_count": profile_count,
                 "risk_distribution": tier_counts,
                 "avg_worked_hours": round(total_worked / profile_count, 1) if profile_count > 0 else 0.0,
@@ -1215,7 +1215,7 @@ class WellbeingMonitoringService:
             "historical_weeks": historical_results[1:] if len(historical_results) > 1 else [],
             "weeks_requested": weeks,
             "eligible_employee_count": eligible_count,
-            "privacy_suppressed": suppress_detail and (eligible_count < 3),
+            "privacy_suppressed": suppress_detail and (eligible_count < 5),
         }
 
     def compute_risk_distribution_history(
@@ -1331,7 +1331,7 @@ class WellbeingMonitoringService:
                 "eligible_employee_count": profile_count,
                 "risk_distribution": tier_counts,
                 "risk_proportions": proportions,
-                "privacy_suppressed": suppress_detail and (profile_count < 3) if 'suppress_detail' in dir() else False,
+            "privacy_suppressed": suppress_detail and (profile_count < 5) if 'suppress_detail' in dir() else False,
                 "reliability_notes": reliability_notes,
                 "classification_possible": len(limitations) == 0,
             }

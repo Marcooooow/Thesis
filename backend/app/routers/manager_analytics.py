@@ -37,7 +37,7 @@ def get_manager_team_summary(
 ):
     """
     Manager team analytics overview.
-    Requires MANAGER/ADMIN role; aggregates wellbeing only for >=3 employees.
+    Requires MANAGER/ADMIN role; only exposes group aggregates for >=5 employees.
     Enforces is_test_data isolation and RBAC via TeamMembership.
     Supports flexible date range filtering (7 days, 30 days, unbounded All time / All available data).
     """
@@ -45,18 +45,21 @@ def get_manager_team_summary(
     analytics = compute_team_analytics(db, current_user, team_id=team_id, start_date=effective_start, end_date=end_date)
     profile_ids = analytics["profile_ids"]
 
-    if len(profile_ids) < 3:
+    if len(profile_ids) < 5:
         return {
             "start_date": str(analytics["start_date"]) if analytics["start_date"] else None,
             "end_date": str(analytics["end_date"]),
             "team_id": str(team_id) if team_id else None,
-            "total_employees": len(profile_ids),
+            # Do not return an exact small-group size; it can identify members
+            # in a known team roster.
+            "total_employees": None if profile_ids else 0,
             "aggregate_wellbeing": None,
             "work_sustainability": None,
             "workload_summary": None,
             "work_life_balance": None,
             "recommendation_effectiveness": None,
-            "note": "Wellbeing aggregates require at least 3 authorized employees." if len(profile_ids) > 0 else "No managed teams found.",
+            "privacy_suppressed": len(profile_ids) > 0,
+            "note": "Not enough people to show this safely. At least 5 authorized employees are required." if len(profile_ids) > 0 else "No managed teams found.",
         }
 
     log_system_activity(

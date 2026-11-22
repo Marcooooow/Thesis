@@ -49,6 +49,8 @@ class ReportGenerationService:
 
         analytics = compute_team_analytics(self.db, current_user, team_id=team_id, start_date=start_date, end_date=end_date)
         profile_ids = analytics["profile_ids"]
+        if is_manager_or_admin and len(profile_ids) < 5:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough people to show this safely. Team exports require at least 5 authorized employees.")
         total_employees = analytics["total_employees"]
         sessions = analytics["sessions"]
         total_work_hours = analytics["total_work_hours"]
@@ -266,8 +268,8 @@ class ReportGenerationService:
 
         user_ids_from_profiles = [p.user_id for p in self.db.query(Profile).filter(Profile.id.in_(profile_ids)).all()] if profile_ids else []
 
-        if len(profile_ids) < 3 and is_manager_or_admin:
-            ws_wellbeing.cell(row=3, column=1, value="Wellbeing aggregates withheld: requires at least 3 non-test employees.").font = subtitle_font
+        if len(profile_ids) < 5 and is_manager_or_admin:
+            ws_wellbeing.cell(row=3, column=1, value="Team analytics withheld: not enough people to show this safely; at least 5 non-test employees are required.").font = subtitle_font
         else:
             checkins = self.db.query(SessionWellbeingCheckin).filter(
                 SessionWellbeingCheckin.user_id.in_(user_ids_from_profiles),

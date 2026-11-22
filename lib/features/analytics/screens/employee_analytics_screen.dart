@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'dart:convert';
 import 'package:intellibreak/core/theme/theme_controller.dart';
 import 'package:intellibreak/core/motion.dart';
 import 'package:intellibreak/features/analytics/services/analytics_service.dart';
@@ -219,14 +220,46 @@ class _EmployeeAnalyticsScreenState extends State<EmployeeAnalyticsScreenContent
       delay: Duration.zero,
       slideDirection: SlideDirection.topToBottom,
       visible: true,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Wrap(
+        spacing: 12,
+        runSpacing: 12,
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           Text('Employee Analytics', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: isDark ? Colors.white : Colors.black)),
           _buildPeriodDropdown(context, isDark, isHighContrast),
+          OutlinedButton.icon(
+            onPressed: _downloadJsonExport,
+            icon: const Icon(Icons.data_object, size: 18),
+            label: const Text('Export JSON'),
+          ),
         ],
       ),
     );
+  }
+
+  void _downloadJsonExport() {
+    if (!kIsWeb) return;
+    final range = _dateRangeForPeriod(_selectedPeriod);
+    final payload = {
+      'generated_on': DateTime.now().toUtc().toIso8601String(),
+      'date_range': {
+        'label': _selectedPeriod == 'Custom' ? 'Last $_customDays days' : _selectedPeriod,
+        'start_date': range.$1.toIso8601String().split('T').first,
+        'end_date': range.$2.toIso8601String().split('T').first,
+      },
+      'scope': 'signed-in user personal analytics',
+      'summary': _todaySummary,
+      'break_analysis': _breakAnalysis,
+      'work_life_balance_summary': _wellbeingSummary,
+      'sessions': _sessionHistory,
+      'insights': _insights,
+    };
+    final blob = html.Blob([const JsonEncoder.withIndent('  ').convert(payload)], 'application/json');
+    final url = html.Url.createObjectUrlFromBlob(blob);
+    html.AnchorElement(href: url)
+      ..setAttribute('download', 'intellibreak-personal-analytics.json')
+      ..click();
+    html.Url.revokeObjectUrl(url);
   }
 
   /// Asks for a number of days (1-365). Returns null when cancelled.

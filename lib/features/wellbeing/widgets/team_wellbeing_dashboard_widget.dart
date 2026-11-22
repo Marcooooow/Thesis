@@ -10,7 +10,6 @@ class TeamWellbeingDashboardWidget extends StatefulWidget {
   final VoidCallback? onRefresh;
   final Function(DateTime)? onWeekChange;
   final DateTime? selectedWeekStart;
-  final Function(String employeeId, String employeeName, String? teamName)? onEmployeeSelected;
 
   const TeamWellbeingDashboardWidget({
     super.key,
@@ -19,7 +18,6 @@ class TeamWellbeingDashboardWidget extends StatefulWidget {
     this.onRefresh,
     this.onWeekChange,
     this.selectedWeekStart,
-    this.onEmployeeSelected,
   });
 
   @override
@@ -27,11 +25,6 @@ class TeamWellbeingDashboardWidget extends StatefulWidget {
 }
 
 class _TeamWellbeingDashboardWidgetState extends State<TeamWellbeingDashboardWidget> {
-  void _onEmployeeTap(EmployeeRiskSummary emp) {
-    if (widget.onEmployeeSelected != null) {
-      widget.onEmployeeSelected!(emp.employeeId, emp.employeeName, widget.weeklyData?.teamSummary.name);
-    }
-  }
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -183,6 +176,15 @@ class _TeamWellbeingDashboardWidgetState extends State<TeamWellbeingDashboardWid
     final data = widget.weeklyData!;
     final isDesktop = MediaQuery.of(context).size.width >= 1100;
 
+    if (data.teamSummary.privacySuppressed || data.teamSummary.totalEmployees < 5) {
+      return _buildSuppressedIndicator(
+        context,
+        !data.teamSummary.privacySuppressed && data.teamSummary.totalEmployees == 0
+            ? 'No team data is available for this selection.'
+            : 'Not enough people to show this safely. Group insights require at least 5 people.',
+      );
+    }
+
     // Compute aggregates from employee data
     final aggregates = _computeTeamAggregates(data);
 
@@ -226,8 +228,10 @@ class _TeamWellbeingDashboardWidgetState extends State<TeamWellbeingDashboardWid
 
         const SizedBox(height: 24),
 
-        // Employee List (tappable for detail drill-down)
-        _buildEmployeeListSection(context, data),
+        _buildSuppressedIndicator(
+          context,
+          'Team figures are grouped and anonymised. They are advisory and not a diagnosis. Individual wellbeing tiers and check-in answers are private.',
+        ),
       ],
     );
   }
@@ -711,100 +715,6 @@ class _TeamWellbeingDashboardWidgetState extends State<TeamWellbeingDashboardWid
         return Colors.green;
       default:
         return Colors.blue;
-    }
-  }
-
-  Widget _buildEmployeeListSection(BuildContext context, WeeklyOverviewResponse data) {
-    if (data.employees.isEmpty) {
-      return _buildSuppressedIndicator(context, 'No employee data available for this week');
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Team Members',
-          style: DesignSystem.titleXL(context),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'Tap an employee to view detailed wellbeing assessment',
-          style: DesignSystem.caption(context),
-        ),
-        const SizedBox(height: 12),
-        ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: data.employees.length,
-          separatorBuilder: (context, index) => const SizedBox(height: 8),
-          itemBuilder: (context, index) {
-            final emp = data.employees[index];
-            final riskColor = _getRiskColor(emp.riskTier);
-            return InkWell(
-              onTap: () => _onEmployeeTap(emp),
-              borderRadius: BorderRadius.circular(DesignSystem.radiusM),
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
-                  borderRadius: BorderRadius.circular(DesignSystem.radiusM),
-                  border: Border.all(
-                    color: riskColor.withValues(alpha: 0.3),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 12,
-                      height: 12,
-                      decoration: BoxDecoration(
-                        color: riskColor,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            emp.employeeName,
-                            style: DesignSystem.body(context).copyWith(fontWeight: FontWeight.w600),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            'Risk: ${emp.riskLabel} • Trend: ${emp.trend.value[0].toUpperCase()}${emp.trend.value.substring(1)}',
-                            style: DesignSystem.caption(context).copyWith(color: riskColor),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Icon(
-                      Icons.chevron_right,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
-      ],
-    );
-  }
-
-  Color _getRiskColor(RiskTier tier) {
-    switch (tier) {
-      case RiskTier.low:
-        return Colors.green;
-      case RiskTier.moderate:
-        return Colors.orange;
-      case RiskTier.high:
-        return Colors.deepOrange;
-      case RiskTier.critical:
-        return Colors.red;
-      case RiskTier.insufficientData:
-        return Colors.grey;
     }
   }
 

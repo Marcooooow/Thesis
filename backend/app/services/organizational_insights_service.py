@@ -26,7 +26,7 @@ class OrganizationalInsightsService:
     THRESHOLD_WELLBEING_HIGH_RISK_PCT = 25.0 # > 25% high wellbeing risk tier concentration trigger
     THRESHOLD_REC_ACCEPTANCE_HIGH = 60.0     # >= 60% high recommendation acceptance trigger
     THRESHOLD_REC_ACCEPTANCE_LOW = 30.0      # < 30% low recommendation acceptance trigger
-    THRESHOLD_MIN_TEAM_MEMBERS = 3           # N >= 3 privacy suppression threshold
+    THRESHOLD_MIN_TEAM_MEMBERS = 5           # Minimum group size for privacy-safe team insights
 
     @staticmethod
     def generate_organizational_insights(
@@ -325,12 +325,12 @@ class OrganizationalInsightsService:
         suppressed_teams_count = 0
         active_teams_analyzed = 0
         for t in teams:
-            # Check member count for privacy suppression (N < 3)
+            # Check member count for privacy suppression.
             m_count = db.query(Profile).join(TeamMembership, Profile.id == TeamMembership.profile_id).filter(
                 TeamMembership.team_id == t.id,
                 TeamMembership.left_at.is_(None)
             ).count()
-            if m_count < 3:
+            if m_count < 5:
                 suppressed_teams_count += 1
             else:
                 active_teams_analyzed += 1

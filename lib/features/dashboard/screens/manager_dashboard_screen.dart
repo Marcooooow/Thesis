@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intellibreak/core/design_system.dart';
 import 'package:intellibreak/features/auth/services/api_service.dart';
-import 'package:intellibreak/features/wellbeing/screens/employee_wellbeing_detail_screen.dart';
 import 'package:intellibreak/providers/team_provider.dart';
 import 'package:intellibreak/models/team_models.dart';
 import 'package:intellibreak/providers/work_session_models.dart';
@@ -151,33 +150,6 @@ class _ManagerDashboardContentState extends State<ManagerDashboardContent> {
 
   DateTime _getMonday(DateTime date) {
     return date.subtract(Duration(days: date.weekday - 1));
-  }
-
-  void _navigateToEmployee(String userId) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EmployeeWellbeingDetailScreen(
-          employeeId: userId,
-          employeeName: '',  // Will be fetched from API
-          initialWeekStart: _selectedWeekStart,
-        ),
-      ),
-    );
-  }
-
-  void _onEmployeeSelected(String employeeId, String employeeName, String? teamName) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EmployeeWellbeingDetailScreen(
-          employeeId: employeeId,
-          employeeName: employeeName,
-          teamName: teamName,
-          initialWeekStart: _selectedWeekStart,
-        ),
-      ),
-    );
   }
 
   @override
@@ -412,7 +384,6 @@ class _ManagerDashboardContentState extends State<ManagerDashboardContent> {
                           onRefresh: _onRefreshWellbeing,
                           onWeekChange: _onWeekChange,
                           selectedWeekStart: _selectedWeekStart,
-                          onEmployeeSelected: _onEmployeeSelected,
                         ),
                       ],
                     ),
@@ -494,9 +465,7 @@ class _ManagerDashboardContentState extends State<ManagerDashboardContent> {
               ),
               itemBuilder: (context, index) {
                 final member = members[index];
-                return InkWell(
-                  onTap: () => _navigateToEmployee(member.userId),
-                  child: Padding(
+                return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 4.0),
                     child: Row(
                       children: [
@@ -565,10 +534,8 @@ class _ManagerDashboardContentState extends State<ManagerDashboardContent> {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        const Icon(Icons.chevron_right, size: 18, color: Colors.grey),
                       ],
                     ),
-                  ),
                 );
               },
             ),
@@ -722,6 +689,18 @@ class _ManagerDashboardContentState extends State<ManagerDashboardContent> {
   }
 
   Widget _buildRecoverySummaryCard(BuildContext context) {
+    if (_weeklyOverview == null || _weeklyOverview!.teamSummary.privacySuppressed || _weeklyOverview!.teamSummary.totalEmployees < 5) {
+      return DesignSystem.premiumCard(
+        context: context,
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text('Recovery Support', style: DesignSystem.titleLarge(context)),
+          const SizedBox(height: 8),
+          Text('Not enough people to show this safely. Group insights require at least 5 people.', style: DesignSystem.body(context)),
+          const SizedBox(height: 6),
+          Text('Team figures are advisory, grouped and anonymised.', style: DesignSystem.caption(context)),
+        ]),
+      );
+    }
     final employees = _weeklyOverview?.employees ?? <EmployeeRiskSummary>[];
     final breakCount = employees.where((e) => e.riskTier == RiskTier.high || e.riskTier == RiskTier.critical).length;
     final leaveCount = employees.where((e) => e.riskTier == RiskTier.critical && e.topEvidence.any((item) => item.toLowerCase().contains('recurring overwork'))).length;
@@ -745,6 +724,17 @@ class _ManagerDashboardContentState extends State<ManagerDashboardContent> {
   }
 
   Widget _buildAttentionRequiredCard(BuildContext context) {
+    final overview = _weeklyOverview;
+    if (overview == null || overview.teamSummary.privacySuppressed || overview.teamSummary.totalEmployees < 5) {
+      return DesignSystem.premiumCard(
+        context: context,
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text('Team Recovery Insights', style: DesignSystem.titleLarge(context)),
+          const SizedBox(height: 8),
+          Text('Not enough people to show this safely. Group insights require at least 5 people.', style: DesignSystem.body(context)),
+        ]),
+      );
+    }
     final employees = _weeklyOverview?.employees ?? <EmployeeRiskSummary>[];
     final flaggedEmployees = employees.where((employee) =>
       employee.riskTier == RiskTier.high || employee.riskTier == RiskTier.critical
@@ -790,7 +780,7 @@ class _ManagerDashboardContentState extends State<ManagerDashboardContent> {
                   children: [
                     const Icon(Icons.check_circle_outline, size: 36, color: Colors.green),
                     const SizedBox(height: 8),
-                    Text('No high or critical risk cases for this week.', style: DesignSystem.body(context)),
+                    Text('No elevated team-level recovery pattern is available for this week.', style: DesignSystem.body(context)),
                     if (insufficientCount > 0) ...[
                       const SizedBox(height: 4),
                       Text('$insufficientCount employees have insufficient data and could not be assessed.', style: DesignSystem.caption(context), textAlign: TextAlign.center),
@@ -800,62 +790,12 @@ class _ManagerDashboardContentState extends State<ManagerDashboardContent> {
               ),
             )
           else
-            ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: flaggedEmployees.length,
-              separatorBuilder: (context, index) => const Divider(height: 16),
-              itemBuilder: (context, index) {
-                final emp = flaggedEmployees[index];
-                final name = emp.employeeName;
-                final concern = emp.primaryConcern;
-                final evidence = emp.topEvidence.join(', ');
-                final empId = emp.employeeId;
-                final isCritical = emp.riskTier == RiskTier.critical;
-                final riskLabel = isCritical ? 'Critical Risk' : 'High Risk';
-                final riskColor = isCritical ? Colors.red : Colors.deepOrange;
-
-                return Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.orange.withValues(alpha: 0.05),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.orange.withValues(alpha: 0.2)),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: riskColor.withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Text(riskLabel, style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: riskColor)),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 6),
-                      Text('Concern: $concern', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-                      const SizedBox(height: 2),
-                      Text('Evidence: $evidence', style: DesignSystem.caption(context)),
-                      const SizedBox(height: 8),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton.icon(
-                          onPressed: empId.isNotEmpty ? () => _navigateToEmployee(empId) : null,
-                          icon: const Icon(Icons.arrow_forward, size: 14),
-                          label: const Text('View Employee', style: TextStyle(fontSize: 12)),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Text(
+                '${flaggedEmployees.length} people are included in a grouped recovery pattern. Individual wellbeing tiers and check-in details are private.',
+                style: DesignSystem.body(context),
+              ),
             ),
         ],
       ),

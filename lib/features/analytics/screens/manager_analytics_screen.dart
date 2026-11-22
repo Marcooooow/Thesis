@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'dart:convert';
 import 'package:intellibreak/features/auth/services/api_service.dart';
 import 'package:intellibreak/features/analytics/screens/employee_analytics_screen.dart';
 import 'package:intellibreak/features/analytics/widgets/report_exports_section.dart';
@@ -10,7 +11,7 @@ import 'dart:html' as html;
 
 /// Manager Analytics screen — Redesigned to match Figma reference.
 /// Sections: Header, Date Range Controls, KPI Overview (4 cards),
-/// Workload Summary, Recommendation Effectiveness, Wellbeing Aggregates (>=3 threshold),
+/// Workload Summary, Recommendation Effectiveness, Wellbeing Aggregates (>=5 threshold),
 /// Report Exports (Excel, PDF, CSV ZIP), and Footer.
 class ManagerAnalyticsScreenContent extends StatefulWidget {
   const ManagerAnalyticsScreenContent({super.key});
@@ -23,6 +24,7 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
   String? _token;
   bool _isLoading = true;
   bool _isExporting = false;
+  String? _loadError;
   Map<String, dynamic> _data = {};
   String _selectedDateRange = 'All available data';
   final ApiService _apiService = ApiService();
@@ -43,11 +45,18 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
       });
     }
     if (_token != null) await _fetchSummary();
+    if (_token == null && mounted) {
+      setState(() {
+        _isLoading = false;
+        _loadError = 'Sign in to view team analytics.';
+      });
+    }
   }
 
   Future<void> _fetchSummary() async {
     if (_token == null) return;
     setState(() => _isLoading = true);
+    _loadError = null;
     try {
       String endpoint = '/manager/analytics/team-summary';
       final now = DateTime.now();
@@ -73,7 +82,7 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
         setState(() => _data = res);
       }
     } catch (_) {
-      // Keep empty state if endpoint fails
+      _loadError = 'Team analytics could not be loaded. Check your connection and try again.';
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -144,6 +153,26 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
     }
   }
 
+  void _downloadJsonSummary() {
+    if (!kIsWeb) return;
+    final payload = {
+      'generated_on': DateTime.now().toUtc().toIso8601String(),
+      'date_range': {
+        'label': _selectedDateRange,
+        'start_date': _data['start_date'],
+        'end_date': _data['end_date'],
+      },
+      'scope': 'authorized team aggregates only',
+      'metrics': _data,
+    };
+    final blob = html.Blob([const JsonEncoder.withIndent('  ').convert(payload)], 'application/json');
+    final url = html.Url.createObjectUrlFromBlob(blob);
+    html.AnchorElement(href: url)
+      ..setAttribute('download', 'intellibreak-team-analytics.json')
+      ..click();
+    html.Url.revokeObjectUrl(url);
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
@@ -153,6 +182,29 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
 
     if (_isLoading && _data.isEmpty) {
       return const Center(child: CircularProgressIndicator());
+    }
+    if (_loadError != null) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.cloud_off_outlined, size: 36),
+              const SizedBox(height: 12),
+              Text(_loadError!, textAlign: TextAlign.center),
+              if (_token != null) ...[
+                const SizedBox(height: 12),
+                OutlinedButton.icon(
+                  onPressed: _fetchSummary,
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('Try again'),
+                ),
+              ],
+            ],
+          ),
+        ),
+      );
     }
 
     final totalEmployees = (_data['total_employees'] as num?)?.toInt() ?? 0;
@@ -164,6 +216,10 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
     final totalFeedback = (recommendation['total_feedback'] as num?)?.toInt() ?? 0;
     final acceptedFeedback = (recommendation['accepted'] as num?)?.toInt() ?? 0;
     final wellbeing = _data['aggregate_wellbeing'];
+
+    if (totalEmployees < 5 || _data['privacy_suppressed'] == true) {
+      return _buildPrivacySuppressedState(isDark, noTeam: _data['note'] == 'No managed teams found.');
+    }
 
     return SingleChildScrollView(
       padding: EdgeInsets.all(isDesktop ? 24.0 : 16.0),
@@ -212,79 +268,115 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
           const SizedBox(height: 24),
 
           // H. Footer
-          _buildFooter(isDark, totalEmployees),
+          _buildFooter(isDark),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPrivacySuppressedState(bool isDark, {required bool noTeam}) {
+    final border = isDark ? Colors.white.withValues(alpha: 0.12) : Colors.grey.withValues(alpha: 0.22);
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(MediaQuery.sizeOf(context).width >= 1100 ? 24 : 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Manager Analytics', style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 4),
+          Text(
+            'Team figures are grouped and anonymised. They are advisory and not a diagnosis.',
+            style: TextStyle(fontSize: 14, color: isDark ? Colors.grey.shade300 : Colors.grey.shade700),
+          ),
+          const SizedBox(height: 20),
+          _buildDateControls(isDark),
+          const SizedBox(height: 20),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: isDark ? const Color(0xFF182029) : Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: border),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.privacy_tip_outlined),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    noTeam
+                        ? 'No team data is available for this selection.'
+                        : 'Not enough people to show this safely. Team analytics are available when the selected group has at least 5 people.',
+                    style: TextStyle(fontSize: 14, height: 1.45),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
   Widget _buildHeader(bool isDark) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    final title = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Manager Analytics',
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : Colors.black87,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                "A clear view of your team's workload, wellbeing and recommendation outcomes.",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 12),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            OutlinedButton.icon(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => Scaffold(
-                      appBar: AppBar(title: const Text('My Personal Analytics')),
-                      body: const EmployeeAnalyticsScreenContent(),
-                    ),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.person_outline, size: 18),
-              label: const Text('Personal Analytics'),
-              style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              ),
-            ),
-            const SizedBox(width: 12),
-            ElevatedButton.icon(
-              onPressed: _isExporting ? null : () => _downloadReport('/reports/export-excel', 'manager_analytics_report.xlsx'),
-              icon: _isExporting
-                  ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                  : const Icon(Icons.download, size: 18),
-              label: const Text('Export report'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              ),
-            ),
-          ],
+        Text('Manager Analytics', style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: isDark ? Colors.white : Colors.black87)),
+        const SizedBox(height: 4),
+        Text(
+          'Team figures are grouped and anonymised. They are advisory and not a diagnosis.',
+          style: TextStyle(fontSize: 14, color: isDark ? Colors.grey.shade400 : Colors.grey.shade600),
         ),
       ],
+    );
+    final actions = Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      alignment: WrapAlignment.end,
+      children: [
+        OutlinedButton.icon(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => Scaffold(
+                  appBar: AppBar(title: const Text('My Personal Analytics')),
+                  body: const EmployeeAnalyticsScreenContent(),
+                ),
+              ),
+            );
+          },
+          icon: const Icon(Icons.person_outline, size: 18),
+          label: const Text('Personal Analytics'),
+        ),
+        OutlinedButton.icon(
+          onPressed: _downloadJsonSummary,
+          icon: const Icon(Icons.data_object, size: 18),
+          label: const Text('Export JSON'),
+        ),
+        ElevatedButton.icon(
+          onPressed: _isExporting ? null : () => _downloadReport('/reports/export-excel', 'manager_analytics_report.xlsx'),
+          icon: _isExporting
+              ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+              : const Icon(Icons.download, size: 18),
+          label: const Text('Export report'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Colors.white,
+          ),
+        ),
+      ],
+    );
+    if (MediaQuery.sizeOf(context).width < 1000) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [title, const SizedBox(height: 12), actions],
+      );
+    }
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [Expanded(child: title), const SizedBox(width: 12), Flexible(child: actions)],
     );
   }
 
@@ -615,7 +707,7 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
     int high = 0;
     int critical = 0;
     int insufficientData = 0;
-    bool privacySuppressed = totalEmployees < 3;
+    bool privacySuppressed = totalEmployees < 5;
 
     if (wellbeing != null && wellbeing is Map) {
       if (wellbeing['privacy_suppressed'] == true) {
@@ -663,7 +755,7 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
             ],
           ),
           const SizedBox(height: 4),
-          Text('Team wellbeing distribution (requires at least 3 distinct non-test employees).', style: TextStyle(fontSize: 12, color: isDark ? Colors.grey.shade400 : Colors.grey.shade600)),
+          Text('Team wellbeing distribution (requires at least 5 distinct non-test employees).', style: TextStyle(fontSize: 12, color: isDark ? Colors.grey.shade400 : Colors.grey.shade600)),
           const SizedBox(height: 20),
           if (hasInsufficientEmployees)
             Container(
@@ -684,7 +776,7 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
                         const Text('Insufficient Data for Wellbeing Aggregates', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                         const SizedBox(height: 4),
                         Text(
-                          'Current team has $totalEmployees non-test employee(s). At least 3 distinct non-test employees are required to protect individual privacy.',
+                          'At least 5 distinct non-test employees are required to protect individual privacy.',
                           style: TextStyle(fontSize: 12, color: isDark ? Colors.grey.shade300 : Colors.grey.shade700),
                         ),
                       ],
@@ -743,10 +835,10 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
     );
   }
 
-  Widget _buildFooter(bool isDark, int employees) {
+  Widget _buildFooter(bool isDark) {
     return Center(
       child: Text(
-        'Reporting scope: $_selectedDateRange · $employees employee(s) · Data integrity verified',
+        'Reporting scope: $_selectedDateRange · Team figures are grouped and anonymised.',
         style: TextStyle(
           fontSize: 12,
           color: isDark ? Colors.grey.shade500 : Colors.grey.shade500,

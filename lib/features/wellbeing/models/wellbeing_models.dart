@@ -294,11 +294,13 @@ class TeamSummary {
   final int totalEmployees;
   final Map<String, int> byTier;
   final String name;
+  final bool privacySuppressed;
 
   TeamSummary({
     required this.totalEmployees,
     required this.byTier,
     this.name = 'Team',
+    this.privacySuppressed = false,
   });
 
   factory TeamSummary.fromJson(Map<String, dynamic> json) {
@@ -307,6 +309,7 @@ class TeamSummary {
       totalEmployees: json['total_employees'] as int? ?? 0,
       byTier: rawByTier.map((k, v) => MapEntry(k, v as int)),
       name: json['name'] ?? 'Team',
+      privacySuppressed: json['privacy_suppressed'] as bool? ?? false,
     );
   }
 }

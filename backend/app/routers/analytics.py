@@ -728,7 +728,7 @@ def get_admin_today_wellbeing(
         }
 
     respondents = len(set(c.user_id for c in checkins))
-    if respondents < 3 and not include_test:
+    if respondents < 5 and not include_test:
         return {
             "checkinCount": 0,
             "overallWellbeing": 0.0,
@@ -810,7 +810,7 @@ def get_admin_weekly_wellbeing(
         }
 
     respondents = len(set(c.user_id for c in checkins))
-    if respondents < 3 and not include_test:
+    if respondents < 5 and not include_test:
         return {
             "checkinCount": 0,
             "overallWellbeing": 0.0,
@@ -842,7 +842,7 @@ def get_admin_team_comparison(
     """
     Get organization-wide team comparison metrics for admin dashboard.
     Compares teams on productivity, work sustainability (WSI), work-life balance (WLB), and wellbeing risk tiers.
-    Enforces N >= 3 privacy suppression and organization tenant isolation.
+    Enforces N >= 5 privacy suppression and organization tenant isolation.
     """
     log_system_activity(db=db, user_id=current_user.id, action_type="ADMIN_ANALYTICS_TEAM_COMPARISON_ACCESSED", action_details={"period": period})
     org_ids = get_organization_ids_for_user(db, current_user.id)
@@ -870,7 +870,7 @@ def get_admin_team_comparison(
         profile_ids = [p.id for p in profiles]
         total_employees = len(profile_ids)
 
-        is_suppressed = total_employees < 3
+        is_suppressed = total_employees < 5
 
         sessions = db.query(WorkSession).filter(
             WorkSession.profile_id.in_(profile_ids),
@@ -979,7 +979,7 @@ def get_admin_recommendation_effectiveness(
     Get organization-wide and team-level recommendation effectiveness metrics.
     Includes generated, accepted, dismissed, expired/pending counts, acceptance/dismissal rates,
     action effectiveness, category breakdown, and historical trends.
-    Enforces N >= 3 privacy suppression and organization tenant isolation.
+    Enforces N >= 5 privacy suppression and organization tenant isolation.
     """
     log_system_activity(db=db, user_id=current_user.id, action_type="ADMIN_ANALYTICS_RECOMMENDATION_EFFECTIVENESS_ACCESSED", action_details={"period": period})
     org_ids = get_organization_ids_for_user(db, current_user.id)
@@ -1025,7 +1025,7 @@ def get_admin_recommendation_effectiveness(
         profiles = prof_q.all()
         t_profile_ids = [p.id for p in profiles]
         total_employees = len(t_profile_ids)
-        is_suppressed = total_employees < 3
+        is_suppressed = total_employees < 5
 
         user_ids = [p.user_id for p in profiles]
         feedback_q = db.query(RecommendationFeedback).filter(
@@ -1551,7 +1551,7 @@ def get_admin_organizational_insights(
     Get automated, rule-based organizational insights for Admin Organization Analytics.
     Analyzes productivity, work sustainability, work-life balance, wellbeing risk, team performance,
     and recommendation effectiveness against configurable thresholds.
-    Enforces Admin RBAC, tenant isolation, and N >= 3 privacy suppression.
+    Enforces Admin RBAC, tenant isolation, and N >= 5 privacy suppression.
     """
     log_system_activity(db=db, user_id=current_user.id, action_type="ADMIN_ORGANIZATIONAL_INSIGHTS_ACCESSED", action_details={"period": period, "category": category})
     org_ids = get_organization_ids_for_user(db, current_user.id)
@@ -1814,7 +1814,7 @@ def get_admin_team_comparison_chart(
         profiles = prof_q.all()
         profile_ids = [p.id for p in profiles]
         total_employees = len(profile_ids)
-        is_suppressed = total_employees < 3
+        is_suppressed = total_employees < 5
 
         if is_suppressed:
             team_data.append({

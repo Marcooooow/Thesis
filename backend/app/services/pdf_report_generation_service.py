@@ -94,6 +94,8 @@ class PdfReportGenerationService:
 
         analytics = compute_team_analytics(self.db, current_user, team_id=team_id, start_date=start_date, end_date=end_date)
         profile_ids = analytics["profile_ids"]
+        if is_manager_or_admin and len(profile_ids) < 5:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough people to show this safely. Team exports require at least 5 authorized employees.")
         total_employees = analytics["total_employees"]
         sessions = analytics["sessions"]
         session_count = analytics["session_count"]
@@ -117,10 +119,10 @@ class PdfReportGenerationService:
         # Gather metrics
         total_employees = len(profile_ids)
 
-        # Wellbeing check-ins (privacy threshold >= 3)
+        # Wellbeing check-ins (privacy threshold >= 5)
         user_ids_from_profiles = [p.user_id for p in self.db.query(Profile).filter(Profile.id.in_(profile_ids)).all()] if profile_ids else []
         checkins = []
-        if total_employees >= 3 or not is_manager_or_admin:
+        if total_employees >= 5 or not is_manager_or_admin:
             checkins = self.db.query(SessionWellbeingCheckin).filter(
                 SessionWellbeingCheckin.user_id.in_(user_ids_from_profiles),
                 SessionWellbeingCheckin.created_at >= start_dt,
@@ -422,8 +424,8 @@ class PdfReportGenerationService:
 
             # Wellbeing Section
             story.append(Paragraph("4. Wellbeing Monitoring Aggregates", section_style))
-            if is_manager_or_admin and total_employees < 3:
-                story.append(Paragraph("<i>Wellbeing aggregates withheld: team size is below the privacy threshold of 3 non-test employees.</i>", body_style))
+            if is_manager_or_admin and total_employees < 5:
+                story.append(Paragraph("<i>Team analytics withheld: not enough people to show this safely; at least 5 non-test employees are required.</i>", body_style))
             elif not checkins:
                 story.append(Paragraph("<i>No wellbeing check-in records found for this period.</i>", body_style))
             else:

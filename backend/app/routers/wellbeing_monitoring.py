@@ -383,7 +383,7 @@ def update_monitoring_thresholds(
             if "ck_thresholds_min_employees" in str(e):
                 raise HTTPException(
                     status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                    detail="min_employees_for_detail must be >= 1"
+                    detail="min_employees_for_detail must be >= 5"
                 )
             raise
         db.refresh(thresholds)
@@ -443,7 +443,7 @@ def update_monitoring_thresholds(
         if "ck_thresholds_min_employees" in str(e):
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail="min_employees_for_detail must be >= 1"
+                detail="min_employees_for_detail must be >= 5"
             )
         raise
     db.refresh(thresholds)
@@ -464,7 +464,7 @@ def _thresholds_model_to_read(model: MonitoringThresholds) -> MonitoringThreshol
         fatigue_red=model.fatigue_red,
         pattern_count_amber=model.pattern_count_amber,
         pattern_count_red=model.pattern_count_red,
-        min_employees_for_detail=model.min_employees_for_detail,
+        min_employees_for_detail=max(5, model.min_employees_for_detail),
         map_green_to_tier=model.map_green_to_tier,
         map_amber_to_tier=model.map_amber_to_tier,
         map_red_to_tier=model.map_red_to_tier,
@@ -488,7 +488,7 @@ def _default_thresholds_to_read() -> MonitoringThresholdsRead:
         fatigue_red=3.5,
         pattern_count_amber=1,
         pattern_count_red=2,
-        min_employees_for_detail=3,
+        min_employees_for_detail=5,
         map_green_to_tier=1,
         map_amber_to_tier=2,
         map_red_to_tier=4,

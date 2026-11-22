@@ -57,6 +57,8 @@ class CsvReportGenerationService:
 
         analytics = compute_team_analytics(self.db, current_user, team_id=team_id, start_date=start_date, end_date=end_date)
         profile_ids = analytics["profile_ids"]
+        if is_manager_or_admin and len(profile_ids) < 5:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough people to show this safely. Team exports require at least 5 authorized employees.")
         total_employees = analytics["total_employees"]
         sessions = analytics["sessions"]
         total_work_hours = analytics["total_work_hours"]
@@ -116,10 +118,10 @@ class CsvReportGenerationService:
         accepted_recs = len([f for f in feedback if f.user_action == 'accepted'])
         acceptance_rate = round((accepted_recs / total_recs * 100.0) if total_recs > 0 else 0.0, 1)
 
-        # Wellbeing check-ins (privacy threshold >= 3)
+        # Wellbeing check-ins (privacy threshold >= 5)
         user_ids_from_profiles = [p.user_id for p in self.db.query(Profile).filter(Profile.id.in_(profile_ids)).all()] if profile_ids else []
         checkins = []
-        if total_employees >= 3 or not is_manager_or_admin:
+        if total_employees >= 5 or not is_manager_or_admin:
             checkins = self.db.query(SessionWellbeingCheckin).filter(
                 SessionWellbeingCheckin.user_id.in_(user_ids_from_profiles),
                 SessionWellbeingCheckin.created_at >= start_dt,
@@ -196,8 +198,8 @@ class CsvReportGenerationService:
             # 5. Wellbeing CSV
             wb_io = io.StringIO()
             wb_writer = csv.writer(wb_io)
-            if is_manager_or_admin and total_employees < 3:
-                wb_writer.writerow(["Notice", "Wellbeing aggregates withheld: requires at least 3 non-test employees."])
+            if is_manager_or_admin and total_employees < 5:
+                wb_writer.writerow(["Notice", "Team analytics withheld: not enough people to show this safely; at least 5 non-test employees are required."])
             else:
                 wb_writer.writerow(["Wellbeing Metric", "Average Score (1-5 Scale)", "Total Check-ins"])
                 wb_writer.writerow(["Overall Wellbeing", avg_ow, len(checkins)])

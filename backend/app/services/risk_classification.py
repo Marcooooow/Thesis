@@ -38,7 +38,7 @@ DEFAULT_THRESHOLDS = Thresholds(
     fatigue_red=3.5,
     pattern_count_amber=1,
     pattern_count_red=2,
-    min_employees_for_detail=3,
+    min_employees_for_detail=5,
     map_green_to_tier=1,  # RiskTier.LOW
     map_amber_to_tier=2,  # RiskTier.MODERATE
     map_red_to_tier=4,    # RiskTier.CRITICAL
@@ -176,4 +176,7 @@ def should_suppress_detail(
     Determine if team detail should be suppressed based on employee count.
     Returns True if suppression should apply.
     """
-    return eligible_employee_count < thresholds.min_employees_for_detail
+    # Never let an organization-specific configuration lower the privacy
+    # floor used for manager-facing group detail.
+    minimum_group_size = max(5, thresholds.min_employees_for_detail)
+    return eligible_employee_count < minimum_group_size

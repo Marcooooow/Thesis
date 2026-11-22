@@ -203,7 +203,7 @@ class MonitoringThresholdsUpdate(BaseModel):
     fatigue_red: Optional[float] = None
     pattern_count_amber: Optional[int] = None
     pattern_count_red: Optional[int] = None
-    min_employees_for_detail: Optional[int] = None
+    min_employees_for_detail: Optional[int] = Field(default=None, ge=5)
     map_green_to_tier: Optional[int] = None
     map_amber_to_tier: Optional[int] = None
     map_red_to_tier: Optional[int] = None
