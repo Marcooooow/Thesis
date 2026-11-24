@@ -168,4 +168,7 @@ class SettingsProvider extends ChangeNotifier {
   bool get weeklySummary => _settings['weekly_summary'] ?? false;
   String get managerDefaultLanding => _settings['manager_default_landing'] ?? 'dashboard';
   bool? get manualDndOverride => _settings['manual_dnd_override'];
+  bool get browserNotificationsEnabled => _settings['browser_notifications_enabled'] ?? true;
+  bool get notificationSoundsEnabled => _settings['notification_sounds_enabled'] ?? true;
+  bool get tabAttentionEnabled => _settings['tab_attention_enabled'] ?? true;
 }

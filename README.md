@@ -36,6 +36,7 @@ Remote workers often lose track of work-break balance. IntelliBreak aims to:
 - Team invitation workflow with Accept/Decline actions through notifications
 - Notification actions disappear after the invitation is processed while the notification remains visible
 - TabTitleTicker lifecycle handling prevents deactivated-widget ancestor errors
+- Configurable notification alerts: browser notifications, subtle sounds, and browser-tab attention, with DND suppression
 
 ## Work-Life Balance (core module)
 

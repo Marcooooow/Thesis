@@ -5,6 +5,7 @@ import 'package:intellibreak/features/sandbox/screens/demo_sandbox_screen.dart';
 import 'package:intellibreak/core/theme/theme_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:intellibreak/providers/settings_provider.dart';
+import 'package:intellibreak/services/notification_alert_service.dart';
 import 'package:intellibreak/features/auth/services/auth_service.dart';
 import 'package:intellibreak/features/auth/services/api_service.dart';
 import 'package:intellibreak/core/design_system.dart';
@@ -861,8 +862,60 @@ class _SettingsContentState extends State<SettingsContent> {
           isSelected: widget.settingsProvider.manualDndOverride == false,
           onTap: () => widget.settingsProvider.updateSettings({'manual_dnd_override': false}),
         ),
+        const SizedBox(height: 16),
+        const SettingsSectionTitle(title: 'Notification alerts'),
+        SettingsListTile(
+          leadingIcon: Icons.desktop_windows_outlined,
+          title: 'Browser notifications',
+          subtitle: 'Show desktop alerts for new notifications',
+          isSelected: widget.settingsProvider.browserNotificationsEnabled,
+          onTap: () => _toggleBrowserNotifications(context),
+        ),
+        SettingsListTile(
+          leadingIcon: Icons.volume_up_outlined,
+          title: 'Notification sounds',
+          subtitle: 'Play a quiet tone for new notifications',
+          isSelected: widget.settingsProvider.notificationSoundsEnabled,
+          onTap: _toggleNotificationSounds,
+        ),
+        SettingsListTile(
+          leadingIcon: Icons.tab_outlined,
+          title: 'Tab attention',
+          subtitle: 'Show notification activity in the browser tab title',
+          isSelected: widget.settingsProvider.tabAttentionEnabled,
+          onTap: () => widget.settingsProvider.updateSettings({
+            'tab_attention_enabled': !widget.settingsProvider.tabAttentionEnabled,
+          }),
+        ),
       ],
     );
+  }
+
+  Future<void> _toggleBrowserNotifications(BuildContext context) async {
+    if (widget.settingsProvider.browserNotificationsEnabled) {
+      await widget.settingsProvider.updateSettings({'browser_notifications_enabled': false});
+      return;
+    }
+    final permission = await NotificationAlertService.requestNotificationPermission();
+    if (!mounted) return;
+    if (permission == 'granted') {
+      await widget.settingsProvider.updateSettings({'browser_notifications_enabled': true});
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(permission == 'unsupported'
+            ? 'Browser notifications are not supported here.'
+            : 'Allow notifications in your browser settings, then try again.')),
+      );
+    }
+  }
+
+  Future<void> _toggleNotificationSounds() async {
+    final enable = !widget.settingsProvider.notificationSoundsEnabled;
+    if (enable) {
+      // Initialize during the user's tap so browsers permit later audio playback.
+      await NotificationAlertService.initializeAudioContext();
+    }
+    await widget.settingsProvider.updateSettings({'notification_sounds_enabled': enable});
   }
 
   void _showIntervalSelector(BuildContext context) {

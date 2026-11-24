@@ -29,6 +29,7 @@ import 'package:intellibreak/providers/work_session_models.dart';
 import 'package:intellibreak/providers/work_session_provider.dart';
 import 'package:intellibreak/providers/team_provider.dart';
 import 'package:intellibreak/providers/settings_provider.dart';
+import 'package:intellibreak/providers/notification_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intellibreak/features/dashboard/tutorial/tutorial_overlay.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -142,6 +143,13 @@ class _AppShellState extends State<AppShell> {
         if (!mounted) return;
         final settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
         await settingsProvider.loadSettings();
+        if (!mounted) return;
+        final notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
+        notificationProvider.setSettingsProvider(settingsProvider);
+        notificationProvider.setWorkSessionProvider(
+          Provider.of<WorkSessionProvider>(context, listen: false),
+        );
+        notificationProvider.startPolling();
       } catch (e) {
         // If we cannot fetch user info, still use backend token but mark as error
         // Don't fall back to Firebase identity as it may be stale

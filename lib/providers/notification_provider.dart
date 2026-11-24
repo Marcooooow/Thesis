@@ -1,8 +1,12 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../features/notifications/models/notification_model.dart';
 import '../features/notifications/services/notification_service.dart';
+import '../services/notification_alert_service.dart';
+import 'settings_provider.dart';
+import 'work_session_provider.dart';
 
 /// Provider that manages the notification state.
 /// Fetches and maintains the list of notifications for the authenticated user.
@@ -17,6 +21,23 @@ class NotificationProvider extends ChangeNotifier {
   bool _isLoading = false;
   String? _error;
   final NotificationService _notificationService = NotificationService();
+  final Set<String> _knownNotificationIds = <String>{};
+  bool _hasLoadedNotificationIds = false;
+  SettingsProvider? _settingsProvider;
+  WorkSessionProvider? _workSessionProvider;
+  Timer? _pollTimer;
+
+  void setSettingsProvider(SettingsProvider provider) => _settingsProvider = provider;
+  void setWorkSessionProvider(WorkSessionProvider provider) => _workSessionProvider = provider;
+
+  void startPolling({Duration interval = const Duration(seconds: 60)}) {
+    _pollTimer ??= Timer.periodic(interval, (_) => loadNotifications());
+  }
+
+  void stopPolling() {
+    _pollTimer?.cancel();
+    _pollTimer = null;
+  }
 
   // Getters
   List<NotificationModel> get notifications => _notifications;
@@ -57,6 +78,19 @@ class NotificationProvider extends ChangeNotifier {
       debugPrint('[NOTIF_PROVIDER] Calling fetchNotifications');
       final notifications = await _notificationService.fetchNotifications(token);
       debugPrint('[NOTIF_PROVIDER] Got ${notifications.length} notifications');
+      if (_hasLoadedNotificationIds) {
+        for (final notification in notifications) {
+          if (_knownNotificationIds.add(notification.id) && !_shouldSuppressAlerts()) {
+            _dispatchAlerts(notification);
+          }
+        }
+      } else {
+        _knownNotificationIds.addAll(notifications.map((n) => n.id));
+        _hasLoadedNotificationIds = true;
+      }
+      if (_knownNotificationIds.length > 500) {
+        _knownNotificationIds.removeAll(_knownNotificationIds.take(_knownNotificationIds.length - 500).toList());
+      }
       _updateState(
         notifications: notifications,
         isLoading: false,
@@ -69,6 +103,34 @@ class NotificationProvider extends ChangeNotifier {
         isLoading: false,
         error: e.toString(),
       );
+    }
+  }
+
+  bool _shouldSuppressAlerts() {
+    final settings = _settingsProvider;
+    if (settings?.manualDndOverride == true) return true;
+    if (settings?.manualDndOverride == false) return false;
+    return _workSessionProvider != null && !_workSessionProvider!.isActive;
+  }
+
+  void _dispatchAlerts(NotificationModel notification) {
+    final settings = _settingsProvider;
+    if (settings?.browserNotificationsEnabled ?? true) {
+      NotificationAlertService.showBrowserNotification(
+        notification.title,
+        notification.message,
+        tag: 'notification-${notification.id}',
+      );
+    }
+    if (settings?.notificationSoundsEnabled ?? true) {
+      final type = notification.type.toLowerCase();
+      NotificationAlertService.playNotificationSound(
+        type.contains('lunch') ? 'lunch' : type.contains('break') ? 'break' : 'default',
+      );
+    }
+    if (settings?.tabAttentionEnabled ?? true) {
+      NotificationAlertService.triggerTabAttention('🔔 ${notification.title}');
+      Future<void>.delayed(const Duration(seconds: 6), NotificationAlertService.clearTabAttention);
     }
   }
 
@@ -141,6 +203,8 @@ class NotificationProvider extends ChangeNotifier {
 
   /// Clears all notifications and state
   void clear() {
+    _knownNotificationIds.clear();
+    _hasLoadedNotificationIds = false;
     _updateState(
       notifications: [],
       isLoading: false,
@@ -176,5 +240,11 @@ class NotificationProvider extends ChangeNotifier {
   void testSetError(String error) {
     _error = error;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    stopPolling();
+    super.dispose();
   }
 }
