@@ -2183,6 +2183,18 @@ class UserSettings(Base):
         nullable=True,
         comment="Manual DND override: NULL=follow auto, TRUE=force on, FALSE=force off"
     )
+    browser_notifications_enabled: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default=text("true"),
+        comment="Show browser notifications for new app notifications"
+    )
+    notification_sounds_enabled: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default=text("true"),
+        comment="Play a sound for new app notifications"
+    )
+    tab_attention_enabled: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default=text("true"),
+        comment="Update the browser tab title for new app notifications"
+    )
     quiet_hours_enabled: Mapped[bool] = mapped_column(
         Boolean,
         nullable=False,

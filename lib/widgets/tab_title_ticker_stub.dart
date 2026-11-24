@@ -6,3 +6,14 @@ void updateDocumentTitle(String title) {
 void registerVisibilityCallback(void Function() onVisible) {
   // No-op on non-web platforms
 }
+
+void registerAttentionListeners({
+  required void Function(String message) onAttention,
+  required void Function() onClear,
+}) {
+  // No-op on non-web platforms
+}
+
+void unregisterAttentionListeners() {
+  // No-op on non-web platforms
+}

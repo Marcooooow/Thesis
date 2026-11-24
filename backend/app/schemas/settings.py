@@ -44,6 +44,9 @@ class UserSettingsRead(BaseModel):
 
     # DND preferences
     manual_dnd_override: Optional[bool] = Field(default=None)
+    browser_notifications_enabled: bool = Field(default=True)
+    notification_sounds_enabled: bool = Field(default=True)
+    tab_attention_enabled: bool = Field(default=True)
     quiet_hours_enabled: bool = Field(default=False)
     quiet_hours_start: Optional[str] = Field(default=None)
     quiet_hours_end: Optional[str] = Field(default=None)
@@ -92,6 +95,9 @@ class UserSettingsUpdate(BaseModel):
     reduce_motion: Optional[bool] = None
     interface_density: Optional[str] = None
     manual_dnd_override: Optional[bool] = None
+    browser_notifications_enabled: Optional[bool] = None
+    notification_sounds_enabled: Optional[bool] = None
+    tab_attention_enabled: Optional[bool] = None
     quiet_hours_enabled: Optional[bool] = None
     quiet_hours_start: Optional[str] = None
     quiet_hours_end: Optional[str] = None
