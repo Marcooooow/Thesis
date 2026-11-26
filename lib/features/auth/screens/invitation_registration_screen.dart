@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intellibreak/features/auth/services/api_service.dart';
+import 'package:intellibreak/features/auth/widgets/legal_dialog.dart';
 
 class InvitationRegistrationScreen extends StatefulWidget {
   final String invitationToken;
@@ -321,6 +322,8 @@ class _RegisterScreenWithInvitationState
 
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+  bool _termsAccepted = false;
+  bool _dataConsent = false;
 
   @override
   void initState() {
@@ -364,6 +367,10 @@ class _RegisterScreenWithInvitationState
       setState(() => _error = 'Password must be at least 12 characters');
       return;
     }
+    if (!_termsAccepted || !_dataConsent) {
+      setState(() => _error = 'Review and accept the Terms of Use and Data Privacy Notice to continue.');
+      return;
+    }
 
     setState(() {
       _isLoading = true;
@@ -380,6 +387,8 @@ class _RegisterScreenWithInvitationState
         role: 'EMPLOYEE',
         accountType: 'solo',
         invitationToken: widget.invitationToken,
+        termsAccepted: _termsAccepted,
+        dataConsent: _dataConsent,
       );
 
       if (!mounted) return;
@@ -480,6 +489,34 @@ class _RegisterScreenWithInvitationState
             ),
             border: const OutlineInputBorder(),
           ),
+        ),
+        const SizedBox(height: 16),
+
+        CheckboxListTile(
+          contentPadding: EdgeInsets.zero,
+          value: _termsAccepted,
+          onChanged: _isLoading ? null : (value) => setState(() => _termsAccepted = value ?? false),
+          title: Wrap(
+            children: [
+              const Text('I agree to the IntelliBreak '),
+              InkWell(
+                onTap: () => showLegalDialog(context, LegalDoc.terms),
+                child: Text('Terms of Use', style: TextStyle(color: Theme.of(context).colorScheme.primary, decoration: TextDecoration.underline)),
+              ),
+              const Text(' and '),
+              InkWell(
+                onTap: () => showLegalDialog(context, LegalDoc.privacy),
+                child: Text('Data Privacy Notice', style: TextStyle(color: Theme.of(context).colorScheme.primary, decoration: TextDecoration.underline)),
+              ),
+              const Text('.'),
+            ],
+          ),
+        ),
+        CheckboxListTile(
+          contentPadding: EdgeInsets.zero,
+          value: _dataConsent,
+          onChanged: _isLoading ? null : (value) => setState(() => _dataConsent = value ?? false),
+          title: const Text('I consent to the collection and processing described in the Data Privacy Notice for operating IntelliBreak and evaluating this thesis system.'),
         ),
         const SizedBox(height: 16),
 

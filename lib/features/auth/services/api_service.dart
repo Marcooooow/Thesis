@@ -389,6 +389,8 @@ class ApiService {
       List<String>? workDays,
       String? invitationToken,
       Map<String, dynamic>? workProfile,
+      bool termsAccepted = false,
+      bool dataConsent = false,
     }) async {
     final requestBody = <String, dynamic>{
       'email': email,
@@ -397,6 +399,8 @@ class ApiService {
       'role': role,
       'account_type': accountType,
       'organization_name': organizationName,
+      'terms_accepted': termsAccepted,
+      'data_consent': dataConsent,
     };
 
     if (jobRole != null && jobRole.isNotEmpty) requestBody['job_role'] = jobRole;

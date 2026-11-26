@@ -43,6 +43,8 @@ class UserCreate(BaseModel):
     shift_end_time: Optional[str] = None
     work_days: Optional[List[str]] = None
     work_profile: Optional[UserWorkProfileCreate] = None
+    terms_accepted: Optional[bool] = None
+    data_consent: Optional[bool] = None
 
     @staticmethod
     def validate_password(password: str) -> tuple[bool, Optional[str]]:

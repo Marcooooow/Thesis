@@ -107,7 +107,7 @@ class _WorkLifeBalanceScreenState extends State<WorkLifeBalanceScreen> {
                             Text('Work-life balance', style: theme.textTheme.headlineMedium),
                             const SizedBox(height: 4),
                             Text(
-                              'How sustainable your work rhythm is, from your weekly check-ins and recorded work patterns.',
+                              'A project-developed weekly indicator based on your check-ins and recorded work patterns. It is not a validated research scale or clinical assessment.',
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
                               ),
@@ -158,7 +158,7 @@ class _WorkLifeBalanceScreenState extends State<WorkLifeBalanceScreen> {
                   history,
                   const SizedBox(height: 24),
                   Text(
-                    'IntelliBreak supports self-reflection and healthier work habits. It is not a medical or psychological assessment.',
+                    'Use this indicator to reflect on your own patterns over time. It is not a validated research scale or a medical or psychological assessment.',
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
                     ),

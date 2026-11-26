@@ -247,6 +247,22 @@ class User(Base):
         server_default=text("0"),
         comment="Version used to invalidate password reset tokens"
     )
+    terms_accepted_at: Mapped[Optional[SADateTime]] = mapped_column(
+        SADateTime(timezone=True), nullable=True,
+        comment="Timestamp when the user accepted the Terms of Use during registration"
+    )
+    terms_version: Mapped[Optional[str]] = mapped_column(
+        String(32), nullable=True,
+        comment="Terms of Use version accepted during registration"
+    )
+    data_consent_at: Mapped[Optional[SADateTime]] = mapped_column(
+        SADateTime(timezone=True), nullable=True,
+        comment="Timestamp when the user consented to research data processing during registration"
+    )
+    privacy_notice_version: Mapped[Optional[str]] = mapped_column(
+        String(32), nullable=True,
+        comment="Data Privacy Notice version accepted during registration"
+    )
 
     # TOTP 2FA fields
     totp_secret: Mapped[Optional[str]] = mapped_column(
