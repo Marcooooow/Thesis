@@ -6,7 +6,7 @@ import uuid
 
 from ..database import get_db
 from ..auth.security import get_current_active_user, log_system_activity, should_include_test_data
-from ..models import User, Profile, TeamMembership, Team, RecommendationFeedback, WorkSession, Break
+from ..models import User, Profile, TeamMembership, Team, RecommendationFeedback, WorkSession, Break, WorkLifeBalanceSurvey
 from ..services.wellbeing_monitoring import WellbeingMonitoringService
 from ..services.team_analytics_service import compute_team_analytics
 
@@ -15,6 +15,35 @@ router = APIRouter(
     tags=["manager-analytics"],
     responses={404: {"description": "Not found"}},
 )
+
+
+def _project_next_week(
+    values: List[Optional[float]],
+    lower: float,
+    upper: float,
+    steps_ahead: int = 1,
+) -> Optional[dict]:
+    """Project ahead from weekly aggregate values using a small linear trend."""
+    points = [(index, float(value)) for index, value in enumerate(values) if value is not None]
+    if len(points) < 3 or values[-1] is None:
+        return None
+
+    mean_x = sum(index for index, _ in points) / len(points)
+    mean_y = sum(value for _, value in points) / len(points)
+    denominator = sum((index - mean_x) ** 2 for index, _ in points)
+    if denominator == 0:
+        return None
+
+    slope = sum((index - mean_x) * (value - mean_y) for index, value in points) / denominator
+    forecast_index = len(values) - 1 + steps_ahead
+    projected = mean_y + slope * (forecast_index - mean_x)
+    projected = max(lower, min(upper, projected))
+    return {
+        "last_week": round(points[-1][1], 1),
+        "projected_next_week": round(projected, 1),
+        "change": round(projected - points[-1][1], 1),
+        "observed_weeks": len(points),
+    }
 
 
 def _get_current_manager_or_admin(current_user: User = Depends(get_current_active_user)) -> User:
@@ -160,4 +189,107 @@ def get_manager_team_summary(
             "dismissed": analytics["dismissed_recs"],
             "acceptance_rate": analytics["acceptance_rate"],
         }
+    }
+
+
+@router.get("/predictive-outlook")
+def get_manager_predictive_outlook(
+    team_id: Optional[uuid.UUID] = Query(None, description="Optional team filter."),
+    current_user: User = Depends(_get_current_manager_or_admin),
+    db: Session = Depends(get_db),
+):
+    """Return privacy-protected directional projections from recent team aggregates.
+
+    This is a transparent trend projection, not an ML inference or an individual risk score.
+    Only groups with at least five authorized people are included; WLB values additionally
+    require at least five survey respondents in each displayed week.
+    """
+    today = date.today()
+    current_monday = today - timedelta(days=today.weekday())
+    latest_completed_monday = current_monday - timedelta(days=7)
+    forecast_week_start = current_monday + timedelta(days=7)
+    week_starts = [
+        latest_completed_monday - timedelta(weeks=offset)
+        for offset in reversed(range(4))
+    ]
+
+    history = []
+    profile_ids: List[uuid.UUID] = []
+    for week_start in week_starts:
+        week_end = week_start + timedelta(days=6)
+        analytics = compute_team_analytics(
+            db,
+            current_user,
+            team_id=team_id,
+            start_date=week_start,
+            end_date=week_end,
+        )
+        profile_ids = analytics["profile_ids"]
+        if len(profile_ids) < 5:
+            return {
+                "available": False,
+                "privacy_suppressed": bool(profile_ids),
+                "note": (
+                    "No managed team data is available."
+                    if not profile_ids
+                    else "Predictive outlook is hidden for groups smaller than five people."
+                ),
+            }
+
+        wlb_surveys = db.query(WorkLifeBalanceSurvey).filter(
+            WorkLifeBalanceSurvey.profile_id.in_(profile_ids),
+            WorkLifeBalanceSurvey.week_start_date >= week_start,
+            WorkLifeBalanceSurvey.week_start_date < week_start + timedelta(days=7),
+        ).all()
+        wlb_respondents = len({survey.profile_id for survey in wlb_surveys})
+        wlb_score = None
+        if wlb_respondents >= 5:
+            wlb_score = round(sum(survey.score for survey in wlb_surveys) / len(wlb_surveys), 2)
+
+        history.append({
+            "week_start": str(week_start),
+            "average_work_hours_per_person": (
+                analytics["avg_hours_per_emp"] if analytics["session_count"] > 0 else None
+            ),
+            "work_life_balance_score": wlb_score,
+        })
+
+    work_hours = _project_next_week(
+        [point["average_work_hours_per_person"] for point in history],
+        0.0,
+        168.0,
+        steps_ahead=2,
+    )
+    if work_hours is not None:
+        work_hours["unit"] = "hours per person per week"
+
+    wlb_score = _project_next_week(
+        [point["work_life_balance_score"] for point in history],
+        0.0,
+        100.0,
+        steps_ahead=2,
+    )
+    if wlb_score is not None:
+        wlb_score["unit"] = "points out of 100"
+
+    log_system_activity(
+        db=db,
+        user_id=current_user.id,
+        action_type="MANAGER_ANALYTICS_PREDICTIVE_OUTLOOK_ACCESSED",
+        action_details={"team_id": str(team_id) if team_id else None, "history_weeks": 4},
+    )
+
+    return {
+        "available": work_hours is not None or wlb_score is not None,
+        "privacy_suppressed": False,
+        "method": "Linear trend across the last four completed weeks, projected to the next full week",
+        "is_machine_learning": False,
+        "forecast_week_start": str(forecast_week_start),
+        "history": history,
+        "work_hours_per_person": work_hours,
+        "work_life_balance_score": wlb_score,
+        "note": (
+            "Directional planning estimates only. They are not ML predictions, individual ratings, "
+            "or a diagnosis. At least three weeks of data are required for each projection."
+        ),
     }
