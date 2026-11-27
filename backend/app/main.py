@@ -40,8 +40,13 @@ if not cors_allowed_origins:
 else:
     allow_origins = [o.strip() for o in cors_allowed_origins.split(",") if o.strip()]
 
-# Always support dynamic localhost and 127.0.0.1 ports for Flutter Web development
-allow_origin_regex = r"^https?://(?:localhost|127\.0\.0\.1)(?::\d+)?$"
+# Permit only this Firebase project's preview-channel hosts in production.
+# Hosting preview URLs include a channel and generated suffix before `.web.app`.
+if is_production:
+    allow_origin_regex = r"^https://intellibreak-829de--[a-z0-9-]+\.web\.app$"
+else:
+    # Always support dynamic localhost and 127.0.0.1 ports for Flutter Web development.
+    allow_origin_regex = r"^https?://(?:localhost|127\.0\.0\.1)(?::\d+)?$"
 
 class SecurityHeadersMiddleware:
     def __init__(self, app):
