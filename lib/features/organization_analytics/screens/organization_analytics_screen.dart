@@ -459,7 +459,7 @@ class _OrganizationAnalyticsScreenState extends State<OrganizationAnalyticsScree
             ],
           ),
           const SizedBox(height: 8),
-          Text('Note: Work-Life Balance is employee-reported via weekly survey check-ins (1-5 scale). Individual responses are strictly confidential.', style: TextStyle(fontSize: 11, color: Colors.grey.shade600, fontStyle: FontStyle.italic)),
+          Text('Note: This project-developed WLB indicator summarizes employee-reported weekly check-ins (1-5 ratings); it is not a validated research scale. Individual responses are confidential.', style: TextStyle(fontSize: 11, color: Colors.grey.shade600, fontStyle: FontStyle.italic)),
           const SizedBox(height: 16),
           Row(
             children: [

@@ -202,7 +202,11 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
         account_type=user.account_type,
         role=global_role,
         approval_status=approval_status,
-        password_hash=hashed_password
+        password_hash=hashed_password,
+        terms_accepted_at=datetime.now(timezone.utc) if user.terms_accepted is True else None,
+        terms_version="terms-2026-11" if user.terms_accepted is True else None,
+        data_consent_at=datetime.now(timezone.utc) if user.data_consent is True else None,
+        privacy_notice_version="privacy-2026-11" if user.data_consent is True else None,
     )
     db.add(db_user)
     db.flush()

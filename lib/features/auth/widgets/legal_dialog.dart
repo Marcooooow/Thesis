@@ -73,7 +73,7 @@ const List<(String, String)> _privacySections = [
   ),
   (
     'What we collect',
-    'Account details (name, email, role, account type); the work profile you enter (schedule, focus and break preferences, job role, industry, department); work sessions, shifts, breaks and tasks you record; post-session check-ins; your weekly work-life balance check-in answers; and your feedback on recommendations (accepted, snoozed or dismissed).',
+    'Account details (name, email, role, account type); profile information you provide (including age, gender, education, marital status, experience, job role, industry, and work schedule); work sessions, shifts, breaks and tasks you record; attendance or leave information when you use those features; post-session and weekly work-life-balance check-ins; messages you send; and recommendation feedback (accepted, dismissed, helpful, or not helpful). During registration, the system records the Terms of Use and Data Privacy Notice versions you accepted and the acceptance timestamps.',
   ),
   (
     'What we do not collect',
@@ -81,7 +81,7 @@ const List<(String, String)> _privacySections = [
   ),
   (
     'Why we collect it',
-    'To run the features you use (shift and break tracking, the Break Coach, your work-life balance score and habit suggestions), to personalise recommendations with the prediction system, and to evaluate the system for the thesis. Scores and recommendations are advisory reflections, not medical or psychological diagnoses.',
+    'To run the features you use (shift and break tracking, the Break Coach, your work-life balance check-in and habit suggestions), to improve recommendations using your recorded patterns and feedback, and to evaluate the system for the thesis. Recommendations use a rule-based baseline when a trained model is unavailable. Scores and recommendations are advisory reflections, not medical or psychological diagnoses.',
   ),
   (
     'Who can see your data',
@@ -89,7 +89,7 @@ const List<(String, String)> _privacySections = [
   ),
   (
     'Your rights under the Data Privacy Act of 2012 (RA 10173)',
-    'You may ask to access your data, correct it, object to its processing, withdraw your consent, and have your account and its related records deleted. You can delete your account in the app; deleting it removes your profile and its related work sessions, breaks, tasks and recommendations.',
+    'You may ask to access your data, correct it, object to its processing, withdraw your consent, and have your account and its related records deleted. You can delete your account in the app; deleting it removes your profile and its related work sessions, breaks, tasks and recommendations. New registrations record the notice versions accepted and their timestamps.',
   ),
   (
     'How long we keep it',

@@ -573,6 +573,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
             .map((entry) => entry.key.toLowerCase())
             .toList(),
         workProfile: workProfile,
+        termsAccepted: _termsAgreed,
+        dataConsent: _dataConsent,
       );
 
       if (mounted) {
@@ -1918,6 +1920,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
         const SizedBox(height: 24),
         // Data sections
         _buildDataSection(
+          Icons.badge_outlined,
+          'Account and work profile',
+          'We use your name, email, account type, work schedule, and the optional background and work-preference details you provide to set up your account and tailor the system.',
+        ),
+        const SizedBox(height: 12),
+        _buildDataSection(
           Icons.timer_outlined,
           'Work Sessions',
           'IntelliBreak records your work session duration '
@@ -1942,8 +1950,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
           Icons.psychology_outlined,
           'Personalized Coaching',
           'Your collected data may be analyzed by the '
-              'IntelliBreak prediction system to provide '
-              'personalized productivity recommendations.',
+              'recommendation pipeline to provide personalized '
+              'work and break suggestions. The current system uses '
+              'a rule-based baseline when a trained model is unavailable.',
         ),
         const SizedBox(height: 12),
         _buildDataSection(
@@ -1964,8 +1973,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
             SemanticColor.primary,
           ),
           title: Text(
-            'I understand and agree to the collection and '
-            'processing of my data for IntelliBreak.',
+            'I consent to the collection and processing described above '
+            'for operating IntelliBreak and evaluating this thesis system.',
             style: TextStyle(
               color: DesignSystem.getSemanticColor(
                 context,

@@ -69,7 +69,7 @@ class _WlbSurveyDialogState extends State<WlbSurveyDialog> {
                   Text('Weekly work-life balance check-in', style: theme.textTheme.titleLarge),
                   const SizedBox(height: 6),
                   Text(
-                    'Think about this past week. There are no right or wrong answers, and this is a self-reflection, not a clinical assessment.',
+                    'Think about this past week. There are no right or wrong answers. This project-developed check-in helps you reflect on weekly patterns; it is not a validated research scale or clinical assessment.',
                     style: theme.textTheme.bodyMedium?.copyWith(color: muted),
                   ),
                 ],
