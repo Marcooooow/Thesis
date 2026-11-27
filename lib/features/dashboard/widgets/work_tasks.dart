@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intellibreak/core/theme/theme_controller.dart';
 import 'package:intellibreak/core/design_system.dart';
@@ -18,8 +20,6 @@ List<String> _categoriesWithOther(Iterable<String> names) {
   list.add('Other');
   return list;
 }
-
-import 'dart:async';
 
 class WorkTasks extends StatefulWidget {
   const WorkTasks({super.key});

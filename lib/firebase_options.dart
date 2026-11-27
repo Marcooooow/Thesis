@@ -47,13 +47,13 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDehHckdyfuePyDhGFZ8MCR_MCy1PQGHMA',
-    appId: '1:854868778573:web:d6a63644100fb7e7df8604',
-    messagingSenderId: '854868778573',
-    projectId: 'intellibreak-9a933',
-    authDomain: 'intellibreak-9a933.firebaseapp.com',
-    storageBucket: 'intellibreak-9a933.firebasestorage.app',
-    measurementId: 'G-KF7D49BKBM',
+    apiKey: 'AIzaSyAnCYN5jdB-UA0Z_ScXVIGzv3Sx6SdufuY',
+    appId: '1:1043318128417:web:61a17c12a164987c8d8860',
+    messagingSenderId: '1043318128417',
+    projectId: 'intellibreak-829de',
+    authDomain: 'intellibreak-829de.firebaseapp.com',
+    storageBucket: 'intellibreak-829de.firebasestorage.app',
+    measurementId: 'G-KF74J8T4Y9',
   );
 
   static const FirebaseOptions android = FirebaseOptions(

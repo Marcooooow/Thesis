@@ -4,6 +4,7 @@ import 'package:intellibreak/core/design_system.dart';
 import 'package:intellibreak/core/config/api_config.dart';
 import 'package:intellibreak/features/organization_analytics/services/admin_analytics_service.dart';
 import 'package:intellibreak/features/analytics/widgets/report_exports_section.dart';
+import 'package:intellibreak/features/analytics/widgets/predictive_outlook_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 // ignore: avoid_web_libraries_in_flutter, deprecated_member_use
@@ -21,8 +22,11 @@ class _OrganizationAnalyticsScreenState extends State<OrganizationAnalyticsScree
   bool _isLoading = true;
   bool _isExporting = false;
   String? _error;
+  String? _predictiveError;
+  bool _isPredictiveLoading = false;
 
   Map<String, dynamic>? _reportsPreview;
+  Map<String, dynamic>? _predictiveOutlook;
   String _selectedPeriod = 'This Week'; // UI label: Today, This Week, Last Week, This Month
 
   @override
@@ -63,12 +67,31 @@ class _OrganizationAnalyticsScreenState extends State<OrganizationAnalyticsScree
         _reportsPreview = preview;
         _isLoading = false;
       });
+      _loadPredictiveOutlook(adminAnalyticsService);
     } catch (e) {
       if (!mounted) return;
       setState(() {
         _error = e.toString();
         _isLoading = false;
       });
+    }
+  }
+
+  Future<void> _loadPredictiveOutlook(AdminAnalyticsService service) async {
+    if (_token == null || !mounted) return;
+    setState(() {
+      _isPredictiveLoading = true;
+      _predictiveError = null;
+    });
+    try {
+      final outlook = await service.getPredictiveOutlook(_token!);
+      if (!mounted) return;
+      setState(() {
+        _predictiveOutlook = outlook;
+        if (outlook == null) _predictiveError = 'Predictive outlook could not be loaded.';
+      });
+    } finally {
+      if (mounted) setState(() => _isPredictiveLoading = false);
     }
   }
 
@@ -159,6 +182,15 @@ class _OrganizationAnalyticsScreenState extends State<OrganizationAnalyticsScree
                       _buildSectionHeader('3. Work-Life Balance', 'Employee-reported WLB weekly survey scores and participation'),
                       const SizedBox(height: 12),
                       _buildWorkLifeBalanceSection(isDark),
+                      const SizedBox(height: 24),
+
+                      _buildSectionHeader('Predictive Planning Outlook', 'Directional team-level estimates from recent weekly patterns'),
+                      const SizedBox(height: 12),
+                      PredictiveOutlookCard(
+                        outlook: _predictiveOutlook,
+                        isLoading: _isPredictiveLoading,
+                        error: _predictiveError,
+                      ),
                       const SizedBox(height: 24),
 
                       // 4. Team Comparison Section

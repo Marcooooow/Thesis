@@ -137,4 +137,13 @@ class AdminAnalyticsService {
       return null;
     }
   }
+
+  /// Get privacy-protected next-week projections for the admin's authorized organization/team scope.
+  Future<Map<String, dynamic>?> getPredictiveOutlook(String token) async {
+    try {
+      return await _apiService.getMapWithAuth('/manager/analytics/predictive-outlook', token);
+    } catch (_) {
+      return null;
+    }
+  }
 }

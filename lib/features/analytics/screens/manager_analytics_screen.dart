@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:intellibreak/features/auth/services/api_service.dart';
 import 'package:intellibreak/features/analytics/screens/employee_analytics_screen.dart';
 import 'package:intellibreak/features/analytics/widgets/report_exports_section.dart';
+import 'package:intellibreak/features/analytics/widgets/predictive_outlook_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 // ignore: avoid_web_libraries_in_flutter, deprecated_member_use
@@ -26,6 +27,9 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
   bool _isExporting = false;
   String? _loadError;
   Map<String, dynamic> _data = {};
+  Map<String, dynamic>? _predictiveOutlook;
+  bool _isPredictiveLoading = false;
+  String? _predictiveError;
   String _selectedDateRange = 'All available data';
   final ApiService _apiService = ApiService();
 
@@ -80,11 +84,45 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
       final res = await _apiService.getMapWithAuth(endpoint, _token!);
       if (res != null) {
         setState(() => _data = res);
+        final employeeCount = (res['total_employees'] as num?)?.toInt() ?? 0;
+        if (employeeCount >= 5 && res['privacy_suppressed'] != true) {
+          await _fetchPredictiveOutlook();
+        } else if (mounted) {
+          setState(() => _predictiveOutlook = {
+                'available': false,
+                'privacy_suppressed': res['privacy_suppressed'] == true,
+                'note': 'Predictive outlook requires an authorized group of at least five people.',
+              });
+        }
       }
     } catch (_) {
       _loadError = 'Team analytics could not be loaded. Check your connection and try again.';
     } finally {
       if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _fetchPredictiveOutlook() async {
+    if (_token == null) return;
+    setState(() {
+      _isPredictiveLoading = true;
+      _predictiveError = null;
+    });
+    try {
+      final result = await _apiService.getMapWithAuth(
+        '/manager/analytics/predictive-outlook',
+        _token!,
+      );
+      if (mounted) setState(() => _predictiveOutlook = result ?? {});
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _predictiveError = 'Predictive outlook could not be loaded.';
+          _predictiveOutlook = null;
+        });
+      }
+    } finally {
+      if (mounted) setState(() => _isPredictiveLoading = false);
     }
   }
 
@@ -259,15 +297,23 @@ class _ManagerAnalyticsScreenState extends State<ManagerAnalyticsScreenContent> 
             ),
           const SizedBox(height: 24),
 
-          // F. Wellbeing Aggregates
+          // F. Predictive planning outlook (group-level, directional estimates)
+          PredictiveOutlookCard(
+            outlook: _predictiveOutlook,
+            isLoading: _isPredictiveLoading,
+            error: _predictiveError,
+          ),
+          const SizedBox(height: 24),
+
+          // G. Wellbeing Aggregates
           _buildWellbeingAggregatesCard(isDark, totalEmployees, wellbeing),
           const SizedBox(height: 24),
 
-          // G. Report Exports
+          // H. Report Exports
           _buildReportExportsCard(isDark, isDesktop),
           const SizedBox(height: 24),
 
-          // H. Footer
+          // I. Footer
           _buildFooter(isDark),
         ],
       ),
