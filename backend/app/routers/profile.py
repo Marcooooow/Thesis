@@ -184,12 +184,15 @@ def update_current_user_profile(
                         detail="Profile image URL must be from Firebase Storage"
                     )
                 # Must be from our specific bucket
-                expected_bucket = 'intellibreak-9a933.firebasestorage.app'
+                expected_buckets = {
+                    'intellibreak-9a933.firebasestorage.app',
+                    'intellibreak-829de.firebasestorage.app',
+                }
                 # Firebase Storage URLs have format: https://firebasestorage.googleapis.com/v0/b/{bucket}/o/{object}
-                if not parsed_url.path.startswith(f'/v0/b/{expected_bucket}/o/'):
+                if not any(parsed_url.path.startswith(f'/v0/b/{bucket}/o/') for bucket in expected_buckets):
                     raise HTTPException(
                         status_code=status.HTTP_400_BAD_REQUEST,
-                        detail=f"Profile image URL must be from bucket '{expected_bucket}'"
+                        detail="Profile image URL must be from the configured Firebase Storage bucket"
                     )
             except Exception as e:
                 if isinstance(e, HTTPException):

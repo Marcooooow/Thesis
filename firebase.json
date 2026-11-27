@@ -17,18 +17,18 @@
       },
       "web": {
         "default": {
-          "projectId": "intellibreak-9a933",
-          "appId": "1:854868778573:web:d6a63644100fb7e7df8604",
+          "projectId": "intellibreak-829de",
+          "appId": "1:1043318128417:web:61a17c12a164987c8d8860",
           "fileOutput": "lib/firebase_options.dart"
         }
       },
       "dart": {
         "lib/firebase_options.dart": {
-          "projectId": "intellibreak-9a933",
+          "projectId": "intellibreak-829de",
           "configurations": {
             "android": "1:854868778573:android:c85eb53385a96fd9df8604",
             "ios": "1:854868778573:ios:8ecb8774dc0430b1df8604",
-            "web": "1:854868778573:web:d6a63644100fb7e7df8604"
+            "web": "1:1043318128417:web:61a17c12a164987c8d8860"
           }
         }
       }

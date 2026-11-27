@@ -30,7 +30,11 @@ is_production = os.getenv("RENDER", "false") == "true" or os.getenv("ENVIRONMENT
 
 if not cors_allowed_origins:
     if is_production:
-        allow_origins = ["https://intellibreak-9a933.web.app"]
+        allow_origins = [
+            "https://intellibreak-829de.web.app",
+            "https://intellibreak-829de.firebaseapp.com",
+            "https://intellibreak-9a933.web.app",
+        ]
     else:
         allow_origins = ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:8080"]
 else:
